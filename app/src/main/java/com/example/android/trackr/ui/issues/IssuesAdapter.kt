@@ -18,36 +18,38 @@ package com.example.android.trackr.ui.issues
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.android.trackr.R
 import com.example.android.trackr.data.Issue
+import com.example.android.trackr.databinding.ListItemBinding
 
-class IssuesAdapter(private val list: List<Issue>)
-    : RecyclerView.Adapter<IssueViewHolder>() {
+class IssuesAdapter() : ListAdapter<Issue, IssueViewHolder>(IssueDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IssueViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        return IssueViewHolder(inflater, parent)
+        return IssueViewHolder(
+            ListItemBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: IssueViewHolder, position: Int) {
-        val issue: Issue = list[position]
-        holder.bind(issue)
+        holder.bind(getItem(position))
     }
-
-    override fun getItemCount(): Int = list.size
 }
 
-class IssueViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
-    RecyclerView.ViewHolder(inflater.inflate(R.layout.list_item, parent, false)) {
-    private var titleView: TextView? = null
-
-    init {
-        titleView = itemView.findViewById(R.id.title)
-    }
+class IssueViewHolder(private val binding: ListItemBinding) :
+    RecyclerView.ViewHolder(binding.root) {
 
     fun bind(issue: Issue) {
-        titleView?.text = issue.title
+        binding.issue = issue
     }
+}
+
+object IssueDiffCallback : DiffUtil.ItemCallback<Issue>() {
+    override fun areItemsTheSame(oldItem: Issue, newItem: Issue) = oldItem.id == newItem.id
+    override fun areContentsTheSame(oldItem: Issue, newItem: Issue) = oldItem == newItem
 }

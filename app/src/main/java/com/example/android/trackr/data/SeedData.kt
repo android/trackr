@@ -19,18 +19,19 @@ package com.example.android.trackr.data
 import android.graphics.Color.argb
 
 object SeedData {
-    val user1 = User("user1")
-    val user2 = User("user2")
-    val user3 = User("user3")
+    val user1 = User(1, "user1")
+    val user2 = User(2, "user2")
+    val user3 = User(3, "user3")
 
-    val i18nTag = Tag("i18n")
-    val a11yTag = Tag("a11y", argb(255, 200, 100, 30))
-    val androidTag = Tag("android", argb(255, 100, 200, 30))
-    val serverTag = Tag("server", argb(255, 200, 100, 30))
-    val designTag = Tag("design")
+    val i18nTag = Tag(1, "i18n")
+    val a11yTag = Tag(2, "a11y", argb(255, 200, 100, 30))
+    val androidTag = Tag(3, "android", argb(255, 100, 200, 30))
+    val serverTag = Tag(4, "server", argb(255, 200, 100, 30))
+    val designTag = Tag(5, "design")
 
     val issues = listOf(
         Issue(
+            id = 1,
             title = "Make sure settings screen works with RTL, especially on small devices",
             reporter = user1,
             owner = user2,
@@ -38,6 +39,7 @@ object SeedData {
         ),
 
         Issue(
+            id = 2,
             title = "Enable logging on XYZ component",
             reporter = user2,
             owner = user3,
@@ -45,6 +47,7 @@ object SeedData {
         ),
 
         Issue(
+            id = 3,
             title = "Create mocks for login screens",
             type = IssueType.FEATURE_REQUEST,
             reporter = user2,
@@ -53,6 +56,7 @@ object SeedData {
         ),
 
         Issue(
+            id = 4,
             title = "Try on app with Talkback and send feedback to team",
             reporter = user2,
             owner = user2,

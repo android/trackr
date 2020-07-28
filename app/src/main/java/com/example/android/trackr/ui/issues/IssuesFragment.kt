@@ -21,12 +21,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android.trackr.R
-import com.example.android.trackr.data.SeedData
 import kotlinx.android.synthetic.main.home_fragment.*
 
 class IssuesFragment : Fragment() {
+    private lateinit var viewModel: IssuesViewModel
+    private val issuesAdapter = IssuesAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,10 +40,17 @@ class IssuesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // TODO: create VM and observe list of issues.
         issues_list.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = IssuesAdapter(SeedData.issues)
+            adapter = issuesAdapter
+        }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel = ViewModelProvider(this).get(IssuesViewModel::class.java)
+        viewModel.issues.observe(viewLifecycleOwner) {
+            issuesAdapter.submitList(it)
         }
     }
 

@@ -17,8 +17,11 @@
 package com.example.android.trackr.data
 
 import android.graphics.Color
+import androidx.recyclerview.widget.DiffUtil
 
 data class Issue(
+    val id: Int,
+
     /**
      * The issue title. TODO: consider adding char limit which may help showcase a11y validation issues.
      */
@@ -68,6 +71,8 @@ enum class IssueState {
 }
 
 data class Tag(
+    val id: Int,
+
     /**
      * A short label for the tag.
      */
@@ -82,6 +87,8 @@ data class Tag(
 )
 
 data class User (
+    val id: Int,
+
     /**
      * A short name for the user.
      */
