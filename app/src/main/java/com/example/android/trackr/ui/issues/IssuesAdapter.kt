@@ -16,40 +16,145 @@
 
 package com.example.android.trackr.ui.issues
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.android.trackr.R
+import com.example.android.trackr.data.HeaderData
 import com.example.android.trackr.data.Issue
-import com.example.android.trackr.databinding.ListItemBinding
+import com.example.android.trackr.data.IssueState
+import com.example.android.trackr.databinding.ListHeaderBinding
+import com.example.android.trackr.databinding.ListIssueBinding
 
-class IssuesAdapter() : ListAdapter<Issue, IssueViewHolder>(IssueDiffCallback) {
+private const val ITEM_VIEW_TYPE_HEADER = 0
+private const val ITEM_VIEW_TYPE_ISSUE = 1
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IssueViewHolder {
-        return IssueViewHolder(
-            ListItemBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
+class IssuesAdapter : ListAdapter<DataItem, RecyclerView.ViewHolder>(
+    DataItemDiffCallback()
+) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            ITEM_VIEW_TYPE_HEADER -> HeaderViewHolder.from(parent)
+            ITEM_VIEW_TYPE_ISSUE -> IssueViewHolder.from(parent)
+            else -> throw IllegalArgumentException("Unknown viewType $viewType")
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return when (getItem(position)) {
+            is DataItem.HeaderItem -> ITEM_VIEW_TYPE_HEADER
+            is DataItem.IssueItem -> ITEM_VIEW_TYPE_ISSUE
+        }
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is IssueViewHolder -> {
+                holder.bind((getItem(position) as DataItem.IssueItem).issue)
+            }
+
+            is HeaderViewHolder -> {
+                holder.bind((getItem(position) as DataItem.HeaderItem).headerData)
+            }
+        }
+    }
+
+    // TODO: refactor into use case, using a coroutine (and add tests).
+    fun addHeadersAndSubmitList(context: Context, issues: List<Issue>?) {
+        val items = mutableListOf<DataItem>()
+
+        val map = issues?.groupBy { it.state }
+
+        val issueStates = listOf(
+            IssueState.IN_PROGRESS,
+            IssueState.NOT_STARTED,
+            IssueState.COMPLETED,
+            IssueState.ARCHIVED
         )
+
+        issueStates.forEach { state ->
+            val sublist = map?.get(state)
+            // Add header even if the category does not have any issues.
+            items.add(
+                DataItem.HeaderItem(
+                    HeaderData(
+                        headerLabel(context, state),
+                        sublist?.size ?: 0
+                    )
+                )
+            )
+            sublist?.map { items.add(DataItem.IssueItem(it)) }
+        }
+
+        submitList(items)
     }
 
-    override fun onBindViewHolder(holder: IssueViewHolder, position: Int) {
-        holder.bind(getItem(position))
+    private fun headerLabel(context: Context, issueState: IssueState) : String {
+        return context.getString(
+            when(issueState) {
+                IssueState.IN_PROGRESS -> R.string.in_progress
+                IssueState.NOT_STARTED -> R.string.not_started
+                IssueState.COMPLETED -> R.string.completed
+                IssueState.ARCHIVED -> R.string.archived
+            })
+    }
+
+    class HeaderViewHolder private constructor(private val binding: ListHeaderBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(headerData: HeaderData) {
+            binding.headerData = headerData
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): HeaderViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                return HeaderViewHolder(ListHeaderBinding.inflate(layoutInflater, parent, false))
+            }
+        }
+    }
+
+    class IssueViewHolder private constructor(private val binding: ListIssueBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(issue: Issue) {
+            binding.issue = issue
+            binding.executePendingBindings()
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): IssueViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                return IssueViewHolder(ListIssueBinding.inflate(layoutInflater, parent, false))
+            }
+        }
     }
 }
 
-class IssueViewHolder(private val binding: ListItemBinding) :
-    RecyclerView.ViewHolder(binding.root) {
+class DataItemDiffCallback : DiffUtil.ItemCallback<DataItem>() {
+    override fun areItemsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
+        return oldItem.id == newItem.id
+    }
 
-    fun bind(issue: Issue) {
-        binding.issue = issue
+    @SuppressLint("DiffUtilEquals")
+    override fun areContentsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
+        return oldItem == newItem
     }
 }
 
-object IssueDiffCallback : DiffUtil.ItemCallback<Issue>() {
-    override fun areItemsTheSame(oldItem: Issue, newItem: Issue) = oldItem.id == newItem.id
-    override fun areContentsTheSame(oldItem: Issue, newItem: Issue) = oldItem == newItem
+sealed class DataItem {
+    abstract val id: Long
+
+    data class IssueItem(val issue: Issue) : DataItem() {
+        override val id = issue.id
+    }
+
+    data class HeaderItem(val headerData: HeaderData) : DataItem() {
+        override val id = Long.MIN_VALUE
+    }
 }

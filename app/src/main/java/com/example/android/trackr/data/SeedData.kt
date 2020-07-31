@@ -19,15 +19,15 @@ package com.example.android.trackr.data
 import android.graphics.Color.argb
 
 object SeedData {
-    val user1 = User(1, "user1")
-    val user2 = User(2, "user2")
-    val user3 = User(3, "user3")
+    private val user1 = User(1, "user1")
+    private val user2 = User(2, "user2")
+    private val user3 = User(3, "user3")
 
-    val i18nTag = Tag(1, "i18n")
-    val a11yTag = Tag(2, "a11y", argb(255, 200, 100, 30))
-    val androidTag = Tag(3, "android", argb(255, 100, 200, 30))
-    val serverTag = Tag(4, "server", argb(255, 200, 100, 30))
-    val designTag = Tag(5, "design")
+    private val i18nTag = Tag(1, "i18n")
+    private val a11yTag = Tag(2, "a11y", argb(255, 200, 100, 30))
+    private val androidTag = Tag(3, "android", argb(255, 100, 200, 30))
+    private val serverTag = Tag(4, "server", argb(255, 200, 100, 30))
+    private val designTag = Tag(5, "design")
 
     val issues = listOf(
         Issue(
@@ -41,6 +41,7 @@ object SeedData {
         Issue(
             id = 2,
             title = "Enable logging on XYZ component",
+            state = IssueState.IN_PROGRESS,
             reporter = user2,
             owner = user3,
             tags = listOf(serverTag)

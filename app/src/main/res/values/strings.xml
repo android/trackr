@@ -17,4 +17,10 @@
 
 <resources>
     <string name="app_name">Trackr</string>
+
+    <!-- Issues screen -->
+    <string name="in_progress">In progress</string>
+    <string name="not_started">Not started</string>
+    <string name="completed">Completed</string>
+    <string name="archived">Archived</string>
 </resources>

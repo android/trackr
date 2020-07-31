@@ -49,12 +49,13 @@ class IssuesFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(IssuesViewModel::class.java)
+
         viewModel.issues.observe(viewLifecycleOwner) {
-            issuesAdapter.submitList(it)
+            issuesAdapter.addHeadersAndSubmitList(requireContext(), it)
         }
     }
 
     companion object {
-        val TAG = "HomeFragment";
+        const val TAG = "IssuesFragment"
     }
 }
