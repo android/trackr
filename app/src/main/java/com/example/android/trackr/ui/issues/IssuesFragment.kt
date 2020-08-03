@@ -23,19 +23,25 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android.trackr.R
-import kotlinx.android.synthetic.main.home_fragment.*
+import kotlinx.android.synthetic.main.fragment_issues.*
 
 class IssuesFragment : Fragment() {
     private lateinit var viewModel: IssuesViewModel
-    private val issuesAdapter = IssuesAdapter()
+
+    private val issuesAdapter = IssuesAdapter(object : IssuesAdapter.IssueItemListener {
+        override fun onItemClicked() {
+            findNavController().navigate(R.id.nav_issue_detail)
+        }
+    })
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.home_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_issues, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,9 +59,5 @@ class IssuesFragment : Fragment() {
         viewModel.issues.observe(viewLifecycleOwner) {
             issuesAdapter.addHeadersAndSubmitList(requireContext(), it)
         }
-    }
-
-    companion object {
-        const val TAG = "IssuesFragment"
     }
 }

@@ -19,6 +19,7 @@ package com.example.android.trackr.ui.issues
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -33,14 +34,21 @@ import com.example.android.trackr.databinding.ListIssueBinding
 private const val ITEM_VIEW_TYPE_HEADER = 0
 private const val ITEM_VIEW_TYPE_ISSUE = 1
 
-class IssuesAdapter : ListAdapter<DataItem, RecyclerView.ViewHolder>(
+class IssuesAdapter(
+    private val issueItemListener: IssueItemListener
+) :
+    ListAdapter<DataItem, RecyclerView.ViewHolder>(
     DataItemDiffCallback()
 ) {
+
+    interface IssueItemListener {
+        fun onItemClicked()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             ITEM_VIEW_TYPE_HEADER -> HeaderViewHolder.from(parent)
-            ITEM_VIEW_TYPE_ISSUE -> IssueViewHolder.from(parent)
+            ITEM_VIEW_TYPE_ISSUE -> IssueViewHolder.from(parent, issueItemListener)
             else -> throw IllegalArgumentException("Unknown viewType $viewType")
         }
     }
@@ -119,18 +127,27 @@ class IssuesAdapter : ListAdapter<DataItem, RecyclerView.ViewHolder>(
         }
     }
 
-    class IssueViewHolder private constructor(private val binding: ListIssueBinding) :
+    class IssueViewHolder private constructor(
+        private val binding: ListIssueBinding,
+        private val issueItemListener: IssueItemListener
+    ) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(issue: Issue) {
             binding.issue = issue
+            binding.listener = issueItemListener
             binding.executePendingBindings()
         }
 
         companion object {
-            fun from(parent: ViewGroup): IssueViewHolder {
+            fun from(parent: ViewGroup, issueItemListener: IssueItemListener): IssueViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                return IssueViewHolder(ListIssueBinding.inflate(layoutInflater, parent, false))
+                return IssueViewHolder(
+                    ListIssueBinding.inflate(
+                        layoutInflater,
+                        parent,
+                        false
+                    ), issueItemListener)
             }
         }
     }
