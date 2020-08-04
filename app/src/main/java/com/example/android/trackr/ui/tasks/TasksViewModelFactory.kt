@@ -16,16 +16,20 @@
 
 package com.example.android.trackr.ui.tasks
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-
-import com.example.android.trackr.data.Task
-
+import androidx.lifecycle.ViewModelProvider
 import com.example.android.trackr.db.dao.TaskDao
 
-class TasksViewModel(private val taskDao: TaskDao) : ViewModel() {
+class TasksViewModelFactory(
+    private val dao: TaskDao
+) : ViewModelProvider.Factory {
 
-    // TODO(b/163065333): add a UseCase instead of directly using the DAO here?
-    val tasks: LiveData<List<Task>>
-        get() = taskDao.getTasks()
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return when {
+            modelClass.isAssignableFrom(TasksViewModel::class.java) -> {
+                TasksViewModel(dao)
+            }
+            else -> throw IllegalArgumentException("Unknown ViewModel class: $modelClass")
+        } as T
+    }
 }

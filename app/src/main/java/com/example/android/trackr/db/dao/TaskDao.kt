@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package com.example.android.trackr.ui.tasks
+package com.example.android.trackr.db.dao
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
 import com.example.android.trackr.data.Task
 
-import com.example.android.trackr.db.dao.TaskDao
+@Dao
+interface TaskDao {
+    @Insert
+    fun insertAll(taskEntities: List<Task>)
 
-class TasksViewModel(private val taskDao: TaskDao) : ViewModel() {
-
-    // TODO(b/163065333): add a UseCase instead of directly using the DAO here?
-    val tasks: LiveData<List<Task>>
-        get() = taskDao.getTasks()
+    @Query("SELECT * FROM tasks")
+    fun getTasks(): LiveData<List<Task>>
 }

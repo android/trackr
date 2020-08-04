@@ -19,7 +19,7 @@
     <data>
         <variable
             name="headerData"
-            type="com.example.android.trackr.data.HeaderData" />
+            type="com.example.android.trackr.ui.tasks.HeaderData" />
     </data>
 
     <androidx.cardview.widget.CardView

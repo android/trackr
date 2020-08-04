@@ -24,11 +24,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.trackr.R
-import com.example.android.trackr.data.HeaderData
-import com.example.android.trackr.data.Task
-import com.example.android.trackr.data.TaskState
 import com.example.android.trackr.databinding.ListHeaderBinding
 import com.example.android.trackr.databinding.ListTaskBinding
+import com.example.android.trackr.data.Task
+import com.example.android.trackr.data.TaskState
 
 private const val ITEM_VIEW_TYPE_HEADER = 0
 private const val ITEM_VIEW_TYPE_TASK = 1
@@ -72,10 +71,10 @@ class TasksAdapter(
     }
 
     // TODO: refactor into use case, using a coroutine (and add tests).
-    fun addHeadersAndSubmitList(context: Context, tasks: List<Task>?) {
+    fun addHeadersAndSubmitList(context: Context, tasks: List<Task>) {
         val items = mutableListOf<DataItem>()
 
-        val map = tasks?.groupBy { it.state }
+        val map = tasks.groupBy { it.state }
 
         val taskStates = listOf(
             TaskState.IN_PROGRESS,
@@ -85,7 +84,7 @@ class TasksAdapter(
         )
 
         taskStates.forEach { state ->
-            val sublist = map?.get(state)
+            val sublist: List<Task>? = map[state]
             // Add header even if the category does not have any tasks.
             items.add(
                 DataItem.HeaderItem(
@@ -174,3 +173,8 @@ sealed class DataItem {
         override val id = Long.MIN_VALUE
     }
 }
+
+data class HeaderData(
+    val title: String,
+    val count: Int
+)

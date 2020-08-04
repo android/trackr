@@ -16,52 +16,14 @@
 
 package com.example.android.trackr.data
 
-import android.graphics.Color.argb
-
 object SeedData {
-    private val user1 = User(1, "user1")
-    private val user2 = User(2, "user2")
-    private val user3 = User(3, "user3")
-
-    private val i18nTag = Tag(1, "i18n")
-    private val a11yTag = Tag(2, "a11y", argb(255, 200, 100, 30))
-    private val androidTag = Tag(3, "android", argb(255, 100, 200, 30))
-    private val serverTag = Tag(4, "server", argb(255, 200, 100, 30))
-    private val designTag = Tag(5, "design")
-
-    val tasks = listOf(
-        Task(
-            id = 1,
-            title = "Make sure settings screen works with RTL, especially on small devices",
-            reporter = user1,
-            owner = user2,
-            tags = listOf(i18nTag, androidTag)
-        ),
-
-        Task(
-            id = 2,
-            title = "Enable logging on XYZ component",
-            state = TaskState.IN_PROGRESS,
-            reporter = user2,
-            owner = user3,
-            tags = listOf(serverTag)
-        ),
-
-        Task(
-            id = 3,
-            title = "Create mocks for login screens",
-            type = TaskType.FEATURE_REQUEST,
-            reporter = user2,
-            owner = user2,
-            tags = listOf(designTag)
-        ),
-
-        Task(
-            id = 4,
-            title = "Try on app with Talkback and send feedback to team",
-            reporter = user2,
-            owner = user2,
-            tags = listOf(androidTag, a11yTag)
-        )
+    // TODO(b/163065333): add descriptive task titles.
+    val Tasks = listOf(
+        Task(title = "Task 1"),
+        Task(title = "Task 2"),
+        Task(title = "Task 3", state = TaskState.IN_PROGRESS),
+        Task(title = "Task 4", state = TaskState.COMPLETED),
+        Task(title = "Task 5"),
+        Task(title = "Task 6")
     )
 }

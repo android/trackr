@@ -17,9 +17,16 @@
 package com.example.android.trackr.data
 
 import android.graphics.Color
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import org.threeten.bp.Duration
+import org.threeten.bp.Instant
 
+
+@Entity(tableName = "tasks")
 data class Task(
-    val id: Long,
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
 
     /**
      * The task title. TODO: consider adding char limit which may help showcase a11y validation issues.
@@ -32,15 +39,12 @@ data class Task(
     var description: String = "",
 
     /**
-     * The task type.
-     */
-    val type: TaskType = TaskType.BUG,
-
-    /**
      * The state of the task.
      */
     val state: TaskState = TaskState.NOT_STARTED,
 
+    /*
+    TODO: for these fields, set up FK relationships after defining User and Tag entities.
     /**
      * The team member who created the task (this defaults to the current user).
      */
@@ -55,26 +59,33 @@ data class Task(
      * An arbitrary list of tags associated with an task.
      */
     val tags: List<Tag> = emptyList()
+    */
+
+    /**
+     * When this task was created.
+     */
+    val createdAt: Instant = Instant.now(),
+
+    /**
+     * When this task is due.
+     */
+    val dueAt: Instant = Instant.now() + Duration.ofDays(7)
 )
 
-// TODO: put in adapter?
-data class HeaderData(
-    val title: String,
-    val count: Int
-)
+enum class TaskState(val key: Int) {
+    NOT_STARTED(1),
+    IN_PROGRESS(2),
+    COMPLETED(3),
+    ARCHIVED(4);
 
-enum class TaskType {
-    BUG,
-    FEATURE_REQUEST
+    companion object {
+        // TODO (b/163065333): find more efficient solution, since map may be high memory.
+        private val map = values().associateBy(TaskState::key)
+        fun fromKey(key: Int) = map[key]
+    }
 }
 
-enum class TaskState {
-    NOT_STARTED,
-    IN_PROGRESS,
-    COMPLETED,
-    ARCHIVED
-}
-
+// TODO(b/163065333): convert to Entity and set up FK relationships.
 data class Tag(
     val id: Long,
 
@@ -91,7 +102,8 @@ data class Tag(
     var color: Int = Color.rgb(255, 255, 255)
 )
 
-data class User (
+// TODO(b/163065333): convert to Entity and set up FK relationships.
+data class User(
     val id: Long,
 
     /**
