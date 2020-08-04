@@ -18,41 +18,41 @@ package com.example.android.trackr.data
 
 import android.graphics.Color
 
-data class Issue(
+data class Task(
     val id: Long,
 
     /**
-     * The issue title. TODO: consider adding char limit which may help showcase a11y validation issues.
+     * The task title. TODO: consider adding char limit which may help showcase a11y validation issues.
      */
     var title: String,
 
     /**
-     * The issue description, which can be verbose.
+     * The task description, which can be verbose.
      */
     var description: String = "",
 
     /**
-     * The issue type.
+     * The task type.
      */
-    val type: IssueType = IssueType.BUG,
+    val type: TaskType = TaskType.BUG,
 
     /**
-     * The state of the issue.
+     * The state of the task.
      */
-    val state: IssueState = IssueState.NOT_STARTED,
+    val state: TaskState = TaskState.NOT_STARTED,
 
     /**
-     * The team member who created the issue (this defaults to the current user).
+     * The team member who created the task (this defaults to the current user).
      */
     val reporter: User,
 
     /**
-     * The team member who the issue has been assigned to.
+     * The team member who the task has been assigned to.
      */
     val owner: User,
 
     /**
-     * An arbitrary list of tags associated with an issue.
+     * An arbitrary list of tags associated with an task.
      */
     val tags: List<Tag> = emptyList()
 )
@@ -63,12 +63,12 @@ data class HeaderData(
     val count: Int
 )
 
-enum class IssueType {
+enum class TaskType {
     BUG,
     FEATURE_REQUEST
 }
 
-enum class IssueState {
+enum class TaskState {
     NOT_STARTED,
     IN_PROGRESS,
     COMPLETED,
@@ -102,7 +102,7 @@ data class User (
     // TODO: add field for avatar.
 
     /**
-     * The list of issues that the user has starred.
+     * The list of tasks that the user has starred.
      */
-    val starredIssues: List<Issue> = emptyList()
+    val starredTasks: List<Task> = emptyList()
 )

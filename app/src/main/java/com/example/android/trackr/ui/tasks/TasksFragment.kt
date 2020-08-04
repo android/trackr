@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.android.trackr.ui.issues
+package com.example.android.trackr.ui.tasks
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,14 +26,14 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android.trackr.R
-import kotlinx.android.synthetic.main.fragment_issues.*
+import kotlinx.android.synthetic.main.fragment_tasks.*
 
-class IssuesFragment : Fragment() {
-    private lateinit var viewModel: IssuesViewModel
+class TasksFragment : Fragment() {
+    private lateinit var viewModel: TasksViewModel
 
-    private val issuesAdapter = IssuesAdapter(object : IssuesAdapter.IssueItemListener {
+    private val tasksAdapter = TasksAdapter(object : TasksAdapter.TaskItemListener {
         override fun onItemClicked() {
-            findNavController().navigate(R.id.nav_issue_detail)
+            findNavController().navigate(R.id.nav_task_detail)
         }
     })
 
@@ -41,23 +41,23 @@ class IssuesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_issues, container, false)
+        return inflater.inflate(R.layout.fragment_tasks, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        issues_list.apply {
+        tasks_list.apply {
             layoutManager = LinearLayoutManager(activity)
-            adapter = issuesAdapter
+            adapter = tasksAdapter
         }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(IssuesViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(TasksViewModel::class.java)
 
-        viewModel.issues.observe(viewLifecycleOwner) {
-            issuesAdapter.addHeadersAndSubmitList(requireContext(), it)
+        viewModel.tasks.observe(viewLifecycleOwner) {
+            tasksAdapter.addHeadersAndSubmitList(requireContext(), it)
         }
     }
 }

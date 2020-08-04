@@ -23,12 +23,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.android.trackr.R
 
-class IssueDetailFragment : Fragment() {
+class TaskDetailFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_issue_detail, container, false)
+        return inflater.inflate(R.layout.fragment_task_detail, container, false)
     }
 }

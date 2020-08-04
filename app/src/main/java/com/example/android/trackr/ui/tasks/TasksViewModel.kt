@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package com.example.android.trackr.ui.issues
+package com.example.android.trackr.ui.tasks
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.android.trackr.data.Issue
+import com.example.android.trackr.data.Task
 import com.example.android.trackr.data.SeedData
 
-class IssuesViewModel : ViewModel() {
-    private val _issues: MutableLiveData<List<Issue>> = MutableLiveData()
-    val issues: LiveData<List<Issue>>
-        get() = _issues
+class TasksViewModel : ViewModel() {
+    private val _tasks: MutableLiveData<List<Task>> = MutableLiveData()
+    val tasks: LiveData<List<Task>>
+        get() = _tasks
 
     init {
         // TODO: implement use case and/or repository for obtaining data.
-        _issues.value = SeedData.issues
+        _tasks.value = SeedData.tasks
     }
 }

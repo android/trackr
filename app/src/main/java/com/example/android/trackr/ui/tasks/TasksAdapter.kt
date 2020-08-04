@@ -14,41 +14,40 @@
  * limitations under the License.
  */
 
-package com.example.android.trackr.ui.issues
+package com.example.android.trackr.ui.tasks
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.trackr.R
 import com.example.android.trackr.data.HeaderData
-import com.example.android.trackr.data.Issue
-import com.example.android.trackr.data.IssueState
+import com.example.android.trackr.data.Task
+import com.example.android.trackr.data.TaskState
 import com.example.android.trackr.databinding.ListHeaderBinding
-import com.example.android.trackr.databinding.ListIssueBinding
+import com.example.android.trackr.databinding.ListTaskBinding
 
 private const val ITEM_VIEW_TYPE_HEADER = 0
-private const val ITEM_VIEW_TYPE_ISSUE = 1
+private const val ITEM_VIEW_TYPE_TASK = 1
 
-class IssuesAdapter(
-    private val issueItemListener: IssueItemListener
+class TasksAdapter(
+    private val taskItemListener: TaskItemListener
 ) :
     ListAdapter<DataItem, RecyclerView.ViewHolder>(
     DataItemDiffCallback()
 ) {
 
-    interface IssueItemListener {
+    interface TaskItemListener {
         fun onItemClicked()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             ITEM_VIEW_TYPE_HEADER -> HeaderViewHolder.from(parent)
-            ITEM_VIEW_TYPE_ISSUE -> IssueViewHolder.from(parent, issueItemListener)
+            ITEM_VIEW_TYPE_TASK -> TaskViewHolder.from(parent, taskItemListener)
             else -> throw IllegalArgumentException("Unknown viewType $viewType")
         }
     }
@@ -56,14 +55,14 @@ class IssuesAdapter(
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
             is DataItem.HeaderItem -> ITEM_VIEW_TYPE_HEADER
-            is DataItem.IssueItem -> ITEM_VIEW_TYPE_ISSUE
+            is DataItem.TaskItem -> ITEM_VIEW_TYPE_TASK
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is IssueViewHolder -> {
-                holder.bind((getItem(position) as DataItem.IssueItem).issue)
+            is TaskViewHolder -> {
+                holder.bind((getItem(position) as DataItem.TaskItem).task)
             }
 
             is HeaderViewHolder -> {
@@ -73,21 +72,21 @@ class IssuesAdapter(
     }
 
     // TODO: refactor into use case, using a coroutine (and add tests).
-    fun addHeadersAndSubmitList(context: Context, issues: List<Issue>?) {
+    fun addHeadersAndSubmitList(context: Context, tasks: List<Task>?) {
         val items = mutableListOf<DataItem>()
 
-        val map = issues?.groupBy { it.state }
+        val map = tasks?.groupBy { it.state }
 
-        val issueStates = listOf(
-            IssueState.IN_PROGRESS,
-            IssueState.NOT_STARTED,
-            IssueState.COMPLETED,
-            IssueState.ARCHIVED
+        val taskStates = listOf(
+            TaskState.IN_PROGRESS,
+            TaskState.NOT_STARTED,
+            TaskState.COMPLETED,
+            TaskState.ARCHIVED
         )
 
-        issueStates.forEach { state ->
+        taskStates.forEach { state ->
             val sublist = map?.get(state)
-            // Add header even if the category does not have any issues.
+            // Add header even if the category does not have any tasks.
             items.add(
                 DataItem.HeaderItem(
                     HeaderData(
@@ -96,19 +95,19 @@ class IssuesAdapter(
                     )
                 )
             )
-            sublist?.map { items.add(DataItem.IssueItem(it)) }
+            sublist?.map { items.add(DataItem.TaskItem(it)) }
         }
 
         submitList(items)
     }
 
-    private fun headerLabel(context: Context, issueState: IssueState) : String {
+    private fun headerLabel(context: Context, taskState: TaskState) : String {
         return context.getString(
-            when(issueState) {
-                IssueState.IN_PROGRESS -> R.string.in_progress
-                IssueState.NOT_STARTED -> R.string.not_started
-                IssueState.COMPLETED -> R.string.completed
-                IssueState.ARCHIVED -> R.string.archived
+            when(taskState) {
+                TaskState.IN_PROGRESS -> R.string.in_progress
+                TaskState.NOT_STARTED -> R.string.not_started
+                TaskState.COMPLETED -> R.string.completed
+                TaskState.ARCHIVED -> R.string.archived
             })
     }
 
@@ -127,27 +126,27 @@ class IssuesAdapter(
         }
     }
 
-    class IssueViewHolder private constructor(
-        private val binding: ListIssueBinding,
-        private val issueItemListener: IssueItemListener
+    class TaskViewHolder private constructor(
+        private val binding: ListTaskBinding,
+        private val taskItemListener: TaskItemListener
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(issue: Issue) {
-            binding.issue = issue
-            binding.listener = issueItemListener
+        fun bind(task: Task) {
+            binding.task = task
+            binding.listener = taskItemListener
             binding.executePendingBindings()
         }
 
         companion object {
-            fun from(parent: ViewGroup, issueItemListener: IssueItemListener): IssueViewHolder {
+            fun from(parent: ViewGroup, taskItemListener: TaskItemListener): TaskViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                return IssueViewHolder(
-                    ListIssueBinding.inflate(
+                return TaskViewHolder(
+                    ListTaskBinding.inflate(
                         layoutInflater,
                         parent,
                         false
-                    ), issueItemListener)
+                    ), taskItemListener)
             }
         }
     }
@@ -167,8 +166,8 @@ class DataItemDiffCallback : DiffUtil.ItemCallback<DataItem>() {
 sealed class DataItem {
     abstract val id: Long
 
-    data class IssueItem(val issue: Issue) : DataItem() {
-        override val id = issue.id
+    data class TaskItem(val task: Task) : DataItem() {
+        override val id = task.id
     }
 
     data class HeaderItem(val headerData: HeaderData) : DataItem() {

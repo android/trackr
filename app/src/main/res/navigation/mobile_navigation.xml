@@ -19,13 +19,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_issues">
+    app:startDestination="@+id/nav_tasks">
 
     <fragment
-        android:id="@+id/nav_issues"
-        android:name="com.example.android.trackr.ui.issues.IssuesFragment"
-        android:label="Issues"
-        tools:layout="@layout/fragment_issues" />
+        android:id="@+id/nav_tasks"
+        android:name="com.example.android.trackr.ui.tasks.TasksFragment"
+        android:label="Tasks"
+        tools:layout="@layout/fragment_tasks" />
 
     <fragment
         android:id="@+id/nav_filter"
@@ -46,9 +46,9 @@
         tools:layout="@layout/fragment_settings" />
 
     <fragment
-        android:id="@+id/nav_issue_detail"
-        android:name="com.example.android.trackr.ui.detail.IssueDetailFragment"
-        android:label="Issue Detail"
-        android:layout="@layout/fragment_issue_detail" />
+        android:id="@+id/nav_task_detail"
+        android:name="com.example.android.trackr.ui.detail.TaskDetailFragment"
+        android:label="Task Detail"
+        android:layout="@layout/fragment_task_detail" />
 
 </navigation>

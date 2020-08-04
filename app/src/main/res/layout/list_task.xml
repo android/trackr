@@ -18,12 +18,12 @@
     <data>
 
         <variable
-            name="issue"
-            type="com.example.android.trackr.data.Issue" />
+            name="task"
+            type="com.example.android.trackr.data.Task" />
 
         <variable
             name="listener"
-            type="com.example.android.trackr.ui.issues.IssuesAdapter.IssueItemListener" />
+            type="com.example.android.trackr.ui.tasks.TasksAdapter.TaskItemListener" />
 
     </data>
 
@@ -44,7 +44,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{issue.title}" />
+                android:text="@{task.title}" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

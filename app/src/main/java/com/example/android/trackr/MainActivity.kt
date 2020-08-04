@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(
             // Top level nav targets.
             setOf(
-                R.id.nav_issues,
+                R.id.nav_tasks,
                 R.id.nav_filter,
                 R.id.nav_archived,
                 R.id.nav_settings

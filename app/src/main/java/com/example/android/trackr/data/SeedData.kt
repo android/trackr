@@ -29,8 +29,8 @@ object SeedData {
     private val serverTag = Tag(4, "server", argb(255, 200, 100, 30))
     private val designTag = Tag(5, "design")
 
-    val issues = listOf(
-        Issue(
+    val tasks = listOf(
+        Task(
             id = 1,
             title = "Make sure settings screen works with RTL, especially on small devices",
             reporter = user1,
@@ -38,25 +38,25 @@ object SeedData {
             tags = listOf(i18nTag, androidTag)
         ),
 
-        Issue(
+        Task(
             id = 2,
             title = "Enable logging on XYZ component",
-            state = IssueState.IN_PROGRESS,
+            state = TaskState.IN_PROGRESS,
             reporter = user2,
             owner = user3,
             tags = listOf(serverTag)
         ),
 
-        Issue(
+        Task(
             id = 3,
             title = "Create mocks for login screens",
-            type = IssueType.FEATURE_REQUEST,
+            type = TaskType.FEATURE_REQUEST,
             reporter = user2,
             owner = user2,
             tags = listOf(designTag)
         ),
 
-        Issue(
+        Task(
             id = 4,
             title = "Try on app with Talkback and send feedback to team",
             reporter = user2,
