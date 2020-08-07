@@ -18,7 +18,7 @@ package com.example.android.trackr.data
 
 object SeedData {
     // TODO(b/163065333): add descriptive task titles.
-    val Tasks = listOf(
+    val Tasks = arrayListOf(
         Task(title = "Task 1"),
         Task(title = "Task 2"),
         Task(title = "Task 3", state = TaskState.IN_PROGRESS),
