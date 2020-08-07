@@ -16,6 +16,7 @@
 
 package com.example.android.trackr.ui.tasks
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 
@@ -23,7 +24,9 @@ import com.example.android.trackr.data.Task
 
 import com.example.android.trackr.db.dao.TaskDao
 
-class TasksViewModel(private val taskDao: TaskDao) : ViewModel() {
+class TasksViewModel @ViewModelInject constructor(
+    private val taskDao: TaskDao
+) : ViewModel() {
 
     // TODO(b/163065333): add a UseCase instead of directly using the DAO here?
     val tasks: LiveData<List<Task>>

@@ -16,18 +16,15 @@
 
 package com.example.android.trackr.db
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import androidx.sqlite.db.SupportSQLiteDatabase
-import com.example.android.trackr.DefaultScheduler
-import com.example.android.trackr.data.SeedData
+
 import com.example.android.trackr.data.Tag
 import com.example.android.trackr.data.Task
 import com.example.android.trackr.data.TaskTag
 import com.example.android.trackr.data.User
+
 import com.example.android.trackr.db.dao.TaskDao
 
 @Database(
@@ -39,45 +36,4 @@ import com.example.android.trackr.db.dao.TaskDao
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun taskDao(): TaskDao
-
-    companion object {
-        private const val DATABASE_NAME = "trackr-db"
-
-        @Volatile
-        private var INSTANCE: AppDatabase? = null
-
-        fun getInstance(context: Context): AppDatabase {
-            return INSTANCE ?: synchronized(AppDatabase::class.java) {
-                INSTANCE ?: buildDatabase(context).also {
-                    INSTANCE = it
-                }
-            }
-        }
-
-        private fun buildDatabase(context: Context): AppDatabase {
-            return Room.databaseBuilder(
-                context.applicationContext,
-                AppDatabase::class.java,
-                DATABASE_NAME
-            )
-                .addCallback(object : RoomDatabase.Callback() {
-                    override fun onCreate(db: SupportSQLiteDatabase) {
-                        super.onCreate(db)
-                        DefaultScheduler.execute {
-                            with(getInstance(context)) {
-                                runInTransaction {
-                                    with(taskDao()) {
-                                        insertUsers(SeedData.Users)
-                                        insertTags(SeedData.Tags)
-                                        insertTasks(SeedData.Tasks)
-                                        insertTaskTags(SeedData.TaskTags)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                })
-                .build()
-        }
-    }
 }

@@ -21,16 +21,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android.trackr.R
-import com.example.android.trackr.db.AppDatabase
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_tasks.*
 
+@AndroidEntryPoint
 class TasksFragment : Fragment() {
 
-    private lateinit var viewModel: TasksViewModel
+    private val viewModel: TasksViewModel by viewModels()
 
     private val tasksAdapter = TasksAdapter(object : TasksAdapter.TaskItemListener {
         override fun onItemClicked() {
@@ -55,11 +57,6 @@ class TasksFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        viewModel =
-            TasksViewModelFactory(AppDatabase.getInstance(requireContext()).taskDao()).create(
-                TasksViewModel::class.java
-            )
 
         viewModel.tasks.observe(viewLifecycleOwner) {
             tasksAdapter.addHeadersAndSubmitList(requireContext(), it)
