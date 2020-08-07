@@ -22,6 +22,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.android.trackr.DefaultScheduler
 import com.example.android.trackr.data.SeedData
 import com.example.android.trackr.db.dao.TaskDao
 import com.example.android.trackr.data.Task
@@ -60,12 +61,8 @@ abstract class AppDatabase : RoomDatabase() {
                 .addCallback(object : RoomDatabase.Callback() {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)
-
-                        // TODO(b/163065333): temporary. Replace after implementing app-wide async scheduler.
-                        val exec = Executors.newSingleThreadScheduledExecutor()
-                        exec.execute {
+                        DefaultScheduler.execute {
                             getInstance(context).taskDao().insertAll(SeedData.Tasks)
-                            exec.shutdown()
                         }
                     }
                 })
