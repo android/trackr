@@ -24,12 +24,14 @@ import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.android.trackr.DefaultScheduler
 import com.example.android.trackr.data.SeedData
-import com.example.android.trackr.db.dao.TaskDao
+import com.example.android.trackr.data.Tag
 import com.example.android.trackr.data.Task
-import java.util.concurrent.Executors
+import com.example.android.trackr.data.TaskTag
+import com.example.android.trackr.data.User
+import com.example.android.trackr.db.dao.TaskDao
 
 @Database(
-    entities = [Task::class],
+    entities = [Task::class, Tag::class, User::class, TaskTag::class],
     version = 1,
     exportSchema = false
 )
@@ -62,7 +64,16 @@ abstract class AppDatabase : RoomDatabase() {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)
                         DefaultScheduler.execute {
-                            getInstance(context).taskDao().insertAll(SeedData.Tasks)
+                            with(getInstance(context)) {
+                                runInTransaction {
+                                    with(taskDao()) {
+                                        insertUsers(SeedData.Users)
+                                        insertTags(SeedData.Tags)
+                                        insertTasks(SeedData.Tasks)
+                                        insertTaskTags(SeedData.TaskTags)
+                                    }
+                                }
+                            }
                         }
                     }
                 })

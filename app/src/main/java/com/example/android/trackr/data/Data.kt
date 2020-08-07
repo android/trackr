@@ -18,15 +18,31 @@ package com.example.android.trackr.data
 
 import android.graphics.Color
 import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 
 
-@Entity(tableName = "tasks")
+@Entity(
+    tableName = "tasks",
+    foreignKeys = [
+        ForeignKey(
+            childColumns = ["reporterId"],
+            entity = User::class,
+            parentColumns = ["id"]
+        ),
+        ForeignKey(
+            childColumns = ["ownerId"],
+            entity = User::class,
+            parentColumns = ["id"]
+        )
+    ]
+)
 data class Task(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
+    @PrimaryKey
+    val id: Long,
 
     /**
      * The task title. TODO: consider adding char limit which may help showcase a11y validation issues.
@@ -43,23 +59,15 @@ data class Task(
      */
     val state: TaskState = TaskState.NOT_STARTED,
 
-    /*
-    TODO: for these fields, set up FK relationships after defining User and Tag entities.
     /**
      * The team member who created the task (this defaults to the current user).
      */
-    val reporter: User,
+    val reporterId: Long,
 
     /**
      * The team member who the task has been assigned to.
      */
-    val owner: User,
-
-    /**
-     * An arbitrary list of tags associated with an task.
-     */
-    val tags: List<Tag> = emptyList()
-    */
+    val ownerId: Long,
 
     /**
      * When this task was created.
@@ -85,8 +93,9 @@ enum class TaskState(val key: Int) {
     }
 }
 
-// TODO(b/163065333): convert to Entity and set up FK relationships.
+@Entity(tableName = "tags")
 data class Tag(
+    @PrimaryKey
     val id: Long,
 
     /**
@@ -102,19 +111,40 @@ data class Tag(
     var color: Int = Color.rgb(255, 255, 255)
 )
 
-// TODO(b/163065333): convert to Entity and set up FK relationships.
+@Entity(
+    tableName = "task_tags",
+    foreignKeys = [
+        ForeignKey(
+            childColumns = ["taskId"],
+            entity = Task::class,
+            parentColumns = ["id"]
+        ),
+        ForeignKey(
+            childColumns = ["tagId"],
+            entity = Tag::class,
+            parentColumns = ["id"]
+        )
+    ],
+    indices = [
+        Index(value = ["taskId", "tagId"], unique = true)
+    ]
+)
+data class TaskTag(
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
+    val taskId: Long,
+    val tagId: Long
+)
+
+@Entity(tableName = "users")
 data class User(
+    @PrimaryKey
     val id: Long,
 
     /**
      * A short name for the user.
      */
-    val username: String,
+    val username: String
 
     // TODO: add field for avatar.
-
-    /**
-     * The list of tasks that the user has starred.
-     */
-    val starredTasks: List<Task> = emptyList()
 )

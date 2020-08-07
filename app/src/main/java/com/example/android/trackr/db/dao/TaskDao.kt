@@ -20,12 +20,25 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import com.example.android.trackr.data.Tag
 import com.example.android.trackr.data.Task
+import com.example.android.trackr.data.TaskTag
+import com.example.android.trackr.data.User
 
 @Dao
 interface TaskDao {
+
     @Insert
-    fun insertAll(taskEntities: List<Task>)
+    fun insertUsers(users: List<User>)
+
+    @Insert
+    fun insertTags(tags: List<Tag>)
+
+    @Insert
+    fun insertTasks(tasks: List<Task>)
+
+    @Insert
+    fun insertTaskTags(taskTags: List<TaskTag>)
 
     @Query("SELECT * FROM tasks")
     fun getTasks(): LiveData<List<Task>>

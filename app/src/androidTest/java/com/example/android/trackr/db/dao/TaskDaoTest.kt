@@ -25,8 +25,12 @@ import com.example.android.trackr.data.Task
 import com.example.android.trackr.db.AppDatabase
 import com.example.android.trackr.valueBlocking
 import org.hamcrest.CoreMatchers.`is`
-import org.junit.*
+import org.junit.After
+import org.junit.Assert
 import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
@@ -68,7 +72,9 @@ class TaskDaoTest {
     @Test
     @Throws(InterruptedException::class)
     fun getTasks_WhenTasksInserted() {
-        taskDao.insertAll(SeedData.Tasks)
+        taskDao.insertUsers(SeedData.Users)
+        taskDao.insertTags(SeedData.Tags)
+        taskDao.insertTasks(SeedData.Tasks)
         val tasks = taskDao.getTasks().valueBlocking
         Assert.assertThat(tasks.size, `is`(SeedData.Tasks.size))
     }
