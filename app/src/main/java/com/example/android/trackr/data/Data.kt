@@ -148,3 +148,29 @@ data class User(
 
     // TODO: add field for avatar.
 )
+
+@Entity(
+    tableName = "user_tasks",
+    foreignKeys = [
+        ForeignKey(
+            childColumns = ["userId"],
+            entity = User::class,
+            parentColumns = ["id"]
+        ),
+        ForeignKey(
+            childColumns = ["taskId"],
+            entity = Task::class,
+            parentColumns = ["id"]
+        )
+    ],
+    indices = [
+        Index(value = ["userId", "taskId"], unique = true)
+    ]
+)
+data class UserTask(
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
+    val userId: Long,
+    val taskId: Long,
+    val star: Boolean
+)

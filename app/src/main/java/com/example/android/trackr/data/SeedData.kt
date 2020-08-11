@@ -53,4 +53,8 @@ object SeedData {
         TaskTag(taskId = 5L, tagId = 2L),
         TaskTag(taskId = 6L, tagId = 2L)
     )
+
+    val UserTasks = listOf(
+        UserTask(userId = 1L, taskId = 1L, star = true)
+    )
 }

@@ -19,16 +19,12 @@ package com.example.android.trackr.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-
-import com.example.android.trackr.data.Tag
-import com.example.android.trackr.data.Task
-import com.example.android.trackr.data.TaskTag
-import com.example.android.trackr.data.User
+import com.example.android.trackr.data.*
 
 import com.example.android.trackr.db.dao.TaskDao
 
 @Database(
-    entities = [Task::class, Tag::class, User::class, TaskTag::class],
+    entities = [Task::class, Tag::class, User::class, TaskTag::class, UserTask::class],
     version = 1,
     exportSchema = false
 )

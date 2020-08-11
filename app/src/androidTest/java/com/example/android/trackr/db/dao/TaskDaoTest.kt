@@ -24,6 +24,7 @@ import com.example.android.trackr.data.SeedData
 import com.example.android.trackr.data.Task
 import com.example.android.trackr.db.AppDatabase
 import com.example.android.trackr.valueBlocking
+import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.After
 import org.junit.Assert
@@ -71,7 +72,7 @@ class TaskDaoTest {
 
     @Test
     @Throws(InterruptedException::class)
-    fun getTasks_WhenTasksInserted() {
+    fun getTasks_WhenTasksInserted() = runBlocking {
         taskDao.insertUsers(SeedData.Users)
         taskDao.insertTags(SeedData.Tags)
         taskDao.insertTasks(SeedData.Tasks)

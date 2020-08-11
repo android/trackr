@@ -51,6 +51,7 @@ object AppModule {
                     insertTags(SeedData.Tags)
                     insertTasks(SeedData.Tasks)
                     insertTaskTags(SeedData.TaskTags)
+                    insertUserTasks(SeedData.UserTasks)
                 }
             }
         }
