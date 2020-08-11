@@ -3,8 +3,8 @@ package com.example.android.trackr.di
 import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.withTransaction
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.example.android.trackr.DefaultScheduler
 import com.example.android.trackr.data.SeedData
 import com.example.android.trackr.db.AppDatabase
 import com.example.android.trackr.db.dao.TaskDao
@@ -13,6 +13,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import javax.inject.Singleton
 
 @Module
@@ -24,29 +27,33 @@ object AppModule {
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
-        appDatabase =  Room.databaseBuilder(
+        appDatabase = Room.databaseBuilder(
             context,
             AppDatabase::class.java, "trackr-db"
         )
             .addCallback(object : RoomDatabase.Callback() {
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)
-                    DefaultScheduler.execute {
-                        with(appDatabase) {
-                            runInTransaction {
-                                with(taskDao()) {
-                                    insertUsers(SeedData.Users)
-                                    insertTags(SeedData.Tags)
-                                    insertTasks(SeedData.Tasks)
-                                    insertTaskTags(SeedData.TaskTags)
-                                }
-                            }
-                        }
+                    GlobalScope.launch(Dispatchers.IO) {
+                        insertSeedData()
                     }
                 }
             })
             .build()
         return appDatabase
+    }
+
+    suspend fun insertSeedData() {
+        with(appDatabase) {
+            withTransaction {
+                with(taskDao()) {
+                    insertUsers(SeedData.Users)
+                    insertTags(SeedData.Tags)
+                    insertTasks(SeedData.Tasks)
+                    insertTaskTags(SeedData.TaskTags)
+                }
+            }
+        }
     }
 
     @Provides

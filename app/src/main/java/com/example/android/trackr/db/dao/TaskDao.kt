@@ -29,16 +29,16 @@ import com.example.android.trackr.data.User
 interface TaskDao {
 
     @Insert
-    fun insertUsers(users: List<User>)
+    suspend fun insertUsers(users: List<User>)
 
     @Insert
-    fun insertTags(tags: List<Tag>)
+    suspend fun insertTags(tags: List<Tag>)
 
     @Insert
-    fun insertTasks(tasks: List<Task>)
+    suspend fun insertTasks(tasks: List<Task>)
 
     @Insert
-    fun insertTaskTags(taskTags: List<TaskTag>)
+    suspend fun insertTaskTags(taskTags: List<TaskTag>)
 
     @Query("SELECT * FROM tasks")
     fun getTasks(): LiveData<List<Task>>
