@@ -17,18 +17,31 @@
 package com.example.android.trackr.ui.detail
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import com.example.android.trackr.R
+import com.example.android.trackr.databinding.FragmentTaskDetailBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-class TaskDetailFragment : Fragment() {
+@AndroidEntryPoint
+class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_task_detail, container, false)
+    private val viewModel: TaskDetailViewModel by viewModels()
+    private val args: TaskDetailFragmentArgs by navArgs()
+
+    private lateinit var binding: FragmentTaskDetailBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.taskId = args.taskId
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding = FragmentTaskDetailBinding.bind(view)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
     }
 }

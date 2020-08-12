@@ -26,8 +26,10 @@ import com.example.android.trackr.db.AppDatabase
 import com.example.android.trackr.valueBlocking
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.Matchers.hasSize
 import org.junit.After
-import org.junit.Assert
+import org.junit.Assert.assertThat
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
@@ -77,6 +79,26 @@ class TaskDaoTest {
         taskDao.insertTags(SeedData.Tags)
         taskDao.insertTasks(SeedData.Tasks)
         val tasks = taskDao.getTasks().valueBlocking
-        Assert.assertThat(tasks.size, `is`(SeedData.Tasks.size))
+        assertThat(tasks.size, `is`(SeedData.Tasks.size))
+    }
+
+    @Test
+    fun getTaskDetailById() = runBlocking {
+        taskDao.insertUsers(SeedData.Users)
+        taskDao.insertTags(SeedData.Tags)
+        taskDao.insertTasks(SeedData.Tasks)
+        taskDao.insertTaskTags(SeedData.TaskTags)
+        taskDao.insertUserTasks(SeedData.UserTasks)
+        taskDao.getTaskDetailById(1L).valueBlocking!!.let { detail ->
+            assertThat(detail.id, `is`(1L))
+            assertThat(detail.title, `is`(equalTo("Task 1")))
+            assertThat(detail.owner.username, `is`(equalTo("You")))
+            assertThat(detail.reporter.username, `is`(equalTo("John")))
+            assertThat(detail.tags, hasSize(2))
+            assertThat(detail.tags[0].label, `is`(equalTo("Home")))
+            assertThat(detail.tags[1].label, `is`(equalTo("Hobby")))
+            assertThat(detail.starUsers, hasSize(1))
+            assertThat(detail.starUsers[0].username, `is`(equalTo("You")))
+        }
     }
 }

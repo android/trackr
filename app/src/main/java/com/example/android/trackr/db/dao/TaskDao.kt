@@ -42,4 +42,7 @@ interface TaskDao {
 
     @Query("SELECT * FROM tasks")
     fun getTasks(): LiveData<List<Task>>
+
+    @Query("SELECT * FROM TaskDetail WHERE id = :id")
+    fun getTaskDetailById(id: Long): LiveData<TaskDetail?>
 }

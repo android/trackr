@@ -49,6 +49,10 @@
         android:id="@+id/nav_task_detail"
         android:name="com.example.android.trackr.ui.detail.TaskDetailFragment"
         android:label="Task Detail"
-        android:layout="@layout/fragment_task_detail" />
+        android:layout="@layout/fragment_task_detail">
+        <argument
+            android:name="taskId"
+            app:argType="long" />
+    </fragment>
 
 </navigation>

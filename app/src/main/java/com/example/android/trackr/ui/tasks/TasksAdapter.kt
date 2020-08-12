@@ -40,7 +40,7 @@ class TasksAdapter(
 ) {
 
     interface TaskItemListener {
-        fun onItemClicked()
+        fun onItemClicked(task: Task)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

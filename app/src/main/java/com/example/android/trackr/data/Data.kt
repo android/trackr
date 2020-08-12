@@ -171,6 +171,5 @@ data class UserTask(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     val userId: Long,
-    val taskId: Long,
-    val star: Boolean
+    val taskId: Long
 )
