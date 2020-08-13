@@ -16,12 +16,12 @@
 
 package com.example.android.trackr.db.dao
 
+import android.graphics.Color
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.android.trackr.data.SeedData
-import com.example.android.trackr.data.Task
+import com.example.android.trackr.data.*
 import com.example.android.trackr.db.AppDatabase
 import com.example.android.trackr.valueBlocking
 import kotlinx.coroutines.runBlocking
@@ -29,8 +29,7 @@ import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.hasSize
 import org.junit.After
-import org.junit.Assert.assertThat
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -100,5 +99,56 @@ class TaskDaoTest {
             assertThat(detail.starUsers, hasSize(1))
             assertThat(detail.starUsers[0].username, `is`(equalTo("You")))
         }
+    }
+
+    @Test
+    fun getTaskListItem() {
+        val users = listOf(user1)
+        val tasks = listOf(task1)
+        val tags = listOf(tag1, tag2)
+        val taskTags = listOf(tastTag1, taskTag2)
+        val userTasks = listOf(userTask1)
+
+        insertData(taskDao, users, tasks, tags, taskTags, userTasks)
+
+        taskDao.getTaskListItems().valueBlocking.let { taskListItems ->
+            val item = taskListItems[0]
+            assertEquals(item.id, tasks[0].id)
+            assertEquals(item.title, tasks[0].title)
+            assertEquals(item.owner, users[0])
+            assertEquals(item.dueAt, tasks[0].dueAt)
+            assertEquals(item.state, tasks[0].state)
+            assertEquals(item.tags.size, tags.size)
+            assertEquals(item.starUsers.size, userTasks.size)
+        }
+    }
+
+    companion object {
+        fun insertData(
+            taskDao: TaskDao,
+            users: List<User>,
+            tasks: List<Task>,
+            tags: List<Tag>,
+            taskTags: List<TaskTag>,
+            userTasks: List<UserTask>
+        ) = runBlocking {
+            taskDao.insertUsers(users)
+            taskDao.insertTasks(tasks)
+            taskDao.insertTags(tags)
+            taskDao.insertTaskTags(taskTags)
+            taskDao.insertUserTasks(userTasks)
+        }
+
+        val user1 = User(id = 1L, username = "user1")
+
+        val task1 = Task(id = 1L, title = "Task 1", ownerId = 1L, reporterId = 1L)
+
+        val tag1 = Tag(id = 1L, label = "tag1", color = Color.rgb(0x81, 0xC7, 0x84))
+        val tag2 = Tag(id = 2L, label = "tag2", color = Color.rgb(0xE5, 0x73, 0x73))
+
+        val tastTag1 =  TaskTag(taskId = 1L, tagId = 1L)
+        val taskTag2 =  TaskTag(taskId = 1L, tagId = 2L)
+
+        val userTask1 = UserTask(userId = 1L, taskId = 1L)
     }
 }

@@ -17,6 +17,8 @@
 package com.example.android.trackr.data
 
 import android.graphics.Color
+import org.threeten.bp.Duration
+import org.threeten.bp.Instant
 
 object SeedData {
 
@@ -40,7 +42,9 @@ object SeedData {
             title = "Task 3",
             state = TaskState.IN_PROGRESS,
             ownerId = 1L,
-            reporterId = 1L
+            reporterId = 1L,
+            createdAt = Instant.now() - Duration.ofDays(1),
+            dueAt = Instant.now() + Duration.ofDays(2)
         ),
         Task(id = 4L, title = "Task 4", state = TaskState.COMPLETED, ownerId = 1L, reporterId = 1L),
         Task(id = 5L, title = "Task 5", ownerId = 1L, reporterId = 1L),

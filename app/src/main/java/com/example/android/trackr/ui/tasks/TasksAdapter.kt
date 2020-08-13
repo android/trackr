@@ -27,6 +27,7 @@ import com.example.android.trackr.R
 import com.example.android.trackr.databinding.ListHeaderBinding
 import com.example.android.trackr.databinding.ListTaskBinding
 import com.example.android.trackr.data.Task
+import com.example.android.trackr.data.TaskListItem
 import com.example.android.trackr.data.TaskState
 
 private const val ITEM_VIEW_TYPE_HEADER = 0
@@ -40,7 +41,7 @@ class TasksAdapter(
 ) {
 
     interface TaskItemListener {
-        fun onItemClicked(task: Task)
+        fun onItemClicked(task: TaskListItem)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -61,7 +62,7 @@ class TasksAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is TaskViewHolder -> {
-                holder.bind((getItem(position) as DataItem.TaskItem).task)
+                holder.bind((getItem(position) as DataItem.TaskItem).taskListItem)
             }
 
             is HeaderViewHolder -> {
@@ -71,7 +72,7 @@ class TasksAdapter(
     }
 
     // TODO: refactor into use case, using a coroutine (and add tests).
-    fun addHeadersAndSubmitList(context: Context, tasks: List<Task>) {
+    fun addHeadersAndSubmitList(context: Context, tasks: List<TaskListItem>) {
         val items = mutableListOf<DataItem>()
 
         val map = tasks.groupBy { it.state }
@@ -84,7 +85,7 @@ class TasksAdapter(
         )
 
         taskStates.forEach { state ->
-            val sublist: List<Task>? = map[state]
+            val sublist: List<TaskListItem>? = map[state]
             // Add header even if the category does not have any tasks.
             items.add(
                 DataItem.HeaderItem(
@@ -131,8 +132,8 @@ class TasksAdapter(
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(task: Task) {
-            binding.task = task
+        fun bind(taskListItem: TaskListItem) {
+            binding.taskListItem = taskListItem
             binding.listener = taskItemListener
             binding.executePendingBindings()
         }
@@ -165,8 +166,8 @@ class DataItemDiffCallback : DiffUtil.ItemCallback<DataItem>() {
 sealed class DataItem {
     abstract val id: Long
 
-    data class TaskItem(val task: Task) : DataItem() {
-        override val id = task.id
+    data class TaskItem(val taskListItem: TaskListItem) : DataItem() {
+        override val id = taskListItem.id
     }
 
     data class HeaderItem(val headerData: HeaderData) : DataItem() {

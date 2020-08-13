@@ -26,7 +26,7 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android.trackr.R
-import com.example.android.trackr.data.Task
+import com.example.android.trackr.data.TaskListItem
 import com.example.android.trackr.ui.detail.TaskDetailFragmentArgs
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_tasks.*
@@ -37,9 +37,9 @@ class TasksFragment : Fragment() {
     private val viewModel: TasksViewModel by viewModels()
 
     private val tasksAdapter = TasksAdapter(object : TasksAdapter.TaskItemListener {
-        override fun onItemClicked(task: Task) {
+        override fun onItemClicked(taskListItem: TaskListItem) {
             findNavController()
-                .navigate(R.id.nav_task_detail, TaskDetailFragmentArgs(task.id).toBundle())
+                .navigate(R.id.nav_task_detail, TaskDetailFragmentArgs(taskListItem.id).toBundle())
         }
     })
 
@@ -61,7 +61,7 @@ class TasksFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.tasks.observe(viewLifecycleOwner) {
+        viewModel.taskListItems.observe(viewLifecycleOwner) {
             tasksAdapter.addHeadersAndSubmitList(requireContext(), it)
         }
     }

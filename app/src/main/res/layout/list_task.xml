@@ -18,8 +18,8 @@
     <data>
 
         <variable
-            name="task"
-            type="com.example.android.trackr.data.Task" />
+            name="taskListItem"
+            type="com.example.android.trackr.data.TaskListItem" />
 
         <variable
             name="listener"
@@ -31,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:onClick="@{() -> listener.onItemClicked(task)}">
+        android:onClick="@{() -> listener.onItemClicked(taskListItem)}">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,7 +44,22 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{task.title}" />
+                android:text="@{taskListItem.title}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{taskListItem.owner.username}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{String.valueOf(taskListItem.daysLabel)}" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{taskListItem.tagLabels}" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

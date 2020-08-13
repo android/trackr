@@ -20,6 +20,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import com.example.android.trackr.data.*
 
 @Dao
@@ -45,4 +46,8 @@ interface TaskDao {
 
     @Query("SELECT * FROM TaskDetail WHERE id = :id")
     fun getTaskDetailById(id: Long): LiveData<TaskDetail?>
+
+    @Transaction
+    @Query("SELECT * FROM TaskListItem")
+    fun  getTaskListItems(): LiveData<List<TaskListItem>>
 }

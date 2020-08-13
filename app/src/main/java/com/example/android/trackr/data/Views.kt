@@ -16,11 +16,65 @@
 
 package com.example.android.trackr.data
 
-import androidx.room.DatabaseView
-import androidx.room.Embedded
-import androidx.room.Junction
-import androidx.room.Relation
+import androidx.room.*
+import org.threeten.bp.Duration
 import org.threeten.bp.Instant
+
+@DatabaseView(
+    """
+        SELECT
+            t.id, t.title, t.state, t.dueAt,
+            o.id AS owner_id, o.username AS owner_username
+        FROM tasks AS t
+        INNER JOIN users AS o ON o.id = t.ownerId
+    """
+)
+data class TaskListItem(
+    val id: Long,
+
+    val title: String,
+
+    val state: TaskState,
+
+    val dueAt: Instant,
+
+    @Embedded(prefix = "owner_")
+    val owner: User,
+
+    @Relation(
+        parentColumn = "id",
+        entity = Tag::class,
+        entityColumn = "id",
+        associateBy = Junction(
+            value = TaskTag::class,
+            parentColumn = "taskId",
+            entityColumn = "tagId"
+        )
+    )
+    val tags: List<Tag>,
+
+    @Relation(
+        parentColumn = "id",
+        entity = User::class,
+        entityColumn = "id",
+        associateBy = Junction(
+            value = UserTask::class,
+            parentColumn = "taskId",
+            entityColumn = "userId"
+        )
+    )
+    val starUsers: List<User>
+) {
+    // TODO: remove (placeholder string representations)
+    @Ignore
+    val tagLabels = tags.joinToString { it.label }
+    val daysLabel : String
+        get() {
+            val days = Duration.between(Instant.now(), dueAt).toDays()
+            val label =   if (days == 1L) "day" else "days"
+            return "$days $label"
+    }
+}
 
 @DatabaseView(
     """
