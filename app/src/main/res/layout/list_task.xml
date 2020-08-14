@@ -13,7 +13,8 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -56,10 +57,11 @@
                 android:layout_height="wrap_content"
                 android:text="@{String.valueOf(taskListItem.daysLabel)}" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{taskListItem.tagLabels}" />
+                app:appendTagChips="@{taskListItem.tags}" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

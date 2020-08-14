@@ -66,8 +66,6 @@ data class TaskListItem(
     val starUsers: List<User>
 ) {
     // TODO: remove (placeholder string representations)
-    @Ignore
-    val tagLabels = tags.joinToString { it.label }
     val daysLabel : String
         get() {
             val days = Duration.between(Instant.now(), dueAt).toDays()

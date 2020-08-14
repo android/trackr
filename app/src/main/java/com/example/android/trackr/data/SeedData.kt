@@ -56,7 +56,6 @@ object SeedData {
         TaskTag(taskId = 1L, tagId = 3L),
         TaskTag(taskId = 2L, tagId = 1L),
         TaskTag(taskId = 3L, tagId = 1L),
-        TaskTag(taskId = 4L, tagId = 2L),
         TaskTag(taskId = 5L, tagId = 2L),
         TaskTag(taskId = 6L, tagId = 2L)
     )
