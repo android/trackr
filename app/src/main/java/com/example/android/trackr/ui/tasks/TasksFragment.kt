@@ -24,16 +24,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android.trackr.R
 import com.example.android.trackr.data.TaskListItem
 import com.example.android.trackr.ui.detail.TaskDetailFragmentArgs
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_tasks.*
 
 @AndroidEntryPoint
 class TasksFragment : Fragment() {
-
     private val viewModel: TasksViewModel by viewModels()
 
     private val tasksAdapter = TasksAdapter(object : TasksAdapter.TaskItemListener {
@@ -41,18 +42,30 @@ class TasksFragment : Fragment() {
             findNavController()
                 .navigate(R.id.nav_task_detail, TaskDetailFragmentArgs(taskListItem.id).toBundle())
         }
+        
+        override fun onItemArchived(taskListItem: TaskListItem) {
+            viewModel.archiveTask(taskListItem)
+        }
     })
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_tasks, container, false)
+        return inflater.inflate(
+            R.layout.fragment_tasks,
+            container,
+            /* attachToRoot= */ false
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         tasks_list.apply {
+            val itemTouchHelper = ItemTouchHelper(SwipeActionCallback())
+            itemTouchHelper.attachToRecyclerView(this)
             layoutManager = LinearLayoutManager(activity)
             adapter = tasksAdapter
         }
@@ -63,6 +76,24 @@ class TasksFragment : Fragment() {
 
         viewModel.taskListItems.observe(viewLifecycleOwner) {
             tasksAdapter.addHeadersAndSubmitList(requireContext(), it)
+        }
+
+        // Logic for presenting user with the option to unarchive a previously archived task.
+        viewModel.archivedItem.observe(viewLifecycleOwner) { item ->
+            if (item != null) {
+                // TODO (b/165136134): retain Snackbar for users of accessibility services.
+                view?.let {
+                    Snackbar.make(
+                        it,
+                        getString(R.string.task_archived),
+                        Snackbar.LENGTH_LONG
+                    )
+                        .setAction(getString(R.string.undo)) {
+                            viewModel.unarchiveTask()
+                        }
+                        .show()
+                }
+            }
         }
     }
 }

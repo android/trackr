@@ -21,7 +21,14 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
-import com.example.android.trackr.data.*
+import com.example.android.trackr.data.Tag
+import com.example.android.trackr.data.Task
+import com.example.android.trackr.data.TaskDetail
+import com.example.android.trackr.data.TaskListItem
+import com.example.android.trackr.data.TaskState
+import com.example.android.trackr.data.TaskTag
+import com.example.android.trackr.data.User
+import com.example.android.trackr.data.UserTask
 
 @Dao
 interface TaskDao {
@@ -50,4 +57,7 @@ interface TaskDao {
     @Transaction
     @Query("SELECT * FROM TaskListItem")
     fun  getTaskListItems(): LiveData<List<TaskListItem>>
+
+    @Query("UPDATE tasks SET state = :state WHERE id = :id")
+    suspend fun updateTaskState(id: Long, state: TaskState)
 }

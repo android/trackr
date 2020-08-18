@@ -26,7 +26,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android.trackr.R
 import com.example.android.trackr.databinding.ListHeaderBinding
 import com.example.android.trackr.databinding.ListTaskBinding
-import com.example.android.trackr.data.Task
 import com.example.android.trackr.data.TaskListItem
 import com.example.android.trackr.data.TaskState
 
@@ -41,7 +40,8 @@ class TasksAdapter(
 ) {
 
     interface TaskItemListener {
-        fun onItemClicked(task: TaskListItem)
+        fun onItemClicked(taskListItem: TaskListItem)
+        fun onItemArchived(taskListItem: TaskListItem)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -130,12 +130,18 @@ class TasksAdapter(
         private val binding: ListTaskBinding,
         private val taskItemListener: TaskItemListener
     ) :
-        RecyclerView.ViewHolder(binding.root) {
+        RecyclerView.ViewHolder(binding.root), SwipeActionCallback.SwipeActionListener {
 
         fun bind(taskListItem: TaskListItem) {
             binding.taskListItem = taskListItem
             binding.listener = taskItemListener
             binding.executePendingBindings()
+        }
+
+        override fun onSwipe() {
+           binding.taskListItem?.let {
+                binding.listener?.onItemArchived(it)
+            }
         }
 
         companion object {

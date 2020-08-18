@@ -21,7 +21,13 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.android.trackr.data.*
+import com.example.android.trackr.data.SeedData
+import com.example.android.trackr.data.Tag
+import com.example.android.trackr.data.Task
+import com.example.android.trackr.data.TaskState
+import com.example.android.trackr.data.TaskTag
+import com.example.android.trackr.data.User
+import com.example.android.trackr.data.UserTask
 import com.example.android.trackr.db.AppDatabase
 import com.example.android.trackr.valueBlocking
 import kotlinx.coroutines.runBlocking
@@ -29,7 +35,9 @@ import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.Matchers.hasSize
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThat
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -123,14 +131,29 @@ class TaskDaoTest {
         }
     }
 
+    @Test
+    fun updateTaskState_persistsState() = runBlocking {
+        insertData(taskDao, listOf(user1), listOf(task1))
+
+        taskDao.getTasks().valueBlocking.let { tasks ->
+            assertEquals(tasks[0].state, TaskState.NOT_STARTED)
+        }
+
+        taskDao.updateTaskState(task1.id, TaskState.ARCHIVED)
+
+        taskDao.getTasks().valueBlocking.let { tasks ->
+            assertEquals(tasks[0].state, TaskState.ARCHIVED)
+        }
+    }
+
     companion object {
         fun insertData(
             taskDao: TaskDao,
             users: List<User>,
-            tasks: List<Task>,
-            tags: List<Tag>,
-            taskTags: List<TaskTag>,
-            userTasks: List<UserTask>
+            tasks: List<Task> = emptyList(),
+            tags: List<Tag> = emptyList(),
+            taskTags: List<TaskTag> = emptyList(),
+            userTasks: List<UserTask> = emptyList()
         ) = runBlocking {
             taskDao.insertUsers(users)
             taskDao.insertTasks(tasks)
