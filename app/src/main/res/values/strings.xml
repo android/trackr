@@ -23,6 +23,9 @@
     <string name="completed">Completed</string>
     <string name="archived">Archived</string>
 
+    <!-- Custom accessibility action strings -->
+    <string name="archive">Archive</string>
+
     <!-- Snackbar strings -->
     <string name="task_archived">Task archived</string>
     <string name="undo">Undo</string>

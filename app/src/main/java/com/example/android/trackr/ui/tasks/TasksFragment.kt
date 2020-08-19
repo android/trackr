@@ -42,7 +42,7 @@ class TasksFragment : Fragment() {
             findNavController()
                 .navigate(R.id.nav_task_detail, TaskDetailFragmentArgs(taskListItem.id).toBundle())
         }
-        
+
         override fun onItemArchived(taskListItem: TaskListItem) {
             viewModel.archiveTask(taskListItem)
         }
@@ -81,7 +81,6 @@ class TasksFragment : Fragment() {
         // Logic for presenting user with the option to unarchive a previously archived task.
         viewModel.archivedItem.observe(viewLifecycleOwner) { item ->
             if (item != null) {
-                // TODO (b/165136134): retain Snackbar for users of accessibility services.
                 view?.let {
                     Snackbar.make(
                         it,

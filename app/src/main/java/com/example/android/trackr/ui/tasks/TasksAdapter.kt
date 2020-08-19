@@ -19,7 +19,9 @@ package com.example.android.trackr.ui.tasks
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -132,16 +134,47 @@ class TasksAdapter(
     ) :
         RecyclerView.ViewHolder(binding.root), SwipeActionCallback.SwipeActionListener {
 
+        private val accessibilityActionIds = arrayListOf<Int>()
+
         fun bind(taskListItem: TaskListItem) {
             binding.taskListItem = taskListItem
             binding.listener = taskItemListener
             binding.executePendingBindings()
+            addArchiveAccessibilityAction(taskListItem)
         }
 
         override fun onSwipe() {
            binding.taskListItem?.let {
                 binding.listener?.onItemArchived(it)
             }
+        }
+
+        /**
+         * Creates a custom accessibility action for archiving tasks.
+         *
+         * This provides the swipe-to-archive functionality to users of accessibility services who
+         * may not be able to perform the swipe gesture.
+         */
+        private fun addArchiveAccessibilityAction(taskListItem: TaskListItem) {
+            // Clear previously added actions. If this is skipped, the actions may be duplicated
+            // when a view is rebound.
+            removeAccessibilityActions(binding.root)
+
+            accessibilityActionIds.add(
+                ViewCompat.addAccessibilityAction(
+                    binding.root,
+                    // The label surfaced to end user by an accessibility service.
+                    binding.root.context.getString(R.string.archive)
+                ) { _, _ ->
+                    // The functionality associated with the label.
+                    binding.listener?.onItemArchived(taskListItem)
+                    true
+                })
+        }
+
+        private fun removeAccessibilityActions(view: View) {
+            accessibilityActionIds.forEach { ViewCompat.removeAccessibilityAction(view, it) }
+            accessibilityActionIds.clear()
         }
 
         companion object {
