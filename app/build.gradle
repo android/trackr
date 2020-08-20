@@ -66,13 +66,13 @@ dependencies {
 
     // Androidx
     implementation 'androidx.core:core-ktx:1.3.1'
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation "androidx.fragment:fragment-ktx:1.2.5"
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation "androidx.cardview:cardview:1.0.0"
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0-rc01"
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.0-alpha06'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.0-alpha07'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
@@ -93,7 +93,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
 
     // Material
-    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'com.google.android.material:material:1.2.0'
 
     // Hilt dependencies
     implementation "com.google.dagger:hilt-android:$hilt_version"
