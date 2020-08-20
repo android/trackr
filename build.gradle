@@ -16,13 +16,34 @@
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    // Keep in alphabetical order.
-    ext.coroutine_version = '1.3.7'
-    ext.hilt_lifecycle_viewmodel_version = "1.0.0-alpha02"
-    ext.hilt_version = "2.28-alpha"
-    ext.kotlin_version = "1.3.72"
-    ext.room_version = "2.2.5"
-    ext.nav_version = "2.3.0"
+    ext {
+        kotlin_version = "1.3.72"
+
+        // Keep in alphabetical order.
+        androidx_test_ext_junit_version = "1.1.1"
+        appcompat_version = "1.2.0"
+        cardview_version = "1.0.0"
+        constraintlayout_version = "1.1.3"
+        core_ktx_version = "1.3.1"
+        core_testing_version = "2.1.0"
+        coroutine_version = "1.3.7"
+        espresso_core_version = "3.2.0"
+        fragment_ktx_version = "1.2.5"
+        hilt_lifecycle_viewmodel_version = "1.0.0-alpha02"
+        hilt_version = "2.28-alpha"
+        junit_version = "4.13"
+        kotlin_version = "1.3.72"
+        legacy_support_v4_version = "1.0.0"
+        lifecycle_extensions_version = "2.2.0"
+        lifecycle_livedata_ktx_version = "2.3.0-alpha07"
+        material_version ="1.2.0"
+        nav_version = "2.3.0"
+        recyclerview_selection_version = "1.1.0-rc01"
+        recyclerview_version = "1.1.0"
+        room_version = "2.2.5"
+        threetenabp_version = "1.2.1"
+    }
+
 
     repositories {
         google()
