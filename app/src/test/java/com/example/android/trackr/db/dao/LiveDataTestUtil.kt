@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.android.trackr
+package com.example.android.trackr.db.dao
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
