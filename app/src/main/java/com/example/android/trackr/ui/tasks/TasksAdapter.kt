@@ -73,6 +73,19 @@ class TasksAdapter(
         }
     }
 
+    /**
+     * Find a header item at the specified [position] or before.
+     */
+    fun findHeaderItem(position: Int): DataItem.HeaderItem {
+        var p = position
+        while (p > 0) {
+            val item = getItem(p)
+            if (item is DataItem.HeaderItem) return item
+            p--
+        }
+        return getItem(0) as DataItem.HeaderItem
+    }
+
     // TODO: refactor into use case, using a coroutine (and add tests).
     fun addHeadersAndSubmitList(context: Context, tasks: List<TaskListItem>) {
         val items = mutableListOf<DataItem>()

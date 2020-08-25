@@ -17,25 +17,26 @@
 package com.example.android.trackr.ui.tasks
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.android.trackr.R
 import com.example.android.trackr.data.TaskListItem
+import com.example.android.trackr.databinding.FragmentTasksBinding
 import com.example.android.trackr.ui.detail.TaskDetailFragmentArgs
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_tasks.*
 
 @AndroidEntryPoint
-class TasksFragment : Fragment() {
+class TasksFragment : Fragment(R.layout.fragment_tasks) {
+
     private val viewModel: TasksViewModel by viewModels()
+    private lateinit var binding: FragmentTasksBinding
 
     private val tasksAdapter = TasksAdapter(object : TasksAdapter.TaskItemListener {
         override fun onItemClicked(taskListItem: TaskListItem) {
@@ -48,26 +49,21 @@ class TasksFragment : Fragment() {
         }
     })
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(
-            R.layout.fragment_tasks,
-            container,
-            /* attachToRoot= */ false
-        )
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentTasksBinding.bind(view)
 
-        tasks_list.apply {
+        binding.tasksList.apply {
             val itemTouchHelper = ItemTouchHelper(SwipeActionCallback())
             itemTouchHelper.attachToRecyclerView(this)
-            layoutManager = LinearLayoutManager(activity)
+            val linearLayoutManager = LinearLayoutManager(activity)
+            layoutManager = linearLayoutManager
             adapter = tasksAdapter
+            doOnScroll { _, _ ->
+                binding.headerData = tasksAdapter
+                    .findHeaderItem(linearLayoutManager.findFirstVisibleItemPosition())
+                    .headerData
+            }
         }
     }
 
@@ -95,4 +91,12 @@ class TasksFragment : Fragment() {
             }
         }
     }
+}
+
+private inline fun RecyclerView.doOnScroll(crossinline action: (dx: Int, dy: Int) -> Unit) {
+    addOnScrollListener(object: RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            action(dx, dy)
+        }
+    })
 }
