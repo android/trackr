@@ -39,14 +39,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{headerData.title}"
+                android:text="@{headerData.label}"
                 android:textSize="32sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{Integer.toString(headerData.count)}"
-                android:textSize="16sp" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

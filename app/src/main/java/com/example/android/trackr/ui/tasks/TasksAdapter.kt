@@ -105,8 +105,20 @@ class TasksAdapter(
             items.add(
                 DataItem.HeaderItem(
                     HeaderData(
-                        headerLabel(context, state),
-                        sublist?.size ?: 0
+                        context.getString(
+                            R.string.header_label_with_count,
+                            // Category, derived from task state.
+                            context.getString(
+                                when (state) {
+                                    TaskState.IN_PROGRESS -> R.string.in_progress
+                                    TaskState.NOT_STARTED -> R.string.not_started
+                                    TaskState.COMPLETED -> R.string.completed
+                                    TaskState.ARCHIVED -> R.string.archived
+                                }
+                            ),
+                            // Tasks count for category.
+                            sublist?.size ?: 0
+                        )
                     )
                 )
             )
@@ -114,16 +126,6 @@ class TasksAdapter(
         }
 
         submitList(items)
-    }
-
-    private fun headerLabel(context: Context, taskState: TaskState) : String {
-        return context.getString(
-            when(taskState) {
-                TaskState.IN_PROGRESS -> R.string.in_progress
-                TaskState.NOT_STARTED -> R.string.not_started
-                TaskState.COMPLETED -> R.string.completed
-                TaskState.ARCHIVED -> R.string.archived
-            })
     }
 
     class HeaderViewHolder private constructor(private val binding: ListHeaderBinding) :
@@ -228,6 +230,5 @@ sealed class DataItem {
 }
 
 data class HeaderData(
-    val title: String,
-    val count: Int
+    val label: String
 )
