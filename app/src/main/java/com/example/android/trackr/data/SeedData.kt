@@ -48,7 +48,8 @@ object SeedData {
         ),
         Task(id = 4L, title = "Task 4", state = TaskState.COMPLETED, ownerId = 1L, reporterId = 1L),
         Task(id = 5L, title = "Task 5", ownerId = 1L, reporterId = 1L),
-        Task(id = 6L, title = "Task 6", ownerId = 1L, reporterId = 1L)
+        Task(id = 6L, title = "Task 6", ownerId = 1L, reporterId = 1L),
+        Task(id = 7L, title = "Task 7", state = TaskState.ARCHIVED, ownerId = 1L, reporterId = 1L)
     )
 
     val TaskTags = listOf(
@@ -57,7 +58,8 @@ object SeedData {
         TaskTag(taskId = 2L, tagId = 1L),
         TaskTag(taskId = 3L, tagId = 1L),
         TaskTag(taskId = 5L, tagId = 2L),
-        TaskTag(taskId = 6L, tagId = 2L)
+        TaskTag(taskId = 6L, tagId = 2L),
+        TaskTag(taskId = 7L, tagId = 2L)
     )
 
     val UserTasks = listOf(

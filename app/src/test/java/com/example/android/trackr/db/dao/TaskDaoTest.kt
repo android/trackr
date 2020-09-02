@@ -32,10 +32,10 @@ import com.example.android.trackr.db.AppDatabase
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.hasSize
 import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertThat
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
@@ -113,12 +113,12 @@ class TaskDaoTest {
         val users = listOf(user1)
         val tasks = listOf(task1)
         val tags = listOf(tag1, tag2)
-        val taskTags = listOf(tastTag1, taskTag2)
+        val taskTags = listOf(taskTag1, taskTag2)
         val userTasks = listOf(userTask1)
 
         insertData(taskDao, users, tasks, tags, taskTags, userTasks)
 
-        taskDao.getTaskListItems().valueBlocking.let { taskListItems ->
+        taskDao.getOngoingTaskListItems().valueBlocking.let { taskListItems ->
             val item = taskListItems[0]
             assertEquals(item.id, tasks[0].id)
             assertEquals(item.title, tasks[0].title)
@@ -128,6 +128,19 @@ class TaskDaoTest {
             assertEquals(item.tags.size, tags.size)
             assertEquals(item.starUsers.size, userTasks.size)
         }
+    }
+
+    @Test
+    fun getOngoingTaskListItems() {
+        val users = listOf(user1)
+        val tasks = listOf(task1, task2)
+        val tags = listOf(tag1, tag2)
+        val taskTags = listOf(taskTag1, taskTag2)
+        val userTasks = listOf(userTask1)
+
+        insertData(taskDao, users, tasks, tags, taskTags, userTasks)
+        assertThat(taskDao.getTasks().valueBlocking, hasSize(2))
+        assertThat(taskDao.getOngoingTaskListItems().valueBlocking, hasSize(1))
     }
 
     @Test
@@ -164,11 +177,14 @@ class TaskDaoTest {
         val user1 = User(id = 1L, username = "user1")
 
         val task1 = Task(id = 1L, title = "Task 1", ownerId = 1L, reporterId = 1L)
+        val task2 = Task(
+            id = 2L, title = "Task 2", state = TaskState.ARCHIVED, ownerId = 1L, reporterId = 1L
+        )
 
         val tag1 = Tag(id = 1L, label = "tag1", color = Color.rgb(0x81, 0xC7, 0x84))
         val tag2 = Tag(id = 2L, label = "tag2", color = Color.rgb(0xE5, 0x73, 0x73))
 
-        val tastTag1 =  TaskTag(taskId = 1L, tagId = 1L)
+        val taskTag1 =  TaskTag(taskId = 1L, tagId = 1L)
         val taskTag2 =  TaskTag(taskId = 1L, tagId = 2L)
 
         val userTask1 = UserTask(userId = 1L, taskId = 1L)
