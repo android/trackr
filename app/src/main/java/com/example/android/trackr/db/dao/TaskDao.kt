@@ -21,6 +21,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
+import com.example.android.trackr.data.ARCHIVED_KEY
 import com.example.android.trackr.data.Tag
 import com.example.android.trackr.data.Task
 import com.example.android.trackr.data.TaskDetail
@@ -55,8 +56,8 @@ interface TaskDao {
     fun getTaskDetailById(id: Long): LiveData<TaskDetail?>
 
     @Transaction
-    @Query("SELECT * FROM TaskListItem")
-    fun  getTaskListItems(): LiveData<List<TaskListItem>>
+    @Query("SELECT * FROM TaskListItem WHERE state != $ARCHIVED_KEY")
+    fun getOngoingTaskListItems(): LiveData<List<TaskListItem>>
 
     @Query("UPDATE tasks SET state = :state WHERE id = :id")
     suspend fun updateTaskState(id: Long, state: TaskState)

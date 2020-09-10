@@ -95,8 +95,7 @@ class TasksAdapter(
         val taskStates = listOf(
             TaskState.IN_PROGRESS,
             TaskState.NOT_STARTED,
-            TaskState.COMPLETED,
-            TaskState.ARCHIVED
+            TaskState.COMPLETED
         )
 
         taskStates.forEach { state ->

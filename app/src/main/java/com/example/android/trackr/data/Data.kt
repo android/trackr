@@ -80,11 +80,13 @@ data class Task(
     val dueAt: Instant = Instant.now() + Duration.ofDays(7)
 )
 
+const val ARCHIVED_KEY = 4 // This is referenced in a query.
+
 enum class TaskState(val key: Int) {
     NOT_STARTED(1),
     IN_PROGRESS(2),
     COMPLETED(3),
-    ARCHIVED(4);
+    ARCHIVED(ARCHIVED_KEY);
 
     companion object {
         // TODO (b/163065333): find more efficient solution, since map may be high memory.

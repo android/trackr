@@ -37,7 +37,7 @@ class TasksViewModel @ViewModelInject constructor(
     val archivedItem: LiveData<ArchivedItem?> = _archivedItem
 
     val taskListItems: LiveData<List<TaskListItem>>
-        get() = taskDao.getTaskListItems()
+        get() = taskDao.getOngoingTaskListItems()
 
     fun archiveTask(taskListItem: TaskListItem) {
         _archivedItem.value = ArchivedItem(taskListItem.id, taskListItem.state)
