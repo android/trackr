@@ -28,24 +28,6 @@
         tools:layout="@layout/fragment_tasks" />
 
     <fragment
-        android:id="@+id/nav_filter"
-        android:name="com.example.android.trackr.ui.filter.FilterFragment"
-        android:label="Filter"
-        tools:layout="@layout/fragment_filter" />
-
-    <fragment
-        android:id="@+id/nav_archived"
-        android:name="com.example.android.trackr.ui.archived.ArchivedFragment"
-        android:label="Archived"
-        tools:layout="@layout/fragment_archived" />
-
-    <fragment
-        android:id="@+id/nav_settings"
-        android:name="com.example.android.trackr.ui.settings.SettingsFragment"
-        android:label="Settings"
-        tools:layout="@layout/fragment_settings" />
-
-    <fragment
         android:id="@+id/nav_task_detail"
         android:name="com.example.android.trackr.ui.detail.TaskDetailFragment"
         android:label="Task Detail"
