@@ -29,14 +29,9 @@ import com.example.android.trackr.data.TaskTag
 import com.example.android.trackr.data.User
 import com.example.android.trackr.data.UserTask
 import com.example.android.trackr.db.AppDatabase
+import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.equalTo
-import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.hasSize
 import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -75,7 +70,7 @@ class TaskDaoTest {
     @Throws(InterruptedException::class)
     fun getTasks_WhenNoTaskInserted() {
         val tasks: List<Task> = taskDao.getTasks().valueBlocking
-        assertTrue(tasks.isEmpty())
+        assertThat(tasks).isEmpty()
     }
 
     @Test
@@ -85,7 +80,7 @@ class TaskDaoTest {
         taskDao.insertTags(SeedData.Tags)
         taskDao.insertTasks(SeedData.Tasks)
         val tasks = taskDao.getTasks().valueBlocking
-        assertThat(tasks.size, `is`(SeedData.Tasks.size))
+        assertThat(tasks).hasSize(SeedData.Tasks.size)
     }
 
     @Test
@@ -96,15 +91,15 @@ class TaskDaoTest {
         taskDao.insertTaskTags(SeedData.TaskTags)
         taskDao.insertUserTasks(SeedData.UserTasks)
         taskDao.getTaskDetailById(1L).valueBlocking!!.let { detail ->
-            assertThat(detail.id, `is`(1L))
-            assertThat(detail.title, `is`(equalTo("Task 1")))
-            assertThat(detail.owner.username, `is`(equalTo("You")))
-            assertThat(detail.reporter.username, `is`(equalTo("John")))
-            assertThat(detail.tags, hasSize(2))
-            assertThat(detail.tags[0].label, `is`(equalTo("Home")))
-            assertThat(detail.tags[1].label, `is`(equalTo("Hobby")))
-            assertThat(detail.starUsers, hasSize(1))
-            assertThat(detail.starUsers[0].username, `is`(equalTo("You")))
+            assertThat(detail.id).isEqualTo(1L)
+            assertThat(detail.title).isEqualTo("Task 1")
+            assertThat(detail.owner.username).isEqualTo("You")
+            assertThat(detail.reporter.username).isEqualTo("John")
+            assertThat(detail.tags).hasSize(2)
+            assertThat(detail.tags[0].label).isEqualTo("Home")
+            assertThat(detail.tags[1].label).isEqualTo("Hobby")
+            assertThat(detail.starUsers).hasSize(1)
+            assertThat(detail.starUsers[0].username).isEqualTo("You")
         }
     }
 
@@ -120,13 +115,13 @@ class TaskDaoTest {
 
         taskDao.getOngoingTaskListItems().valueBlocking.let { taskListItems ->
             val item = taskListItems[0]
-            assertEquals(item.id, tasks[0].id)
-            assertEquals(item.title, tasks[0].title)
-            assertEquals(item.owner, users[0])
-            assertEquals(item.dueAt, tasks[0].dueAt)
-            assertEquals(item.state, tasks[0].state)
-            assertEquals(item.tags.size, tags.size)
-            assertEquals(item.starUsers.size, userTasks.size)
+            assertThat(item.id).isEqualTo(tasks[0].id)
+            assertThat(item.title).isEqualTo(tasks[0].title)
+            assertThat(item.owner).isEqualTo(users[0])
+            assertThat(item.dueAt).isEqualTo(tasks[0].dueAt)
+            assertThat(item.state).isEqualTo(tasks[0].state)
+            assertThat(item.tags).hasSize(tags.size)
+            assertThat(item.starUsers).hasSize(userTasks.size)
         }
     }
 
@@ -139,8 +134,8 @@ class TaskDaoTest {
         val userTasks = listOf(userTask1)
 
         insertData(taskDao, users, tasks, tags, taskTags, userTasks)
-        assertThat(taskDao.getTasks().valueBlocking, hasSize(2))
-        assertThat(taskDao.getOngoingTaskListItems().valueBlocking, hasSize(1))
+        assertThat(taskDao.getTasks().valueBlocking).hasSize(2)
+        assertThat(taskDao.getOngoingTaskListItems().valueBlocking).hasSize(1)
     }
 
     @Test
@@ -148,13 +143,13 @@ class TaskDaoTest {
         insertData(taskDao, listOf(user1), listOf(task1))
 
         taskDao.getTasks().valueBlocking.let { tasks ->
-            assertEquals(tasks[0].state, TaskState.NOT_STARTED)
+            assertThat(tasks[0].state).isEqualTo(TaskState.NOT_STARTED)
         }
 
         taskDao.updateTaskState(task1.id, TaskState.ARCHIVED)
 
         taskDao.getTasks().valueBlocking.let { tasks ->
-            assertEquals(tasks[0].state, TaskState.ARCHIVED)
+            assertThat(tasks[0].state).isEqualTo(TaskState.ARCHIVED)
         }
     }
 
@@ -184,8 +179,8 @@ class TaskDaoTest {
         val tag1 = Tag(id = 1L, label = "tag1", color = Color.rgb(0x81, 0xC7, 0x84))
         val tag2 = Tag(id = 2L, label = "tag2", color = Color.rgb(0xE5, 0x73, 0x73))
 
-        val taskTag1 =  TaskTag(taskId = 1L, tagId = 1L)
-        val taskTag2 =  TaskTag(taskId = 1L, tagId = 2L)
+        val taskTag1 = TaskTag(taskId = 1L, tagId = 1L)
+        val taskTag2 = TaskTag(taskId = 1L, tagId = 2L)
 
         val userTask1 = UserTask(userId = 1L, taskId = 1L)
     }

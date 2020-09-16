@@ -88,6 +88,8 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
+    testImplementation "androidx.test.ext:truth:$androidx_test_ext_truth_version"
+    testImplementation "com.google.truth:truth:$truth_version"
     testImplementation "androidx.arch.core:core-testing:$core_testing_version"
     testImplementation "androidx.room:room-testing:$room_version"
     testImplementation "androidx.test.ext:junit:$androidx_test_ext_junit_version"
