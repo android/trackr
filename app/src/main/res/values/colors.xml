@@ -14,25 +14,25 @@
      limitations under the License.
 -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!--Color palette. This list should be kept alphabetized-->
 
-    <color name="trackr_blue_300">#526E8E</color>
-    <color name="trackr_blue_100">#DDE3E9</color>
-    <color name="trackr_blue_200">#3D444B</color>
-    <color name="trackr_blue_500">#364F6B</color>
+    <color name="trackr_blue_300" tools:ignore="UnusedResources">#526E8E</color>
+    <color name="trackr_blue_100" tools:ignore="UnusedResources">#DDE3E9</color>
+    <color name="trackr_blue_200" tools:ignore="UnusedResources">#3D444B</color>
+    <color name="trackr_blue_500" tools:ignore="UnusedResources">#364F6B</color>
     <color name="trackr_blue_700">#1C2A3A</color>
 
-    <color name="trackr_green_500">#90C178</color>
+    <color name="trackr_green_500" tools:ignore="UnusedResources">#90C178</color>
 
     <color name="trackr_pink_300">#EA7699</color>
     <color name="trackr_pink_500">#F95184</color>
 
-    <color name="trackr_teal_300">#72BCC0</color>
-    <color name="trackr_teal_500">#3FC1C9</color>
+    <color name="trackr_teal_300" tools:ignore="UnusedResources">#72BCC0</color>
+    <color name="trackr_teal_500" tools:ignore="UnusedResources">#3FC1C9</color>
 
-    <color name="trackr_white_50">#FFFFFF</color>
+    <color name="trackr_white_50" tools:ignore="UnusedResources">#FFFFFF</color>
 
-    <color name="trackr_yellow_300">#F3BB59</color>
-    <color name="trackr_yellow_500">#C88004</color>
+    <color name="trackr_yellow_300" tools:ignore="UnusedResources">#F3BB59</color>
+    <color name="trackr_yellow_500" tools:ignore="UnusedResources">#C88004</color>
 </resources>
