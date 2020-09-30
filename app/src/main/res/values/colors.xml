@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2020 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +15,24 @@
 -->
 
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <!--Color palette. This list should be kept alphabetized-->
+
+    <color name="trackr_blue_300">#526E8E</color>
+    <color name="trackr_blue_100">#DDE3E9</color>
+    <color name="trackr_blue_200">#3D444B</color>
+    <color name="trackr_blue_500">#364F6B</color>
+    <color name="trackr_blue_700">#1C2A3A</color>
+
+    <color name="trackr_green_500">#90C178</color>
+
+    <color name="trackr_pink_300">#EA7699</color>
+    <color name="trackr_pink_500">#F95184</color>
+
+    <color name="trackr_teal_300">#72BCC0</color>
+    <color name="trackr_teal_500">#3FC1C9</color>
+
+    <color name="trackr_white_50">#FFFFFF</color>
+
+    <color name="trackr_yellow_300">#F3BB59</color>
+    <color name="trackr_yellow_500">#C88004</color>
 </resources>

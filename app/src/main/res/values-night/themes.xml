@@ -14,8 +14,14 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-
 <resources>
-    <!-- Add styles for individual components here. -->
+    <!--Final, top-level theme-->
+    <style name="Theme.Trackr.DayNight" parent="Theme.Trackr.Dark"/>
+
+    <style name="Theme.Trackr.Dark" parent="Theme.Trackr">
+
+        <item name="colorPrimary">@color/trackr_blue_700</item>
+        <item name="colorPrimaryDark">@color/trackr_pink_500</item>
+    </style>
 
 </resources>
