@@ -13,24 +13,17 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-
 <resources>
-    <string name="app_name">Trackr</string>
 
-    <!-- Tasks screen -->
-    <string name="in_progress">In progress</string>
-    <string name="not_started">Not started</string>
-    <string name="completed">Completed</string>
-    <string name="archived">Archived</string>
-    <string name="header_label_with_count">%1$s (%2$d)</string>
+    <!--Typography-->
+    <style name="TextAppearance.Trackr.Headline2" parent="TextAppearance.MaterialComponents.Headline2">
+        <item name="android:textColor">@color/trackr_gray_500</item>
+        <item name="android:textSize">@dimen/text_size_header_2</item>
+    </style>
 
-    <!--Task Item -->
-    <string name="user">Owner: %s</string>
+    <style name="TextAppearance.Trackr.Body1" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/trackr_gray_500</item>
+        <item name="android:textSize">@dimen/text_size_body_1</item>
+    </style>
 
-    <!-- Custom accessibility action strings -->
-    <string name="archive">Archive</string>
-
-    <!-- Snackbar strings -->
-    <string name="task_archived">Task archived</string>
-    <string name="undo">Undo</string>
 </resources>

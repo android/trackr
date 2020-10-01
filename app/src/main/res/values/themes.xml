@@ -24,5 +24,10 @@
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
+
+        <!--Typography-->
+        <item name="textAppearanceHeadline2">@style/TextAppearance.Trackr.Headline2</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.Trackr.Body1</item>
+
     </style>
 </resources>

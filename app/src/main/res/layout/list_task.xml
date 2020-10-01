@@ -45,17 +45,20 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{taskListItem.title}" />
+                android:text="@{taskListItem.title}"
+                android:textAppearance="?attr/textAppearanceHeadline2" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{taskListItem.owner.username}" />
+                android:text="@{@string/user(taskListItem.owner.username)}"
+                android:textAppearance="?attr/textAppearanceBody1" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{String.valueOf(taskListItem.daysLabel)}" />
+                android:text="@{String.valueOf(taskListItem.daysLabel)}"
+                android:textAppearance="?attr/textAppearanceBody1"/>
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chip_group"
