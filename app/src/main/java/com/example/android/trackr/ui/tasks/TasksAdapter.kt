@@ -31,8 +31,6 @@ import com.example.android.trackr.databinding.ListTaskBinding
 import com.example.android.trackr.data.TaskListItem
 import com.example.android.trackr.data.TaskState
 
-private const val ITEM_VIEW_TYPE_HEADER = 0
-private const val ITEM_VIEW_TYPE_TASK = 1
 
 class TasksAdapter(
     private val taskItemListener: TaskItemListener
@@ -202,6 +200,11 @@ class TasksAdapter(
                     ), taskItemListener)
             }
         }
+    }
+
+    companion object {
+        const val ITEM_VIEW_TYPE_HEADER = 0
+        const val ITEM_VIEW_TYPE_TASK = 1
     }
 }
 

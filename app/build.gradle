@@ -66,6 +66,12 @@ android {
         disable "UnsafeExperimentalUsageError",
                 "UnsafeExperimentalUsageWarning"
     }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
