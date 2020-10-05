@@ -21,6 +21,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.example.android.trackr.R
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 
@@ -82,11 +83,11 @@ data class Task(
 
 const val ARCHIVED_KEY = 4 // This is referenced in a query.
 
-enum class TaskState(val key: Int) {
-    NOT_STARTED(1),
-    IN_PROGRESS(2),
-    COMPLETED(3),
-    ARCHIVED(ARCHIVED_KEY);
+enum class TaskState(val key: Int, val stringResId: Int) {
+    NOT_STARTED(1, R.string.not_started),
+    IN_PROGRESS(2, R.string.in_progress),
+    COMPLETED(3, R.string.completed),
+    ARCHIVED(ARCHIVED_KEY, R.string.archived);
 
     companion object {
         // TODO (b/163065333): find more efficient solution, since map may be high memory.

@@ -85,16 +85,14 @@ class TasksAdapter(
     }
 
     // TODO: refactor into use case, using a coroutine (and add tests).
-    fun addHeadersAndSubmitList(context: Context, tasks: List<TaskListItem>) {
+    fun addHeadersAndSubmitList(
+        context: Context,
+        tasks: List<TaskListItem>,
+        taskStates: List<TaskState>
+    ) {
         val items = mutableListOf<DataItem>()
 
         val map = tasks.groupBy { it.state }
-
-        val taskStates = listOf(
-            TaskState.IN_PROGRESS,
-            TaskState.NOT_STARTED,
-            TaskState.COMPLETED
-        )
 
         taskStates.forEach { state ->
             val sublist: List<TaskListItem>? = map[state]
@@ -105,14 +103,7 @@ class TasksAdapter(
                         context.getString(
                             R.string.header_label_with_count,
                             // Category, derived from task state.
-                            context.getString(
-                                when (state) {
-                                    TaskState.IN_PROGRESS -> R.string.in_progress
-                                    TaskState.NOT_STARTED -> R.string.not_started
-                                    TaskState.COMPLETED -> R.string.completed
-                                    TaskState.ARCHIVED -> R.string.archived
-                                }
-                            ),
+                            context.getString(state.stringResId),
                             // Tasks count for category.
                             sublist?.size ?: 0
                         )

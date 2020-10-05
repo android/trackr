@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.trackr.R
 import com.example.android.trackr.data.TaskListItem
+import com.example.android.trackr.data.TaskState
 import com.example.android.trackr.databinding.FragmentTasksBinding
 import com.example.android.trackr.ui.detail.TaskDetailFragmentArgs
 import com.google.android.material.snackbar.Snackbar
@@ -71,7 +72,16 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
         super.onActivityCreated(savedInstanceState)
 
         viewModel.taskListItems.observe(viewLifecycleOwner) {
-            tasksAdapter.addHeadersAndSubmitList(requireContext(), it)
+            tasksAdapter.addHeadersAndSubmitList(
+                requireContext(),
+                it,
+                // Determines the headers and the tasks displayed.
+                listOf(
+                    TaskState.IN_PROGRESS,
+                    TaskState.NOT_STARTED,
+                    TaskState.COMPLETED
+                )
+            )
         }
 
         // Logic for presenting user with the option to unarchive a previously archived task.
