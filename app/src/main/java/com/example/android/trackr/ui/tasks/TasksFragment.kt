@@ -32,26 +32,33 @@ import com.example.android.trackr.databinding.FragmentTasksBinding
 import com.example.android.trackr.ui.detail.TaskDetailFragmentArgs
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import org.threeten.bp.Clock
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class TasksFragment : Fragment(R.layout.fragment_tasks) {
 
     private val viewModel: TasksViewModel by viewModels()
     private lateinit var binding: FragmentTasksBinding
+    private lateinit var tasksAdapter: TasksAdapter
 
-    private val tasksAdapter = TasksAdapter(object : TasksAdapter.TaskItemListener {
-        override fun onItemClicked(taskListItem: TaskListItem) {
-            findNavController()
-                .navigate(R.id.nav_task_detail, TaskDetailFragmentArgs(taskListItem.id).toBundle())
-        }
-
-        override fun onItemArchived(taskListItem: TaskListItem) {
-            viewModel.archiveTask(taskListItem)
-        }
-    })
+    @Inject
+    lateinit var clock: Clock
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        tasksAdapter = TasksAdapter(object : TasksAdapter.TaskItemListener {
+            override fun onItemClicked(taskListItem: TaskListItem) {
+                findNavController()
+                    .navigate(R.id.nav_task_detail, TaskDetailFragmentArgs(taskListItem.id).toBundle())
+            }
+
+            override fun onItemArchived(taskListItem: TaskListItem) {
+                viewModel.archiveTask(taskListItem)
+            }
+        }, clock)
+
         binding = FragmentTasksBinding.bind(view)
 
         binding.tasksList.apply {
