@@ -18,8 +18,9 @@ package com.example.android.trackr.ui.tasks
 
 import android.app.Application
 import android.content.Context
-import android.view.View
+import android.widget.AbsListView
 import android.widget.FrameLayout
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
 import com.example.android.trackr.TestApplication
 import com.example.android.trackr.data.TaskListItem
@@ -29,6 +30,7 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.threeten.bp.Instant
@@ -156,6 +158,40 @@ class TasksAdapterTest {
         assertThat(holder.accessibilityActionIds.size).isEqualTo(1)
     }
 
+
+    @Test
+    fun swipe_archivesItem() {
+        val mockListener = Mockito.mock(TasksAdapter.TaskItemListener::class.java)
+        val holder = setUpAndBindTaskViewHolder(mockListener)
+
+        holder.onSwipe()
+
+        Mockito.verify(mockListener).onItemArchived(taskListItem)
+    }
+
+    @Test
+    fun accessibilityAction_archivesItem() {
+        val mockListener = Mockito.mock(TasksAdapter.TaskItemListener::class.java)
+        val holder = setUpAndBindTaskViewHolder(mockListener)
+
+        holder.binding.root.performAccessibilityAction(holder.accessibilityActionIds[0], null)
+
+        Mockito.verify(mockListener).onItemArchived(taskListItem)
+    }
+
+    private fun setUpAndBindTaskViewHolder(
+        listener: TasksAdapter.TaskItemListener
+    ): TasksAdapter.TaskViewHolder {
+        tasksAdapter.addHeadersAndSubmitList(
+            context,
+            listOf(taskListItem),
+            listOf(TaskState.NOT_STARTED)
+        )
+        val holder = TasksAdapter.TaskViewHolder.from(frameLayout, listener)
+        holder.bind(taskListItem)
+
+        return holder
+    }
 
     companion object {
         private val user = User(1, "user")
