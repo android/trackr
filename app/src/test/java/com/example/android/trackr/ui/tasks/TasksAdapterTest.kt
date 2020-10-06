@@ -18,6 +18,7 @@ package com.example.android.trackr.ui.tasks
 
 import android.app.Application
 import android.content.Context
+import android.view.View
 import android.widget.FrameLayout
 import androidx.test.core.app.ApplicationProvider
 import com.example.android.trackr.TestApplication
@@ -137,6 +138,24 @@ class TasksAdapterTest {
         assertThat(holder.accessibilityActionIds.size).isEqualTo(1)
         assertThat(holder.binding.taskListItem).isEqualTo(taskListItem)
     }
+
+    @Test
+    fun bindTaskViewHolder_addingAccessibilityAction_isIdempotent() {
+        tasksAdapter.addHeadersAndSubmitList(
+            context,
+            listOf(taskListItem),
+            listOf(TaskState.NOT_STARTED)
+        )
+        val holder = TasksAdapter.TaskViewHolder.from(frameLayout, taskItemListener)
+        holder.bind(taskListItem)
+        assertThat(holder.accessibilityActionIds.size).isEqualTo(1)
+
+        holder.bind(taskListItem)
+        // If previously added accessibility actions are not cleared, when the holder is rebound,
+        // the actions will get added again. This check guards against that.
+        assertThat(holder.accessibilityActionIds.size).isEqualTo(1)
+    }
+
 
     companion object {
         private val user = User(1, "user")
