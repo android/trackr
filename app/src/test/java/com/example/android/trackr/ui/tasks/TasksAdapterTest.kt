@@ -16,17 +16,21 @@
 
 package com.example.android.trackr.ui.tasks
 
+import android.app.Application
+import android.content.Context
 import android.widget.FrameLayout
 import androidx.test.core.app.ApplicationProvider
 import com.example.android.trackr.TestApplication
 import com.example.android.trackr.data.TaskListItem
+import com.example.android.trackr.data.TaskState
+import com.example.android.trackr.data.User
 import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.objectweb.asm.tree.analysis.Frame
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import org.threeten.bp.Instant
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestApplication::class)
@@ -37,11 +41,14 @@ class TasksAdapterTest {
     }
 
     private val tasksAdapter = TasksAdapter(TestListener())
+    private lateinit var context: Context
     private lateinit var frameLayout: FrameLayout
 
     @Before
     fun setup() {
-        frameLayout = FrameLayout(ApplicationProvider.getApplicationContext())
+        val application: Application = ApplicationProvider.getApplicationContext()
+        context = application
+        frameLayout = FrameLayout(context)
     }
 
     @Test
@@ -65,5 +72,44 @@ class TasksAdapterTest {
     @Test(expected = IllegalArgumentException::class)
     fun onCreateViewHolder_whenTypeUnknown() {
         tasksAdapter.onCreateViewHolder(frameLayout, -1)
+    }
+
+    @Test
+    fun getItemViewType_withMatchingTask_showsHeaderAndTask() {
+        tasksAdapter.addHeadersAndSubmitList(
+            context,
+            listOf(taskListItem),
+            listOf(TaskState.IN_PROGRESS)
+        )
+
+        assertThat(tasksAdapter.currentList.size).isEqualTo(2)
+        assertThat(tasksAdapter.getItemViewType(0)).isEqualTo(TasksAdapter.ITEM_VIEW_TYPE_HEADER)
+        assertThat(tasksAdapter.getItemViewType(1)).isEqualTo(TasksAdapter.ITEM_VIEW_TYPE_TASK)
+    }
+
+    @Test
+    fun getItemViewType_noMatchingTask_StillShowsHeader() {
+        tasksAdapter.addHeadersAndSubmitList(
+            context,
+            listOf(taskListItem),
+            listOf(TaskState.NOT_STARTED)
+        )
+
+        assertThat(tasksAdapter.currentList.size).isEqualTo(1)
+        assertThat(tasksAdapter.getItemViewType(0)).isEqualTo(TasksAdapter.ITEM_VIEW_TYPE_HEADER)
+    }
+
+
+    companion object {
+        private val user = User(1, "user")
+        val taskListItem = TaskListItem(
+            id = 1,
+            title = "task list item 1",
+            dueAt = Instant.now(),
+            owner = user,
+            state = TaskState.IN_PROGRESS,
+            starUsers = emptyList(),
+            tags = emptyList()
+        )
     }
 }
