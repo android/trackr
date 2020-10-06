@@ -15,6 +15,18 @@
 -->
 
 <resources>
-    <!-- Add styles for individual components here. -->
+
+    <style name="Widget.Trackr.TextView.Label" parent="Widget.MaterialComponents.TextView">
+        <item name="android:drawablePadding">@dimen/drawable_padding</item>
+        <item name="android:paddingStart">@dimen/drawable_padding</item>
+        <item name="android:paddingLeft">@dimen/drawable_padding</item>
+        <item name="android:paddingEnd">0dp</item>
+        <item name="android:paddingRight">0dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Headline6</item>
+    </style>
+
+    <style name="Widget.Trackr.TextView.Label.Title">
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Headline5</item>
+    </style>
 
 </resources>

@@ -15,6 +15,7 @@
      limitations under the License.
 -->
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -27,63 +28,151 @@
 
     </data>
 
-    <LinearLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/task_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         tools:context=".ui.detail.TaskDetailFragment">
 
-        <TextView
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{Long.toString(viewModel.detail.id)}" />
+            android:layout_height="wrap_content">
 
-        <TextView
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{viewModel.detail.title}" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{viewModel.detail.description}" />
+            <!-- Star / Title -->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{viewModel.detail.state.toString()}" />
+            <TextView
+                style="@style/Widget.Trackr.TextView.Label.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.detail.title}"
+                app:drawableStartCompat="@drawable/ic_star"
+                tools:drawableStart="@drawable/ic_star"
+                tools:text="Calendar design" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{viewModel.detail.createdAt.toString()}" />
+            <!-- Description -->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{viewModel.detail.dueAt.toString()}" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_huge"
+                android:layout_marginLeft="@dimen/spacing_huge"
+                android:text="@{viewModel.detail.description}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{viewModel.detail.owner.username}" />
+            <!-- Owner -->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{viewModel.detail.reporter.username}" />
+            <TextView
+                style="@style/Widget.Trackr.TextView.Label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/owner"
+                app:drawableStartCompat="@drawable/ic_user" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{ShowTaskDetail.tags(viewModel.detail.tags)}" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_huge"
+                android:layout_marginLeft="@dimen/spacing_huge"
+                android:text="@{viewModel.detail.owner.username}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                tools:text="Daring Dove" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{ShowTaskDetail.starUsers(viewModel.detail.starUsers)}" />
+            <!-- Creator -->
 
-    </LinearLayout>
+            <TextView
+                style="@style/Widget.Trackr.TextView.Label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/creator"
+                app:drawableStartCompat="@drawable/ic_user" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_huge"
+                android:layout_marginLeft="@dimen/spacing_huge"
+                android:text="@{viewModel.detail.reporter.username}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                tools:text="Peaceful Puffin" />
+
+            <!-- Due date -->
+
+            <TextView
+                style="@style/Widget.Trackr.TextView.Label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/due_at"
+                app:drawableStartCompat="@drawable/ic_due_at" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_huge"
+                android:layout_marginLeft="@dimen/spacing_huge"
+                android:text="@{viewModel.detail.dueAt.toString()}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                tools:text="Sept 2, 2020 (Wed)" />
+
+            <!-- Creation date -->
+
+            <TextView
+                style="@style/Widget.Trackr.TextView.Label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/created_at"
+                app:drawableStartCompat="@drawable/ic_created_at" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_huge"
+                android:layout_marginLeft="@dimen/spacing_huge"
+                android:text="@{viewModel.detail.createdAt.toString()}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                tools:text="July 16, 2020 (Thur)" />
+
+            <!-- Tags -->
+
+            <TextView
+                style="@style/Widget.Trackr.TextView.Label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tags"
+                app:drawableStartCompat="@drawable/ic_tags" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_huge"
+                android:layout_marginLeft="@dimen/spacing_huge"
+                android:text="@{ShowTaskDetail.tags(viewModel.detail.tags)}"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                tools:text="design / 3.2 release" />
+
+        </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            app:srcCompat="@drawable/ic_edit"
+            app:useCompatPadding="true" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>
