@@ -116,7 +116,7 @@ class TasksAdapter(
         submitList(items)
     }
 
-    class HeaderViewHolder private constructor(private val binding: ListHeaderBinding) :
+    class HeaderViewHolder private constructor(val binding: ListHeaderBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(headerData: HeaderData) {
@@ -132,12 +132,12 @@ class TasksAdapter(
     }
 
     class TaskViewHolder private constructor(
-        private val binding: ListTaskBinding,
+        val binding: ListTaskBinding,
         private val taskItemListener: TaskItemListener
     ) :
         RecyclerView.ViewHolder(binding.root), SwipeActionCallback.SwipeActionListener {
 
-        private val accessibilityActionIds = arrayListOf<Int>()
+        val accessibilityActionIds = arrayListOf<Int>()
 
         fun bind(taskListItem: TaskListItem) {
             binding.taskListItem = taskListItem

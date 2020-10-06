@@ -43,12 +43,14 @@ class TasksAdapterTest {
     private val tasksAdapter = TasksAdapter(TestListener())
     private lateinit var context: Context
     private lateinit var frameLayout: FrameLayout
+    private lateinit var taskItemListener: TestListener
 
     @Before
     fun setup() {
         val application: Application = ApplicationProvider.getApplicationContext()
         context = application
         frameLayout = FrameLayout(context)
+        taskItemListener = TestListener()
     }
 
     @Test
@@ -99,6 +101,42 @@ class TasksAdapterTest {
         assertThat(tasksAdapter.getItemViewType(0)).isEqualTo(TasksAdapter.ITEM_VIEW_TYPE_HEADER)
     }
 
+    @Test
+    fun bindHeaderViewHolder_initialState() {
+        tasksAdapter.addHeadersAndSubmitList(
+            context,
+            listOf(taskListItem),
+            listOf(TaskState.NOT_STARTED)
+        )
+        val holder = TasksAdapter.HeaderViewHolder.from(frameLayout)
+        val headerData = HeaderData("some label")
+
+        assertThat(holder.binding.headerData).isNull()
+
+        holder.bind(headerData)
+
+        assertThat(holder.binding.headerData).isEqualTo(headerData)
+    }
+
+    @Test
+    fun bindTaskViewHolder_initialState() {
+        tasksAdapter.addHeadersAndSubmitList(
+            context,
+            listOf(taskListItem),
+            listOf(TaskState.NOT_STARTED)
+        )
+        val holder = TasksAdapter.TaskViewHolder.from(frameLayout, taskItemListener)
+
+        assertThat(holder.binding.taskListItem).isNull()
+        assertThat(holder.binding.listener).isNull()
+        assertThat(holder.accessibilityActionIds).isEmpty()
+
+        holder.bind(taskListItem)
+
+        assertThat(holder.binding.listener).isEqualTo(taskItemListener)
+        assertThat(holder.accessibilityActionIds.size).isEqualTo(1)
+        assertThat(holder.binding.taskListItem).isEqualTo(taskListItem)
+    }
 
     companion object {
         private val user = User(1, "user")
