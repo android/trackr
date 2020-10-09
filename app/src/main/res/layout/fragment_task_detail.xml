@@ -154,14 +154,13 @@
                 android:text="@string/tags"
                 app:drawableStartCompat="@drawable/ic_tags" />
 
-            <TextView
+            <com.google.android.material.chip.ChipGroup
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/spacing_huge"
                 android:layout_marginLeft="@dimen/spacing_huge"
-                android:text="@{ShowTaskDetail.tags(viewModel.detail.tags)}"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                tools:text="design / 3.2 release" />
+                app:showAllTags="@{true}"
+                app:tags="@{viewModel.detail.tags}" />
 
         </LinearLayout>
 

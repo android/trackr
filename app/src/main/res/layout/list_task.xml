@@ -100,10 +100,26 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/home_task_star_detail_margin"
                 android:layout_marginLeft="@dimen/home_task_star_detail_margin"
-                app:appendTagChips="@{taskListItem.tags}"
+                app:showAllTags="@{false}"
                 app:layout_constraintBottom_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/star"
-                app:layout_constraintTop_toBottomOf="@id/due_date" />
+                app:layout_constraintTop_toBottomOf="@id/due_date"
+                app:tags="@{taskListItem.tags}">
+
+                <include layout="@layout/tag" />
+
+                <include layout="@layout/tag" />
+
+                <include layout="@layout/tag" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/chip_height"
+                    android:gravity="center_vertical"
+                    tools:text="+2 more tags" />
+
+            </com.google.android.material.chip.ChipGroup>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
