@@ -42,7 +42,4 @@ class TaskDetailViewModel @ViewModelInject constructor(
 object ShowTaskDetail {
     @JvmStatic
     fun tags(tags: List<Tag>?) = tags?.joinToString { it.label }
-
-    @JvmStatic
-    fun starUsers(users: List<User>?) = users?.joinToString { it.username }
 }
