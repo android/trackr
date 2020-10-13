@@ -14,18 +14,8 @@
      limitations under the License.
 -->
 <resources>
-
-    <!--Typography-->
-    <style name="TextAppearance.Trackr.Headline2" parent="TextAppearance.MaterialComponents.Headline2">
-        <item name="fontFamily">@font/raleway_extrabold</item>
-        <item name="android:textColor">@color/trackr_gray_500</item>
-        <item name="android:textSize">@dimen/text_size_header_2</item>
-    </style>
-
-    <style name="TextAppearance.Trackr.Body1" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="fontFamily">@font/raleway</item>
-        <item name="android:textColor">@color/trackr_gray_500</item>
-        <item name="android:textSize">@dimen/text_size_body_1</item>
-    </style>
-
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/raleway</item>
+        <item>@font/raleway_extrabold</item>
+    </array>
 </resources>
