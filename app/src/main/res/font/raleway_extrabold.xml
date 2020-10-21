@@ -13,19 +13,8 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
-
-    <!--Typography-->
-    <style name="TextAppearance.Trackr.Headline2" parent="TextAppearance.MaterialComponents.Headline2">
-        <item name="fontFamily">@font/raleway_extrabold</item>
-        <item name="android:textColor">@color/trackr_gray_500</item>
-        <item name="android:textSize">@dimen/text_size_header_2</item>
-    </style>
-
-    <style name="TextAppearance.Trackr.Body1" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="fontFamily">@font/raleway</item>
-        <item name="android:textColor">@color/trackr_gray_500</item>
-        <item name="android:textSize">@dimen/text_size_body_1</item>
-    </style>
-
-</resources>
+<font-family xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:fontProviderAuthority="com.google.android.gms.fonts"
+    app:fontProviderCerts="@array/com_google_android_gms_fonts_certs"
+    app:fontProviderPackage="com.google.android.gms"
+    app:fontProviderQuery="name=Raleway&amp;weight=800"></font-family>
