@@ -64,15 +64,7 @@ data class TaskListItem(
         )
     )
     val starUsers: List<User>
-) {
-    // TODO: remove (placeholder string representations)
-    val daysLabel : String
-        get() {
-            val days = Duration.between(Instant.now(), dueAt).toDays()
-            val label =   if (days == 1L) "day" else "days"
-            return "$days $label"
-    }
-}
+)
 
 @DatabaseView(
     """

@@ -18,9 +18,7 @@ package com.example.android.trackr.ui.tasks
 
 import android.app.Application
 import android.content.Context
-import android.widget.AbsListView
 import android.widget.FrameLayout
-import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
 import com.example.android.trackr.TestApplication
 import com.example.android.trackr.data.TaskListItem
@@ -33,7 +31,9 @@ import org.junit.runner.RunWith
 import org.mockito.Mockito
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import org.threeten.bp.Clock
 import org.threeten.bp.Instant
+import org.threeten.bp.ZoneId
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestApplication::class)
@@ -43,7 +43,10 @@ class TasksAdapterTest {
         override fun onItemArchived(taskListItem: TaskListItem) {}
     }
 
-    private val tasksAdapter = TasksAdapter(TestListener())
+    private val dateInEpochSecond = 1584310694L // March 15, 2020
+    private val fakeClock =
+        Clock.fixed(Instant.ofEpochSecond(dateInEpochSecond), ZoneId.systemDefault())
+    private val tasksAdapter = TasksAdapter(TestListener(), fakeClock)
     private lateinit var context: Context
     private lateinit var frameLayout: FrameLayout
     private lateinit var taskItemListener: TestListener
@@ -128,7 +131,7 @@ class TasksAdapterTest {
             listOf(taskListItem),
             listOf(TaskState.NOT_STARTED)
         )
-        val holder = TasksAdapter.TaskViewHolder.from(frameLayout, taskItemListener)
+        val holder = TasksAdapter.TaskViewHolder.from(frameLayout, taskItemListener, fakeClock)
 
         assertThat(holder.binding.taskListItem).isNull()
         assertThat(holder.binding.listener).isNull()
@@ -148,7 +151,7 @@ class TasksAdapterTest {
             listOf(taskListItem),
             listOf(TaskState.NOT_STARTED)
         )
-        val holder = TasksAdapter.TaskViewHolder.from(frameLayout, taskItemListener)
+        val holder = TasksAdapter.TaskViewHolder.from(frameLayout, taskItemListener, fakeClock)
         holder.bind(taskListItem)
         assertThat(holder.accessibilityActionIds.size).isEqualTo(1)
 
@@ -187,7 +190,7 @@ class TasksAdapterTest {
             listOf(taskListItem),
             listOf(TaskState.NOT_STARTED)
         )
-        val holder = TasksAdapter.TaskViewHolder.from(frameLayout, listener)
+        val holder = TasksAdapter.TaskViewHolder.from(frameLayout, listener, fakeClock)
         holder.bind(taskListItem)
 
         return holder

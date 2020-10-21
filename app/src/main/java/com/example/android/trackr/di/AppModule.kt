@@ -16,6 +16,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.threeten.bp.Clock
 import javax.inject.Singleton
 
 @Module
@@ -23,6 +24,7 @@ import javax.inject.Singleton
 object AppModule {
 
     private lateinit var appDatabase: AppDatabase
+    private lateinit var clock: Clock
 
     @Provides
     @Singleton
@@ -60,5 +62,12 @@ object AppModule {
     @Provides
     fun provideTaskDao(appDatabase: AppDatabase): TaskDao {
         return appDatabase.taskDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideClock(): Clock {
+        clock = Clock.systemDefaultZone()
+        return clock
     }
 }

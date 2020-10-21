@@ -26,6 +26,10 @@
             name="listener"
             type="com.example.android.trackr.ui.tasks.TasksAdapter.TaskItemListener" />
 
+        <variable
+            name="clock"
+            type="org.threeten.bp.Clock" />
+
     </data>
 
     <androidx.cardview.widget.CardView
@@ -57,8 +61,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{String.valueOf(taskListItem.daysLabel)}"
-                android:textAppearance="?attr/textAppearanceBody1"/>
+                android:textAppearance="?attr/textAppearanceBody1"
+                app:clock="@{clock}"
+                app:dueDate="@{taskListItem.dueAt}" />
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chip_group"
