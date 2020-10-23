@@ -24,4 +24,6 @@
     <dimen name="spacing_huge">64dp</dimen>
     <dimen name="drawable_padding">20dp</dimen>
 
+    <dimen name="home_task_star_detail_margin">30dp</dimen>
+
 </resources>

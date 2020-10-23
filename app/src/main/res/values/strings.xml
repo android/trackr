@@ -38,6 +38,8 @@
     <!-- When due date is 5 or more days away, display with date. Example: Due Mar 15, 2020 -->
     <string name="due_date_generic">Due %s</string>
 
+    <string name="star">Star</string>
+
     <!-- Custom accessibility action strings -->
     <string name="archive">Archive</string>
 
