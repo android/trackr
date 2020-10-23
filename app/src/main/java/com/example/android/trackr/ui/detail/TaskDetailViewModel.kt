@@ -37,9 +37,3 @@ class TaskDetailViewModel @ViewModelInject constructor(
 
     val detail = _taskId.switchMap { id -> taskDao.getTaskDetailById(id) }
 }
-
-// TODO: Temporary string representation. To be replaced with the actual UI.
-object ShowTaskDetail {
-    @JvmStatic
-    fun tags(tags: List<Tag>?) = tags?.joinToString { it.label }
-}

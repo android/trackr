@@ -29,6 +29,12 @@ import com.example.android.trackr.R
 import com.example.android.trackr.data.Tag
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import org.threeten.bp.Clock
+import org.threeten.bp.Duration
+import org.threeten.bp.Instant
+import org.threeten.bp.ZoneId
+import org.threeten.bp.ZonedDateTime
+import org.threeten.bp.format.DateTimeFormatter
 
 /**
  * Sets tags to be shown in this [ChipGroup].
@@ -88,4 +94,78 @@ private fun Chip.bind(tag: Tag) {
     val color = tag.color
     chipBackgroundColor =
         ColorStateList.valueOf(Color.argb(0x17, color.red, color.green, color.blue))
+}
+
+private val DATE_TIME_FORMATTER_PATTERN = DateTimeFormatter.ofPattern("MMM d, YYYY")
+
+/**
+ * Binding adapter to format due date of task to a human-readable format.
+ *
+ * @param view to set dueDate text on.
+ * @param dueDate as [Instant].
+ */
+@BindingAdapter("dueDate", "clock")
+fun formatDueDate(view: TextView, dueDate: Instant, clock: Clock) {
+    formatDueDate(view, dueDate, clock) {
+        view.text = view.resources.getString(
+            R.string.due_date_generic,
+            ZonedDateTime
+                .ofInstant(dueDate, clock.zone)
+                .format(DATE_TIME_FORMATTER_PATTERN)
+        )
+    }
+}
+
+/**
+ * Binding adapter to format due date of task to a human-readable format. If the due date is not
+ * close, the [view] is hidden.
+ */
+@BindingAdapter("dueMessage", "clock")
+fun formatDueMessage(view: TextView, dueDate: Instant?, clock: Clock) {
+    if (dueDate == null) {
+        return
+    }
+    formatDueDate(view, dueDate, clock) {
+        view.visibility = View.GONE
+    }
+}
+
+private fun formatDueDate(
+    view: TextView,
+    dueDate: Instant,
+    clock: Clock,
+    otherwise: () -> Unit
+) {
+    when (val daysTillDue = Duration.between(Instant.now(clock), dueDate).toDays().toInt()) {
+        in Int.MIN_VALUE..-1 -> {
+            val daysOverdue = daysTillDue.times(-1)
+            view.text = view.resources.getQuantityString(
+                R.plurals.due_date_overdue_x_days,
+                daysOverdue,
+                daysOverdue
+            )
+        }
+        0 -> {
+            view.text = view.resources.getString(R.string.due_date_today)
+        }
+        in 1 until 5 ->
+            view.text = view.resources.getQuantityString(
+                R.plurals.due_date_days,
+                daysTillDue,
+                daysTillDue
+            )
+        else ->
+            otherwise()
+    }
+}
+
+@BindingAdapter("instant")
+fun instant(view: TextView, instant: Instant?) {
+    if (instant == null) {
+        view.text = ""
+        return
+    }
+    view.text = ZonedDateTime
+        .ofInstant(instant, ZoneId.systemDefault())
+        .format(DATE_TIME_FORMATTER_PATTERN)
 }

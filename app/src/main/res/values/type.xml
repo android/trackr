@@ -16,6 +16,13 @@
 <resources>
 
     <!--Typography-->
+
+    <style name="TextAppearance.Trackr.Headline1" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="fontFamily">@font/raleway_extrabold</item>
+        <item name="android:textColor">@color/trackr_gray_500</item>
+        <item name="android:textSize">@dimen/text_size_header_1</item>
+    </style>
+
     <style name="TextAppearance.Trackr.Headline2" parent="TextAppearance.MaterialComponents.Headline2">
         <item name="fontFamily">@font/raleway_extrabold</item>
         <item name="android:textColor">@color/trackr_gray_500</item>

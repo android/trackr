@@ -17,6 +17,7 @@
 
 <resources>
 
+    <dimen name="text_size_header_1">25sp</dimen>
     <dimen name="text_size_header_2">23sp</dimen>
     <dimen name="text_size_body_1">19sp</dimen>
 

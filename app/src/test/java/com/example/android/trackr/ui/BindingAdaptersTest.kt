@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package com.example.android.trackr.util
+package com.example.android.trackr.ui
 
 import android.app.Application
 import android.content.res.Resources
+import android.view.View
 import android.widget.TextView
 import androidx.test.core.app.ApplicationProvider
 import com.example.android.trackr.R
 import com.example.android.trackr.TestApplication
-import junit.framework.Assert.assertEquals
+import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -35,7 +36,7 @@ import org.threeten.bp.ZoneId
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestApplication::class)
-class TaskItemBindingAdapterTest {
+class BindingAdaptersTest {
 
     private val dateInEpochSecond = 1584310694L // March 15, 2020
     private val fakeClock =
@@ -51,49 +52,70 @@ class TaskItemBindingAdapterTest {
     }
 
     @Test
-    fun formatTaskDueDate_overdue3Day() {
+    fun formatDueDate_overdue3Day() {
         val time3DaysAgo = Instant.now(fakeClock) - Duration.ofDays(3)
-        formatDate(textView, time3DaysAgo, fakeClock)
-        assertEquals(
-            textView.text,
+        formatDueDate(textView, time3DaysAgo, fakeClock)
+        assertThat(textView.text).isEqualTo(
             resources.getQuantityString(R.plurals.due_date_overdue_x_days, 3, 3)
         )
     }
 
     @Test
-    fun formatTaskDueDate_overdue1Day() {
+    fun formatDueDate_overdue1Day() {
         val timeYesterday = Instant.now(fakeClock) - Duration.ofDays(1)
-        formatDate(textView, timeYesterday, fakeClock)
-        assertEquals(
-            textView.text, resources
-                .getQuantityString(R.plurals.due_date_overdue_x_days, 1, 1)
+        formatDueDate(textView, timeYesterday, fakeClock)
+        assertThat(textView.text).isEqualTo(
+            resources.getQuantityString(R.plurals.due_date_overdue_x_days, 1, 1)
         )
     }
 
     @Test
-    fun formatTaskDueDate_dueToday() {
+    fun formatDueDate_dueToday() {
         val timeToday = Instant.now(fakeClock) + Duration.ofHours(3)
-        formatDate(textView, timeToday, fakeClock)
-        assertEquals(textView.text, resources.getString(R.string.due_date_today))
+        formatDueDate(textView, timeToday, fakeClock)
+        assertThat(textView.text).isEqualTo(
+            resources.getString(R.string.due_date_today)
+        )
     }
 
     @Test
-    fun formatTaskDueDate_dueTomorrow() {
+    fun formatDueDate_dueTomorrow() {
         val timeTomorrow = Instant.now(fakeClock) + Duration.ofDays(1)
-        formatDate(textView, timeTomorrow, fakeClock)
-        assertEquals(
-            textView.text,
+        formatDueDate(textView, timeTomorrow, fakeClock)
+        assertThat(textView.text).isEqualTo(
             resources.getQuantityString(R.plurals.due_date_days, 1, 1)
         )
     }
 
     @Test
-    fun formatTaskDueDate_dueInXDays() {
+    fun formatDueDate_dueInXDays() {
         val timeIn3Days = Instant.now(fakeClock) + Duration.ofDays(3) + Duration.ofHours(2)
-        formatDate(textView, timeIn3Days, fakeClock)
-        assertEquals(
-            textView.text,
+        formatDueDate(textView, timeIn3Days, fakeClock)
+        assertThat(textView.text).isEqualTo(
             resources.getQuantityString(R.plurals.due_date_days, 3, 3)
         )
+    }
+
+    @Test
+    fun formatDueMessage_overdue1Day() {
+        val timeYesterday = Instant.now(fakeClock) - Duration.ofDays(1)
+        formatDueMessage(textView, timeYesterday, fakeClock)
+        assertThat(textView.text).isEqualTo(
+            resources.getQuantityString(R.plurals.due_date_overdue_x_days, 1, 1)
+        )
+        assertThat(textView.visibility).isEqualTo(View.VISIBLE)
+    }
+
+    @Test
+    fun formatDueMessage_dueLongAhead() {
+        val timeIn30Days = Instant.now(fakeClock) + Duration.ofDays(30)
+        formatDueMessage(textView, timeIn30Days, fakeClock)
+        assertThat(textView.visibility).isEqualTo(View.GONE)
+    }
+
+    @Test
+    fun instant_empty() {
+        instant(textView, null)
+        assertThat(textView.text.toString()).isEmpty()
     }
 }

@@ -24,6 +24,8 @@ import androidx.navigation.fragment.navArgs
 import com.example.android.trackr.R
 import com.example.android.trackr.databinding.FragmentTaskDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
+import org.threeten.bp.Clock
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
@@ -32,6 +34,9 @@ class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
     private val args: TaskDetailFragmentArgs by navArgs()
 
     private lateinit var binding: FragmentTaskDetailBinding
+
+    @Inject
+    lateinit var clock: Clock
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,5 +48,6 @@ class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
         binding = FragmentTaskDetailBinding.bind(view)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
+        binding.clock = clock
     }
 }

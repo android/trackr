@@ -22,11 +22,11 @@
         <item name="android:paddingLeft">@dimen/drawable_padding</item>
         <item name="android:paddingEnd">0dp</item>
         <item name="android:paddingRight">0dp</item>
-        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Headline6</item>
+        <item name="android:textAppearance">?textAppearanceHeadline2</item>
     </style>
 
     <style name="Widget.Trackr.TextView.Label.Title">
-        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Headline5</item>
+        <item name="android:textAppearance">?textAppearanceHeadline1</item>
     </style>
 
 </resources>
