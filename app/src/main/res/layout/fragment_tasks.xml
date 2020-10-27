@@ -22,6 +22,10 @@
             name="headerData"
             type="com.example.android.trackr.ui.tasks.HeaderData" />
 
+        <variable
+            name="listener"
+            type="com.example.android.trackr.ui.tasks.TasksAdapter.ItemListener" />
+
     </data>
 
     <FrameLayout
@@ -36,6 +40,7 @@
         <include
             android:id="@+id/sticky_header"
             layout="@layout/list_header"
+            app:listener="@{listener}"
             app:headerData="@{headerData}" />
 
     </FrameLayout>

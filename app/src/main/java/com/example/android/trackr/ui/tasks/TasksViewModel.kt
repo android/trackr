@@ -18,9 +18,11 @@ package com.example.android.trackr.ui.tasks
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+
 import com.example.android.trackr.data.TaskListItem
 import com.example.android.trackr.data.TaskState
 import com.example.android.trackr.db.dao.TaskDao
@@ -36,8 +38,41 @@ class TasksViewModel @ViewModelInject constructor(
     private val _archivedItem: MutableLiveData<ArchivedItem?> = MutableLiveData()
     val archivedItem: LiveData<ArchivedItem?> = _archivedItem
 
-    val taskListItems: LiveData<List<TaskListItem>>
+    private val taskListItems: LiveData<List<TaskListItem>>
         get() = taskDao.getOngoingTaskListItems()
+
+    // TODO: don't hardcode TaskState values; instead, read from the db
+    private val _expandedStatesMap: MutableLiveData<MutableMap<TaskState, Boolean>> =
+        MutableLiveData(mutableMapOf(
+            TaskState.IN_PROGRESS to true,
+            TaskState.NOT_STARTED to true,
+            TaskState.COMPLETED to true))
+    private val expandedStatesMap: LiveData<MutableMap<TaskState, Boolean>> = _expandedStatesMap
+
+    var dataItems: LiveData<List<DataItem>> = MediatorLiveData<List<DataItem>>().apply {
+        var cachedTaskListItems: List<TaskListItem>? = null
+
+        addSource(taskListItems) {
+            // In case the user changes the expanded/collapsed state, avoid a new db write by
+            // providing cached data.
+            cachedTaskListItems = it
+            DataItemsCreator(it, expandedStatesMap.value).execute()?.let { result ->
+                value = result
+            }
+        }
+
+        addSource(expandedStatesMap) {
+            DataItemsCreator(cachedTaskListItems, it).execute()?.let { result ->
+                value = result
+            }
+        }
+    }
+
+    fun toggleExpandedState(headerData: HeaderData) {
+        _expandedStatesMap.value = _expandedStatesMap.value?.also { it ->
+            it[headerData.taskState] = !it[headerData.taskState]!!
+        }
+    }
 
     fun archiveTask(taskListItem: TaskListItem) {
         _archivedItem.value = ArchivedItem(taskListItem.id, taskListItem.state)

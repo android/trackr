@@ -23,12 +23,17 @@
             name="headerData"
             type="com.example.android.trackr.ui.tasks.HeaderData" />
 
+        <variable
+            name="listener"
+            type="com.example.android.trackr.ui.tasks.TasksAdapter.ItemListener" />
+
     </data>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp">
+        android:layout_marginBottom="4dp"
+        android:onClick="@{() -> listener.onHeaderClicked(headerData)}">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,7 +47,7 @@
                 style="@style/HomeSectionHeaderText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{headerData.label}" />
+                android:text="@{headerData.label(context)}" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

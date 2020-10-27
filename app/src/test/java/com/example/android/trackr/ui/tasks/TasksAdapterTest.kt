@@ -38,9 +38,10 @@ import org.threeten.bp.ZoneId
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestApplication::class)
 class TasksAdapterTest {
-    class TestListener : TasksAdapter.TaskItemListener {
-        override fun onItemClicked(taskListItem: TaskListItem) {}
-        override fun onItemArchived(taskListItem: TaskListItem) {}
+    class TestListener : TasksAdapter.ItemListener {
+        override fun onHeaderClicked(headerData: HeaderData) {}
+        override fun onTaskClicked(taskListItem: TaskListItem) {}
+        override fun onTaskArchived(taskListItem: TaskListItem) {}
     }
 
     private val dateInEpochSecond = 1584310694L // March 15, 2020
@@ -49,14 +50,14 @@ class TasksAdapterTest {
     private val tasksAdapter = TasksAdapter(TestListener(), fakeClock)
     private lateinit var context: Context
     private lateinit var frameLayout: FrameLayout
-    private lateinit var taskItemListener: TestListener
+    private lateinit var testItemListener: TestListener
 
     @Before
     fun setup() {
         val application: Application = ApplicationProvider.getApplicationContext()
         context = application
         frameLayout = FrameLayout(context)
-        taskItemListener = TestListener()
+        testItemListener = TestListener()
     }
 
     @Test
@@ -83,39 +84,9 @@ class TasksAdapterTest {
     }
 
     @Test
-    fun getItemViewType_withMatchingTask_showsHeaderAndTask() {
-        tasksAdapter.addHeadersAndSubmitList(
-            context,
-            listOf(taskListItem),
-            listOf(TaskState.IN_PROGRESS)
-        )
-
-        assertThat(tasksAdapter.currentList.size).isEqualTo(2)
-        assertThat(tasksAdapter.getItemViewType(0)).isEqualTo(TasksAdapter.ITEM_VIEW_TYPE_HEADER)
-        assertThat(tasksAdapter.getItemViewType(1)).isEqualTo(TasksAdapter.ITEM_VIEW_TYPE_TASK)
-    }
-
-    @Test
-    fun getItemViewType_noMatchingTask_StillShowsHeader() {
-        tasksAdapter.addHeadersAndSubmitList(
-            context,
-            listOf(taskListItem),
-            listOf(TaskState.NOT_STARTED)
-        )
-
-        assertThat(tasksAdapter.currentList.size).isEqualTo(1)
-        assertThat(tasksAdapter.getItemViewType(0)).isEqualTo(TasksAdapter.ITEM_VIEW_TYPE_HEADER)
-    }
-
-    @Test
     fun bindHeaderViewHolder_initialState() {
-        tasksAdapter.addHeadersAndSubmitList(
-            context,
-            listOf(taskListItem),
-            listOf(TaskState.NOT_STARTED)
-        )
-        val holder = TasksAdapter.HeaderViewHolder.from(frameLayout)
-        val headerData = HeaderData("some label")
+        val holder = TasksAdapter.HeaderViewHolder.from(frameLayout, testItemListener)
+        val headerData = HeaderData(1, taskState = TaskState.NOT_STARTED)
 
         assertThat(holder.binding.headerData).isNull()
 
@@ -126,79 +97,62 @@ class TasksAdapterTest {
 
     @Test
     fun bindTaskViewHolder_initialState() {
-        tasksAdapter.addHeadersAndSubmitList(
-            context,
-            listOf(taskListItem),
-            listOf(TaskState.NOT_STARTED)
-        )
-        val holder = TasksAdapter.TaskViewHolder.from(frameLayout, taskItemListener, fakeClock)
+        val holder = TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, fakeClock)
 
         assertThat(holder.binding.taskListItem).isNull()
         assertThat(holder.binding.listener).isNull()
         assertThat(holder.accessibilityActionIds).isEmpty()
 
-        holder.bind(taskListItem)
+        holder.bind(inProgressTaskListItem)
 
-        assertThat(holder.binding.listener).isEqualTo(taskItemListener)
+        assertThat(holder.binding.listener).isEqualTo(testItemListener)
         assertThat(holder.accessibilityActionIds.size).isEqualTo(1)
-        assertThat(holder.binding.taskListItem).isEqualTo(taskListItem)
+        assertThat(holder.binding.taskListItem).isEqualTo(inProgressTaskListItem)
     }
 
     @Test
     fun bindTaskViewHolder_addingAccessibilityAction_isIdempotent() {
-        tasksAdapter.addHeadersAndSubmitList(
-            context,
-            listOf(taskListItem),
-            listOf(TaskState.NOT_STARTED)
-        )
-        val holder = TasksAdapter.TaskViewHolder.from(frameLayout, taskItemListener, fakeClock)
-        holder.bind(taskListItem)
+        val holder = TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, fakeClock)
+        holder.bind(inProgressTaskListItem)
         assertThat(holder.accessibilityActionIds.size).isEqualTo(1)
 
-        holder.bind(taskListItem)
+        holder.bind(inProgressTaskListItem)
         // If previously added accessibility actions are not cleared, when the holder is rebound,
         // the actions will get added again. This check guards against that.
         assertThat(holder.accessibilityActionIds.size).isEqualTo(1)
     }
 
-
     @Test
     fun swipe_archivesItem() {
-        val mockListener = Mockito.mock(TasksAdapter.TaskItemListener::class.java)
+        val mockListener = Mockito.mock(TasksAdapter.ItemListener::class.java)
         val holder = setUpAndBindTaskViewHolder(mockListener)
 
         holder.onSwipe()
 
-        Mockito.verify(mockListener).onItemArchived(taskListItem)
+        Mockito.verify(mockListener).onTaskArchived(inProgressTaskListItem)
     }
 
     @Test
     fun accessibilityAction_archivesItem() {
-        val mockListener = Mockito.mock(TasksAdapter.TaskItemListener::class.java)
+        val mockListener = Mockito.mock(TasksAdapter.ItemListener::class.java)
         val holder = setUpAndBindTaskViewHolder(mockListener)
 
         holder.binding.root.performAccessibilityAction(holder.accessibilityActionIds[0], null)
 
-        Mockito.verify(mockListener).onItemArchived(taskListItem)
+        Mockito.verify(mockListener).onTaskArchived(inProgressTaskListItem)
     }
 
     private fun setUpAndBindTaskViewHolder(
-        listener: TasksAdapter.TaskItemListener
+        listener: TasksAdapter.ItemListener
     ): TasksAdapter.TaskViewHolder {
-        tasksAdapter.addHeadersAndSubmitList(
-            context,
-            listOf(taskListItem),
-            listOf(TaskState.NOT_STARTED)
-        )
         val holder = TasksAdapter.TaskViewHolder.from(frameLayout, listener, fakeClock)
-        holder.bind(taskListItem)
-
+        holder.bind(inProgressTaskListItem)
         return holder
     }
 
     companion object {
         private val user = User(1, "user")
-        val taskListItem = TaskListItem(
+        val inProgressTaskListItem = TaskListItem(
             id = 1,
             title = "task list item 1",
             dueAt = Instant.now(),

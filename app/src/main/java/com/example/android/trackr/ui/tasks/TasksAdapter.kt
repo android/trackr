@@ -34,22 +34,23 @@ import org.threeten.bp.Clock
 
 
 class TasksAdapter(
-    private val taskItemListener: TaskItemListener,
+    private val itemListener: ItemListener,
     private val clock: Clock
 ) :
     ListAdapter<DataItem, RecyclerView.ViewHolder>(
         DataItemDiffCallback()
     ) {
 
-    interface TaskItemListener {
-        fun onItemClicked(taskListItem: TaskListItem)
-        fun onItemArchived(taskListItem: TaskListItem)
+    interface ItemListener {
+        fun onHeaderClicked(headerData: HeaderData)
+        fun onTaskClicked(taskListItem: TaskListItem)
+        fun onTaskArchived(taskListItem: TaskListItem)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            ITEM_VIEW_TYPE_HEADER -> HeaderViewHolder.from(parent)
-            ITEM_VIEW_TYPE_TASK -> TaskViewHolder.from(parent, taskItemListener, clock)
+            ITEM_VIEW_TYPE_HEADER -> HeaderViewHolder.from(parent, itemListener)
+            ITEM_VIEW_TYPE_TASK -> TaskViewHolder.from(parent, itemListener, clock)
             else -> throw IllegalArgumentException("Unknown viewType $viewType")
         }
     }
@@ -86,56 +87,32 @@ class TasksAdapter(
         return getItem(0) as DataItem.HeaderItem
     }
 
-    // TODO: refactor into use case, using a coroutine (and add tests).
-    fun addHeadersAndSubmitList(
-        context: Context,
-        tasks: List<TaskListItem>,
-        taskStates: List<TaskState>
-    ) {
-        val items = mutableListOf<DataItem>()
-
-        val map = tasks.groupBy { it.state }
-
-        taskStates.forEach { state ->
-            val sublist: List<TaskListItem>? = map[state]
-            // Add header even if the category does not have any tasks.
-            items.add(
-                DataItem.HeaderItem(
-                    HeaderData(
-                        context.getString(
-                            R.string.header_label_with_count,
-                            // Category, derived from task state.
-                            context.getString(state.stringResId),
-                            // Tasks count for category.
-                            sublist?.size ?: 0
-                        )
-                    )
-                )
-            )
-            sublist?.map { items.add(DataItem.TaskItem(it)) }
-        }
-
-        submitList(items)
-    }
-
-    class HeaderViewHolder private constructor(val binding: ListHeaderBinding) :
+    class HeaderViewHolder private constructor(
+        val binding: ListHeaderBinding,
+        private val itemListener: ItemListener
+    ) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(headerData: HeaderData) {
             binding.headerData = headerData
+            binding.listener = itemListener
         }
 
         companion object {
-            fun from(parent: ViewGroup): HeaderViewHolder {
+            fun from(parent: ViewGroup, itemListener: ItemListener): HeaderViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                return HeaderViewHolder(ListHeaderBinding.inflate(layoutInflater, parent, false))
+                return HeaderViewHolder(ListHeaderBinding.inflate(
+                    layoutInflater,
+                    parent,
+                    false
+                ), itemListener)
             }
         }
     }
 
     class TaskViewHolder private constructor(
         val binding: ListTaskBinding,
-        private val taskItemListener: TaskItemListener,
+        private val itemListener: ItemListener,
         private val clock: Clock
     ) :
         RecyclerView.ViewHolder(binding.root), SwipeActionCallback.SwipeActionListener {
@@ -144,7 +121,7 @@ class TasksAdapter(
 
         fun bind(taskListItem: TaskListItem) {
             binding.taskListItem = taskListItem
-            binding.listener = taskItemListener
+            binding.listener = itemListener
             binding.clock = clock
             binding.executePendingBindings()
             addArchiveAccessibilityAction(taskListItem)
@@ -152,7 +129,7 @@ class TasksAdapter(
 
         override fun onSwipe() {
             binding.taskListItem?.let {
-                binding.listener?.onItemArchived(it)
+                binding.listener?.onTaskArchived(it)
             }
         }
 
@@ -174,7 +151,7 @@ class TasksAdapter(
                     binding.root.context.getString(R.string.archive)
                 ) { _, _ ->
                     // The functionality associated with the label.
-                    binding.listener?.onItemArchived(taskListItem)
+                    binding.listener?.onTaskArchived(taskListItem)
                     true
                 })
         }
@@ -185,7 +162,7 @@ class TasksAdapter(
         }
 
         companion object {
-            fun from(parent: ViewGroup, taskItemListener: TaskItemListener, clock: Clock):
+            fun from(parent: ViewGroup, itemListener: ItemListener, clock: Clock):
                     TaskViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 return TaskViewHolder(
@@ -193,7 +170,7 @@ class TasksAdapter(
                         layoutInflater,
                         parent,
                         false
-                    ), taskItemListener, clock
+                    ), itemListener, clock
                 )
             }
         }
@@ -229,5 +206,14 @@ sealed class DataItem {
 }
 
 data class HeaderData(
-    val label: String
-)
+    val count: Int,
+    val taskState: TaskState
+) {
+    fun label(context: Context): String {
+        return context.getString(
+            R.string.header_label_with_count,
+            context.getString(taskState.stringResId),
+            count
+        )
+    }
+}
