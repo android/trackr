@@ -18,9 +18,9 @@
     <!--Color palette. This list should be kept alphabetized-->
 
     <color name="trackr_blue_300" tools:ignore="UnusedResources">#526E8E</color>
-    <color name="trackr_blue_100" tools:ignore="UnusedResources">#DDE3E9</color>
+    <color name="trackr_blue_100">#DDE3E9</color>
     <color name="trackr_blue_200" tools:ignore="UnusedResources">#3D444B</color>
-    <color name="trackr_blue_500" tools:ignore="UnusedResources">#364F6B</color>
+    <color name="trackr_blue_500">#364F6B</color>
     <color name="trackr_blue_700">#1C2A3A</color>
 
     <color name="trackr_green_500" tools:ignore="UnusedResources">#90C178</color>
