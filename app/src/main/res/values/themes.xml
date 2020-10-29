@@ -22,6 +22,7 @@
         <item name="colorAccent">@color/trackr_pink_300</item>
 
         <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/trackr_blue_700</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
 

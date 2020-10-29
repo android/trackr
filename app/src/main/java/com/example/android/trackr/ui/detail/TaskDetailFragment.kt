@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.android.trackr.R
 import com.example.android.trackr.databinding.FragmentTaskDetailBinding
@@ -49,5 +50,8 @@ class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
         binding.clock = clock
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 }

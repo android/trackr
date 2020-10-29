@@ -22,9 +22,11 @@
     <dimen name="text_size_body_1">19sp</dimen>
 
     <dimen name="spacing_medium">16dp</dimen>
+    <dimen name="spacing_large">32dp</dimen>
     <dimen name="spacing_huge">64dp</dimen>
     <dimen name="drawable_padding">20dp</dimen>
     <dimen name="chip_height">48dp</dimen>
+    <dimen name="card_radius">8dp</dimen>
 
     <!-- Home Screen -->
     <dimen name="home_task_star_detail_margin">30dp</dimen>
