@@ -26,6 +26,8 @@
     <dimen name="drawable_padding">20dp</dimen>
     <dimen name="chip_height">48dp</dimen>
 
+    <!-- Home Screen -->
     <dimen name="home_task_star_detail_margin">30dp</dimen>
+    <dimen name="home_task_star_size">24dp</dimen>
 
 </resources>

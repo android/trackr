@@ -13,6 +13,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
+
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
@@ -45,14 +46,16 @@
             android:layout_marginBottom="6dp"
             android:padding="16dp">
 
-            <ImageView
+            <CheckBox
                 android:id="@+id/star"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/home_task_star_size"
+                android:layout_height="@dimen/home_task_star_size"
+                android:background="@drawable/selector_star"
+                android:button="@null"
                 android:contentDescription="@string/star"
+                android:gravity="center"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_star" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/title"
