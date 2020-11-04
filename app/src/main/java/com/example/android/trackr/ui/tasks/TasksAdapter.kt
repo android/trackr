@@ -96,6 +96,7 @@ class TasksAdapter(
         fun bind(headerData: HeaderData) {
             binding.headerData = headerData
             binding.listener = itemListener
+            ViewCompat.setAccessibilityHeading(binding.root, true)
         }
 
         companion object {
