@@ -37,144 +37,169 @@
         tools:context=".ui.detail.TaskDetailFragment">
 
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize" />
+                android:layout_height="?attr/actionBarSize"
+                app:navigationIcon="@drawable/ic_chevron_left" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <LinearLayout
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
+            app:cardCornerRadius="@dimen/card_radius"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <!-- Star / Title -->
-
-            <TextView
-                style="@style/Widget.Trackr.TextView.Label.Title"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{viewModel.detail.title}"
-                app:drawableStartCompat="@drawable/ic_star"
-                tools:drawableStart="@drawable/ic_star"
-                tools:text="Calendar design" />
+                android:layout_height="match_parent">
 
-            <!-- Description -->
+                <LinearLayout
+                    android:id="@+id/content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_huge"
-                android:layout_marginLeft="@dimen/spacing_huge"
-                android:text="@{viewModel.detail.description}"
-                android:textAppearance="?textAppearanceBody1"
-                tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
+                    <!-- Star / Title -->
 
-            <!-- Owner -->
+                    <TextView
+                        style="@style/Widget.Trackr.TextView.Label.Title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_large"
+                        android:text="@{viewModel.detail.title}"
+                        app:drawableStartCompat="@drawable/ic_star"
+                        tools:drawableStart="@drawable/ic_star"
+                        tools:text="Calendar design" />
 
-            <TextView
-                style="@style/Widget.Trackr.TextView.Label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/owner"
-                app:drawableStartCompat="@drawable/ic_user" />
+                    <!-- Description -->
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_huge"
-                android:layout_marginLeft="@dimen/spacing_huge"
-                android:text="@{viewModel.detail.owner.username}"
-                android:textAppearance="?textAppearanceBody1"
-                tools:text="Daring Dove" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_huge"
+                        android:layout_marginLeft="@dimen/spacing_huge"
+                        android:layout_marginTop="@dimen/spacing_medium"
+                        android:text="@{viewModel.detail.description}"
+                        android:textAppearance="?textAppearanceBody1"
+                        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
 
-            <!-- Creator -->
+                    <!-- Owner -->
 
-            <TextView
-                style="@style/Widget.Trackr.TextView.Label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/creator"
-                app:drawableStartCompat="@drawable/ic_user" />
+                    <TextView
+                        style="@style/Widget.Trackr.TextView.Label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_large"
+                        android:text="@string/owner"
+                        app:drawableStartCompat="@drawable/ic_user" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_huge"
-                android:layout_marginLeft="@dimen/spacing_huge"
-                android:text="@{viewModel.detail.reporter.username}"
-                android:textAppearance="?textAppearanceBody1"
-                tools:text="Peaceful Puffin" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_huge"
+                        android:layout_marginLeft="@dimen/spacing_huge"
+                        android:text="@{viewModel.detail.owner.username}"
+                        android:textAppearance="?textAppearanceBody1"
+                        tools:text="Daring Dove" />
 
-            <!-- Due date -->
+                    <!-- Creator -->
 
-            <TextView
-                style="@style/Widget.Trackr.TextView.Label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/due_at"
-                app:drawableStartCompat="@drawable/ic_due_at" />
+                    <TextView
+                        style="@style/Widget.Trackr.TextView.Label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_large"
+                        android:text="@string/creator"
+                        app:drawableStartCompat="@drawable/ic_user" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_huge"
-                android:layout_marginLeft="@dimen/spacing_huge"
-                android:textAppearance="?textAppearanceBody1"
-                app:instant="@{viewModel.detail.dueAt}"
-                tools:text="Sept 2, 2020 (Wed)" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_huge"
+                        android:layout_marginLeft="@dimen/spacing_huge"
+                        android:text="@{viewModel.detail.reporter.username}"
+                        android:textAppearance="?textAppearanceBody1"
+                        tools:text="Peaceful Puffin" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_huge"
-                android:layout_marginLeft="@dimen/spacing_huge"
-                android:textAppearance="?textAppearanceBody1"
-                app:clock="@{clock}"
-                app:dueMessage="@{viewModel.detail.dueAt}"
-                tools:text="Due in 3 days" />
+                    <!-- Due date -->
 
-            <!-- Creation date -->
+                    <TextView
+                        style="@style/Widget.Trackr.TextView.Label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_large"
+                        android:text="@string/due_at"
+                        app:drawableStartCompat="@drawable/ic_due_at" />
 
-            <TextView
-                style="@style/Widget.Trackr.TextView.Label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/created_at"
-                app:drawableStartCompat="@drawable/ic_created_at" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_huge"
+                        android:layout_marginLeft="@dimen/spacing_huge"
+                        android:textAppearance="?textAppearanceBody1"
+                        app:instant="@{viewModel.detail.dueAt}"
+                        tools:text="Sept 2, 2020 (Wed)" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_huge"
-                android:layout_marginLeft="@dimen/spacing_huge"
-                android:textAppearance="?textAppearanceBody1"
-                app:instant="@{viewModel.detail.createdAt}"
-                tools:text="July 16, 2020 (Thur)" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_huge"
+                        android:layout_marginLeft="@dimen/spacing_huge"
+                        android:textAppearance="?textAppearanceBody1"
+                        app:clock="@{clock}"
+                        app:dueMessage="@{viewModel.detail.dueAt}"
+                        tools:text="Due in 3 days" />
 
-            <!-- Tags -->
+                    <!-- Creation date -->
 
-            <TextView
-                style="@style/Widget.Trackr.TextView.Label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/tags"
-                app:drawableStartCompat="@drawable/ic_tags" />
+                    <TextView
+                        style="@style/Widget.Trackr.TextView.Label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_large"
+                        android:text="@string/created_at"
+                        app:drawableStartCompat="@drawable/ic_created_at" />
 
-            <com.google.android.material.chip.ChipGroup
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_huge"
-                android:layout_marginLeft="@dimen/spacing_huge"
-                app:showAllTags="@{true}"
-                app:tags="@{viewModel.detail.tags}" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_huge"
+                        android:layout_marginLeft="@dimen/spacing_huge"
+                        android:textAppearance="?textAppearanceBody1"
+                        app:instant="@{viewModel.detail.createdAt}"
+                        tools:text="July 16, 2020 (Thur)" />
 
-        </LinearLayout>
+                    <!-- Tags -->
+
+                    <TextView
+                        style="@style/Widget.Trackr.TextView.Label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_large"
+                        android:text="@string/tags"
+                        app:drawableStartCompat="@drawable/ic_tags" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_huge"
+                        android:layout_marginLeft="@dimen/spacing_huge"
+                        android:layout_marginBottom="@dimen/spacing_large"
+                        app:showAllTags="@{true}"
+                        app:tags="@{viewModel.detail.tags}" />
+
+                </LinearLayout>
+
+            </ScrollView>
+
+        </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"
