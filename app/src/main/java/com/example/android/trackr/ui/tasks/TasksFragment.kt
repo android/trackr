@@ -27,7 +27,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.trackr.R
 import com.example.android.trackr.data.TaskListItem
-import com.example.android.trackr.data.TaskState
 import com.example.android.trackr.databinding.FragmentTasksBinding
 import com.example.android.trackr.ui.detail.TaskDetailFragmentArgs
 import com.google.android.material.snackbar.Snackbar
@@ -36,7 +35,7 @@ import org.threeten.bp.Clock
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class TasksFragment : Fragment(R.layout.fragment_tasks) {
+class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListener {
 
     private val viewModel: TasksViewModel by viewModels()
     private lateinit var binding: FragmentTasksBinding
@@ -48,19 +47,10 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tasksAdapter = TasksAdapter(object : TasksAdapter.TaskItemListener {
-            override fun onItemClicked(taskListItem: TaskListItem) {
-                findNavController()
-                    .navigate(R.id.nav_task_detail, TaskDetailFragmentArgs(taskListItem.id).toBundle())
-            }
-
-            override fun onItemArchived(taskListItem: TaskListItem) {
-                viewModel.archiveTask(taskListItem)
-            }
-        }, clock)
+        tasksAdapter = TasksAdapter(this, clock)
 
         binding = FragmentTasksBinding.bind(view)
-
+        binding.listener = this
         binding.tasksList.apply {
             val itemTouchHelper = ItemTouchHelper(SwipeActionCallback())
             itemTouchHelper.attachToRecyclerView(this)
@@ -78,17 +68,8 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.taskListItems.observe(viewLifecycleOwner) {
-            tasksAdapter.addHeadersAndSubmitList(
-                requireContext(),
-                it,
-                // Determines the headers and the tasks displayed.
-                listOf(
-                    TaskState.IN_PROGRESS,
-                    TaskState.NOT_STARTED,
-                    TaskState.COMPLETED
-                )
-            )
+        viewModel.dataItems.observe(viewLifecycleOwner) {
+            tasksAdapter.submitList(it)
         }
 
         // Logic for presenting user with the option to unarchive a previously archived task.
@@ -107,6 +88,19 @@ class TasksFragment : Fragment(R.layout.fragment_tasks) {
                 }
             }
         }
+    }
+
+    override fun onHeaderClicked(headerData: HeaderData) {
+        viewModel.toggleExpandedState(headerData)
+    }
+
+    override fun onTaskClicked(taskListItem: TaskListItem) {
+        findNavController()
+            .navigate(R.id.nav_task_detail, TaskDetailFragmentArgs(taskListItem.id).toBundle())
+    }
+
+    override fun onTaskArchived(taskListItem: TaskListItem) {
+        viewModel.archiveTask(taskListItem)
     }
 }
 
