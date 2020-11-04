@@ -206,6 +206,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:layout_margin="16dp"
+            android:contentDescription="@string/edit_task"
             app:srcCompat="@drawable/ic_edit"
             app:useCompatPadding="true" />
 
