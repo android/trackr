@@ -25,6 +25,8 @@ import com.example.android.trackr.data.TaskListItem
 import com.example.android.trackr.data.TaskState
 import com.example.android.trackr.data.User
 import com.google.common.truth.Truth.assertThat
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -47,7 +49,7 @@ class TasksAdapterTest {
     private val dateInEpochSecond = 1584310694L // March 15, 2020
     private val fakeClock =
         Clock.fixed(Instant.ofEpochSecond(dateInEpochSecond), ZoneId.systemDefault())
-    private val tasksAdapter = TasksAdapter(TestListener(), fakeClock)
+    private val tasksAdapter = TasksAdapter(TestListener(), user, fakeClock)
     private lateinit var context: Context
     private lateinit var frameLayout: FrameLayout
     private lateinit var testItemListener: TestListener
@@ -97,7 +99,8 @@ class TasksAdapterTest {
 
     @Test
     fun bindTaskViewHolder_initialState() {
-        val holder = TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, fakeClock)
+        val holder =
+            TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, user, fakeClock)
 
         assertThat(holder.binding.taskListItem).isNull()
         assertThat(holder.binding.listener).isNull()
@@ -111,8 +114,33 @@ class TasksAdapterTest {
     }
 
     @Test
+    fun bindTaskViewHolder_starredTaskShownForCurrentUser() {
+        val currentUser = user2
+        val holder =
+            TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, currentUser, fakeClock)
+
+        assertFalse(holder.binding.star.isChecked)
+
+        holder.bind(starredTaskListItem)
+
+        assertTrue(holder.binding.star.isChecked)
+    }
+
+    @Test
+    fun bindTaskViewHolder_starredTaskNotShownForOtherUsers() {
+        val currentUser = user
+        val holder =
+            TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, currentUser, fakeClock)
+
+        holder.bind(starredTaskListItem)
+
+        assertFalse(holder.binding.star.isChecked)
+    }
+
+    @Test
     fun bindTaskViewHolder_addingAccessibilityAction_isIdempotent() {
-        val holder = TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, fakeClock)
+        val holder =
+            TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, user, fakeClock)
         holder.bind(inProgressTaskListItem)
         assertThat(holder.accessibilityActionIds.size).isEqualTo(1)
 
@@ -145,13 +173,15 @@ class TasksAdapterTest {
     private fun setUpAndBindTaskViewHolder(
         listener: TasksAdapter.ItemListener
     ): TasksAdapter.TaskViewHolder {
-        val holder = TasksAdapter.TaskViewHolder.from(frameLayout, listener, fakeClock)
+        val holder = TasksAdapter.TaskViewHolder.from(frameLayout, listener, user, fakeClock)
         holder.bind(inProgressTaskListItem)
         return holder
     }
 
     companion object {
         private val user = User(1, "user")
+        private val user2 = User(2, "user2")
+
         val inProgressTaskListItem = TaskListItem(
             id = 1,
             title = "task list item 1",
@@ -159,6 +189,16 @@ class TasksAdapterTest {
             owner = user,
             state = TaskState.IN_PROGRESS,
             starUsers = emptyList(),
+            tags = emptyList()
+        )
+
+        val starredTaskListItem = TaskListItem(
+            id = 2,
+            title = "task list item 2",
+            dueAt = Instant.now(),
+            owner = user2,
+            state = TaskState.IN_PROGRESS,
+            starUsers = listOf(user2),
             tags = emptyList()
         )
     }

@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.trackr.R
 import com.example.android.trackr.data.TaskListItem
+import com.example.android.trackr.data.User
 import com.example.android.trackr.databinding.FragmentTasksBinding
 import com.example.android.trackr.ui.detail.TaskDetailFragmentArgs
 import com.google.android.material.snackbar.Snackbar
@@ -42,12 +43,15 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
     private lateinit var tasksAdapter: TasksAdapter
 
     @Inject
+    lateinit var currentUser: User
+
+    @Inject
     lateinit var clock: Clock
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tasksAdapter = TasksAdapter(this, clock)
+        tasksAdapter = TasksAdapter(this, currentUser, clock)
 
         binding = FragmentTasksBinding.bind(view)
         binding.listener = this
@@ -105,7 +109,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
 }
 
 private inline fun RecyclerView.doOnScroll(crossinline action: (dx: Int, dy: Int) -> Unit) {
-    addOnScrollListener(object: RecyclerView.OnScrollListener() {
+    addOnScrollListener(object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             action(dx, dy)
         }
