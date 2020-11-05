@@ -42,6 +42,7 @@ import org.threeten.bp.ZoneId
 class TasksAdapterTest {
     class TestListener : TasksAdapter.ItemListener {
         override fun onHeaderClicked(headerData: HeaderData) {}
+        override fun onStarClicked(taskListItem: TaskListItem) {}
         override fun onTaskClicked(taskListItem: TaskListItem) {}
         override fun onTaskArchived(taskListItem: TaskListItem) {}
     }
@@ -133,6 +134,34 @@ class TasksAdapterTest {
             TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, currentUser, fakeClock)
 
         holder.bind(starredTaskListItem)
+
+        assertFalse(holder.binding.star.isChecked)
+    }
+
+    @Test
+    fun starTask() {
+        val holder =
+            TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, user, fakeClock)
+
+        holder.bind(inProgressTaskListItem)
+
+        assertFalse(holder.binding.star.isChecked)
+
+        holder.binding.star.performClick()
+
+        assertTrue(holder.binding.star.isChecked)
+    }
+
+    @Test
+    fun unstarTask() {
+        val holder =
+            TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, user2, fakeClock)
+
+        holder.bind(starredTaskListItem)
+
+        assertTrue(holder.binding.star.isChecked)
+
+        holder.binding.star.performClick()
 
         assertFalse(holder.binding.star.isChecked)
     }

@@ -94,6 +94,10 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
         }
     }
 
+    override fun onStarClicked(taskListItem: TaskListItem) {
+        viewModel.toggleTaskStarState(taskListItem, currentUser)
+    }
+
     override fun onHeaderClicked(headerData: HeaderData) {
         viewModel.toggleExpandedState(headerData)
     }

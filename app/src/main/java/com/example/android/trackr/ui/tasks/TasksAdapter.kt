@@ -45,6 +45,7 @@ class TasksAdapter(
 
     interface ItemListener {
         fun onHeaderClicked(headerData: HeaderData)
+        fun onStarClicked(taskListItem: TaskListItem)
         fun onTaskClicked(taskListItem: TaskListItem)
         fun onTaskArchived(taskListItem: TaskListItem)
     }
