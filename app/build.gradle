@@ -27,7 +27,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.android.trackr"
-        minSdkVersion 16
+        minSdkVersion 23
         targetSdkVersion 30
         multiDexEnabled true
         versionCode 1
