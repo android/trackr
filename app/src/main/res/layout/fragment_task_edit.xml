@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2020 The Android Open Source Project
-
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-
-          http://www.apache.org/licenses/LICENSE-2.0
-
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
+  ~ Copyright (C) 2020 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
 -->
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -20,21 +20,13 @@
 
     <data>
 
-        <variable
-            name="viewModel"
-            type="com.example.android.trackr.ui.detail.TaskDetailViewModel" />
-
-        <variable
-            name="clock"
-            type="org.threeten.bp.Clock" />
-
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/task_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.detail.TaskDetailFragment">
+        tools:context=".ui.edit.TaskEditFragment">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
@@ -73,9 +65,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_large"
-                        android:text="@{viewModel.detail.title}"
-                        app:drawableStartCompat="@drawable/ic_star"
-                        tools:drawableStart="@drawable/ic_star"
+                        android:text="TITLE"
                         tools:text="Calendar design" />
 
                     <!-- Description -->
@@ -86,7 +76,7 @@
                         android:layout_marginStart="@dimen/spacing_huge"
                         android:layout_marginLeft="@dimen/spacing_huge"
                         android:layout_marginTop="@dimen/spacing_medium"
-                        android:text="@{viewModel.detail.description}"
+                        android:text="DESCRIPTION"
                         android:textAppearance="?textAppearanceBody1"
                         tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
 
@@ -105,7 +95,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
                         android:layout_marginLeft="@dimen/spacing_huge"
-                        android:text="@{viewModel.detail.owner.username}"
+                        android:text="OWNER"
                         android:textAppearance="?textAppearanceBody1"
                         tools:text="Daring Dove" />
 
@@ -124,7 +114,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
                         android:layout_marginLeft="@dimen/spacing_huge"
-                        android:text="@{viewModel.detail.reporter.username}"
+                        android:text="CREATOR"
                         android:textAppearance="?textAppearanceBody1"
                         tools:text="Peaceful Puffin" />
 
@@ -143,8 +133,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
                         android:layout_marginLeft="@dimen/spacing_huge"
+                        android:text="DUE_AT"
                         android:textAppearance="?textAppearanceBody1"
-                        app:instant="@{viewModel.detail.dueAt}"
                         tools:text="Sept 2, 2020 (Wed)" />
 
                     <TextView
@@ -152,9 +142,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
                         android:layout_marginLeft="@dimen/spacing_huge"
+                        android:text="DUE_AT 2"
                         android:textAppearance="?textAppearanceBody1"
-                        app:clock="@{clock}"
-                        app:dueMessage="@{viewModel.detail.dueAt}"
                         tools:text="Due in 3 days" />
 
                     <!-- Creation date -->
@@ -172,8 +161,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
                         android:layout_marginLeft="@dimen/spacing_huge"
+                        android:text="CREATED_AT"
                         android:textAppearance="?textAppearanceBody1"
-                        app:instant="@{viewModel.detail.createdAt}"
                         tools:text="July 16, 2020 (Thur)" />
 
                     <!-- Tags -->
@@ -191,25 +180,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
                         android:layout_marginLeft="@dimen/spacing_huge"
-                        android:layout_marginBottom="@dimen/spacing_large"
-                        app:showAllTags="@{true}"
-                        app:tags="@{viewModel.detail.tags}" />
+                        android:layout_marginBottom="@dimen/spacing_large" />
 
                 </LinearLayout>
 
             </ScrollView>
 
         </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="@dimen/spacing_medium"
-            android:contentDescription="@string/edit_task"
-            app:srcCompat="@drawable/ic_edit"
-            app:useCompatPadding="true" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

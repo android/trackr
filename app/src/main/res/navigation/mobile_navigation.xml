@@ -37,4 +37,15 @@
             app:argType="long" />
     </fragment>
 
+    <fragment
+        android:id="@+id/nav_task_edit"
+        android:name="com.example.android.trackr.ui.edit.TaskEditFragment"
+        android:label="Task Edit"
+        android:layout="@layout/fragment_task_edit">
+        <argument
+            android:name="taskId"
+            android:defaultValue="0L"
+            app:argType="long" />
+    </fragment>
+
 </navigation>
