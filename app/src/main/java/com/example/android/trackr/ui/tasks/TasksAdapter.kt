@@ -30,11 +30,13 @@ import com.example.android.trackr.databinding.ListHeaderBinding
 import com.example.android.trackr.databinding.ListTaskBinding
 import com.example.android.trackr.data.TaskListItem
 import com.example.android.trackr.data.TaskState
+import com.example.android.trackr.data.User
 import org.threeten.bp.Clock
 
 
 class TasksAdapter(
     private val itemListener: ItemListener,
+    private val currentUser: User,
     private val clock: Clock
 ) :
     ListAdapter<DataItem, RecyclerView.ViewHolder>(
@@ -50,7 +52,7 @@ class TasksAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             ITEM_VIEW_TYPE_HEADER -> HeaderViewHolder.from(parent, itemListener)
-            ITEM_VIEW_TYPE_TASK -> TaskViewHolder.from(parent, itemListener, clock)
+            ITEM_VIEW_TYPE_TASK -> TaskViewHolder.from(parent, itemListener, currentUser, clock)
             else -> throw IllegalArgumentException("Unknown viewType $viewType")
         }
     }
@@ -101,11 +103,13 @@ class TasksAdapter(
         companion object {
             fun from(parent: ViewGroup, itemListener: ItemListener): HeaderViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                return HeaderViewHolder(ListHeaderBinding.inflate(
-                    layoutInflater,
-                    parent,
-                    false
-                ), itemListener)
+                return HeaderViewHolder(
+                    ListHeaderBinding.inflate(
+                        layoutInflater,
+                        parent,
+                        false
+                    ), itemListener
+                )
             }
         }
     }
@@ -113,6 +117,7 @@ class TasksAdapter(
     class TaskViewHolder private constructor(
         val binding: ListTaskBinding,
         private val itemListener: ItemListener,
+        private val currentUser: User,
         private val clock: Clock
     ) :
         RecyclerView.ViewHolder(binding.root), SwipeActionCallback.SwipeActionListener {
@@ -123,6 +128,7 @@ class TasksAdapter(
             binding.taskListItem = taskListItem
             binding.listener = itemListener
             binding.clock = clock
+            binding.currentUser = currentUser
             binding.executePendingBindings()
             addArchiveAccessibilityAction(taskListItem)
         }
@@ -162,7 +168,12 @@ class TasksAdapter(
         }
 
         companion object {
-            fun from(parent: ViewGroup, itemListener: ItemListener, clock: Clock):
+            fun from(
+                parent: ViewGroup,
+                itemListener: ItemListener,
+                currentUser: User,
+                clock: Clock
+            ):
                     TaskViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 return TaskViewHolder(
@@ -170,7 +181,7 @@ class TasksAdapter(
                         layoutInflater,
                         parent,
                         false
-                    ), itemListener, clock
+                    ), itemListener, currentUser, clock
                 )
             }
         }

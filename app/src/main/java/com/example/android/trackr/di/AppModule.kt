@@ -6,6 +6,7 @@ import androidx.room.RoomDatabase
 import androidx.room.withTransaction
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.android.trackr.data.SeedData
+import com.example.android.trackr.data.User
 import com.example.android.trackr.db.AppDatabase
 import com.example.android.trackr.db.dao.TaskDao
 import dagger.Module
@@ -57,6 +58,12 @@ object AppModule {
                 }
             }
         }
+    }
+
+    @Provides
+    fun provideCurrentUser(): User {
+        // For simplicity of sample, assign first user as current user
+        return SeedData.Users[0]
     }
 
     @Provides
