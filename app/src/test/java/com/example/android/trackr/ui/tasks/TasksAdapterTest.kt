@@ -19,6 +19,7 @@ package com.example.android.trackr.ui.tasks
 import android.app.Application
 import android.content.Context
 import android.widget.FrameLayout
+import androidx.core.view.ViewCompat
 import androidx.test.core.app.ApplicationProvider
 import com.example.android.trackr.TestApplication
 import com.example.android.trackr.data.TaskListItem
@@ -91,10 +92,12 @@ class TasksAdapterTest {
         val headerData = HeaderData(1, taskState = TaskState.NOT_STARTED)
 
         assertThat(holder.binding.headerData).isNull()
+        assertThat(ViewCompat.isAccessibilityHeading(holder.binding.root)).isFalse()
 
         holder.bind(headerData)
 
         assertThat(holder.binding.headerData).isEqualTo(headerData)
+        assertThat(ViewCompat.isAccessibilityHeading(holder.binding.root)).isTrue()
     }
 
     @Test
