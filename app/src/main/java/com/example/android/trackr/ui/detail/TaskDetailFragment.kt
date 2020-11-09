@@ -24,6 +24,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.android.trackr.R
 import com.example.android.trackr.databinding.FragmentTaskDetailBinding
+import com.example.android.trackr.ui.edit.TaskEditFragmentArgs
 import dagger.hilt.android.AndroidEntryPoint
 import org.threeten.bp.Clock
 import javax.inject.Inject
@@ -52,6 +53,14 @@ class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
         binding.clock = clock
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
+        }
+        binding.edit.setOnClickListener {
+            findNavController().navigate(
+                R.id.nav_task_edit,
+                TaskEditFragmentArgs(
+                    taskId = args.taskId
+                ).toBundle()
+            )
         }
     }
 }

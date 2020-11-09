@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -66,6 +65,9 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
                     .findHeaderItem(linearLayoutManager.findFirstVisibleItemPosition())
                     .headerData
             }
+        }
+        binding.add.setOnClickListener {
+            findNavController().navigate(R.id.nav_task_edit)
         }
     }
 
