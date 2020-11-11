@@ -20,11 +20,13 @@ import android.app.Application
 import android.content.Context
 import android.widget.FrameLayout
 import androidx.test.core.app.ApplicationProvider
+import com.example.android.trackr.R
 import com.example.android.trackr.TestApplication
 import com.example.android.trackr.data.TaskListItem
 import com.example.android.trackr.data.TaskState
 import com.example.android.trackr.data.User
 import com.google.common.truth.Truth.assertThat
+import org.junit.Assert
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -110,7 +112,7 @@ class TasksAdapterTest {
         holder.bind(inProgressTaskListItem)
 
         assertThat(holder.binding.listener).isEqualTo(testItemListener)
-        assertThat(holder.accessibilityActionIds.size).isEqualTo(1)
+        assertThat(holder.accessibilityActionIds.size).isEqualTo(2)
         assertThat(holder.binding.taskListItem).isEqualTo(inProgressTaskListItem)
     }
 
@@ -167,16 +169,26 @@ class TasksAdapterTest {
     }
 
     @Test
+    fun accessibilityAction_starItem() {
+        val mockListener = Mockito.mock(TasksAdapter.ItemListener::class.java)
+        val holder = setUpAndBindTaskViewHolder(mockListener)
+
+        holder.binding.root.performAccessibilityAction(holder.accessibilityActionIds[1], null)
+
+        Mockito.verify(mockListener).onStarClicked(inProgressTaskListItem)
+    }
+
+    @Test
     fun bindTaskViewHolder_addingAccessibilityAction_isIdempotent() {
         val holder =
             TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, user, fakeClock)
         holder.bind(inProgressTaskListItem)
-        assertThat(holder.accessibilityActionIds.size).isEqualTo(1)
+        assertThat(holder.accessibilityActionIds.size).isEqualTo(2)
 
         holder.bind(inProgressTaskListItem)
         // If previously added accessibility actions are not cleared, when the holder is rebound,
         // the actions will get added again. This check guards against that.
-        assertThat(holder.accessibilityActionIds.size).isEqualTo(1)
+        assertThat(holder.accessibilityActionIds.size).isEqualTo(2)
     }
 
     @Test
