@@ -56,7 +56,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
         binding = FragmentTasksBinding.bind(view)
         binding.listener = this
         binding.tasksList.apply {
-            val itemTouchHelper = ItemTouchHelper(SwipeActionCallback())
+            val itemTouchHelper = ItemTouchHelper(SwipeAndDragCallback())
             itemTouchHelper.attachToRecyclerView(this)
             val linearLayoutManager = LinearLayoutManager(activity)
             layoutManager = linearLayoutManager
@@ -105,6 +105,10 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
 
     override fun onTaskArchived(taskListItem: TaskListItem) {
         viewModel.archiveTask(taskListItem)
+    }
+
+    override fun onTaskDragged(fromPosition: Int, toPosition: Int) {
+        tasksAdapter.changeTaskPosition(fromPosition, toPosition)
     }
 }
 

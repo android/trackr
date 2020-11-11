@@ -44,6 +44,7 @@ class TasksAdapterTest {
         override fun onHeaderClicked(headerData: HeaderData) {}
         override fun onTaskClicked(taskListItem: TaskListItem) {}
         override fun onTaskArchived(taskListItem: TaskListItem) {}
+        override fun onTaskDragged(fromPosition: Int, toPosition: Int) {}
     }
 
     private val dateInEpochSecond = 1584310694L // March 15, 2020
@@ -155,7 +156,7 @@ class TasksAdapterTest {
         val mockListener = Mockito.mock(TasksAdapter.ItemListener::class.java)
         val holder = setUpAndBindTaskViewHolder(mockListener)
 
-        holder.onSwipe()
+        holder.onItemSwiped()
 
         Mockito.verify(mockListener).onTaskArchived(inProgressTaskListItem)
     }
