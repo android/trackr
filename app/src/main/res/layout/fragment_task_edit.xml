@@ -19,10 +19,13 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.example.android.trackr.ui.edit.TaskEditViewModel" />
+
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/task_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.edit.TaskEditFragment">
@@ -37,6 +40,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                app:menu="@menu/task_edit"
                 app:navigationContentDescription="@string/back"
                 app:navigationIcon="@drawable/ic_chevron_left" />
 
@@ -61,22 +65,48 @@
                     <!-- Star / Title -->
 
                     <TextView
-                        style="@style/Widget.Trackr.TextView.Label.Title"
+                        style="@style/Widget.Trackr.TextView.Label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_large"
-                        android:text="TITLE"
+                        android:labelFor="@id/title"
+                        android:paddingStart="@dimen/spacing_huge"
+                        android:paddingEnd="0dp"
+                        android:text="@string/title" />
+
+                    <EditText
+                        android:id="@+id/title"
+                        style="@style/Widget.Trackr.TextView.Label.Title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="64dp"
+                        android:autofillHints="title"
+                        android:inputType="textCapSentences"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="0dp"
+                        android:text="@={viewModel.title}"
                         tools:text="Calendar design" />
 
                     <!-- Description -->
 
                     <TextView
+                        style="@style/Widget.Trackr.TextView.Label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_large"
+                        android:labelFor="@id/description"
+                        android:text="@string/description"
+                        app:drawableStartCompat="@drawable/ic_description" />
+
+                    <EditText
+                        android:id="@+id/description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
-                        android:layout_marginLeft="@dimen/spacing_huge"
+                        android:inputType="textMultiLine|textCapSentences"
                         android:layout_marginTop="@dimen/spacing_medium"
-                        android:text="DESCRIPTION"
+                        android:autofillHints="description"
+                        android:text="@={viewModel.description}"
                         android:textAppearance="?textAppearanceBody1"
                         tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
 
@@ -94,7 +124,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
-                        android:layout_marginLeft="@dimen/spacing_huge"
                         android:text="OWNER"
                         android:textAppearance="?textAppearanceBody1"
                         tools:text="Daring Dove" />
@@ -113,7 +142,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
-                        android:layout_marginLeft="@dimen/spacing_huge"
                         android:text="CREATOR"
                         android:textAppearance="?textAppearanceBody1"
                         tools:text="Peaceful Puffin" />
@@ -132,7 +160,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
-                        android:layout_marginLeft="@dimen/spacing_huge"
                         android:text="DUE_AT"
                         android:textAppearance="?textAppearanceBody1"
                         tools:text="Sept 2, 2020 (Wed)" />
@@ -141,7 +168,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
-                        android:layout_marginLeft="@dimen/spacing_huge"
                         android:text="DUE_AT 2"
                         android:textAppearance="?textAppearanceBody1"
                         tools:text="Due in 3 days" />
@@ -160,7 +186,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
-                        android:layout_marginLeft="@dimen/spacing_huge"
                         android:text="CREATED_AT"
                         android:textAppearance="?textAppearanceBody1"
                         tools:text="July 16, 2020 (Thur)" />
@@ -179,7 +204,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
-                        android:layout_marginLeft="@dimen/spacing_huge"
                         android:layout_marginBottom="@dimen/spacing_large" />
 
                 </LinearLayout>

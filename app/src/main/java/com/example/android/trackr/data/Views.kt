@@ -83,7 +83,7 @@ data class TaskDetail(
 
     val title: String,
 
-    val description: String?,
+    val description: String,
 
     val state: TaskState,
 

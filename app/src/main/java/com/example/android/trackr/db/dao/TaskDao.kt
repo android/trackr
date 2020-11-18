@@ -59,6 +59,9 @@ interface TaskDao {
     @Query("SELECT * FROM TaskDetail WHERE id = :id")
     fun getTaskDetailById(id: Long): LiveData<TaskDetail?>
 
+    @Query("SELECT * FROM TaskDetail WHERE id = :id")
+    suspend fun loadTaskDetailById(id: Long): TaskDetail?
+
     @Transaction
     @Query("SELECT * FROM TaskListItem WHERE state != $ARCHIVED_KEY")
     fun getOngoingTaskListItems(): LiveData<List<TaskListItem>>

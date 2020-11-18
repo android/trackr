@@ -17,10 +17,10 @@
 package com.example.android.trackr.ui.edit
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.android.trackr.R
 import com.example.android.trackr.databinding.FragmentTaskEditBinding
@@ -30,11 +30,33 @@ import dagger.hilt.android.AndroidEntryPoint
 class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
 
     private val args: TaskEditFragmentArgs by navArgs()
+    private val viewModel: TaskEditViewModel by viewModels()
     private lateinit var binding: FragmentTaskEditBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.taskId = args.taskId
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentTaskEditBinding.bind(view)
         binding.lifecycleOwner = viewLifecycleOwner
-        // TODO: Implement
+        binding.viewModel = viewModel
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
+        binding.toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.action_save -> {
+                    viewModel.save()
+                    true
+                }
+                else -> false
+            }
+        }
+        val menuItemSave = binding.toolbar.menu.findItem(R.id.action_save)
+        viewModel.modified.observe(viewLifecycleOwner) { modified ->
+            menuItemSave.isEnabled = modified
+        }
     }
 }

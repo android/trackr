@@ -51,6 +51,8 @@
     <string name="task_archived">Task archived</string>
     <string name="undo">Undo</string>
 
+    <string name="title">Title</string>
+    <string name="description">Description</string>
     <string name="owner">Owner</string>
     <string name="creator">Creator</string>
     <string name="due_at">Due date</string>
@@ -58,4 +60,5 @@
     <string name="tags">Tags</string>
 
     <string name="back">Back</string>
+    <string name="save">Save</string>
 </resources>
