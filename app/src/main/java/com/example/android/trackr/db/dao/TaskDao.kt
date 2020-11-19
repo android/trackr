@@ -19,6 +19,7 @@ package com.example.android.trackr.db.dao
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Transaction
 import com.example.android.trackr.data.ARCHIVED_KEY
@@ -49,6 +50,9 @@ interface TaskDao {
     @Insert
     suspend fun insertUserTasks(userTasks: List<UserTask>)
 
+    @Delete
+    suspend fun deleteUserTasks(userTasks: List<UserTask>)
+
     @Query("SELECT * FROM tasks")
     fun getTasks(): LiveData<List<Task>>
 
@@ -61,4 +65,7 @@ interface TaskDao {
 
     @Query("UPDATE tasks SET state = :state WHERE id = :id")
     suspend fun updateTaskState(id: Long, state: TaskState)
+
+    @Query("SELECT * FROM user_tasks WHERE taskId = :taskId AND userId = :userId")
+    suspend fun getUserTask(taskId: Long, userId: Long): UserTask?
 }

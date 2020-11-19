@@ -45,6 +45,7 @@ class TasksAdapter(
 
     interface ItemListener {
         fun onHeaderClicked(headerData: HeaderData)
+        fun onStarClicked(taskListItem: TaskListItem)
         fun onTaskClicked(taskListItem: TaskListItem)
         fun onTaskArchived(taskListItem: TaskListItem)
     }
@@ -131,7 +132,13 @@ class TasksAdapter(
             binding.clock = clock
             binding.currentUser = currentUser
             binding.executePendingBindings()
+
+            // Clear previously added actions. If this is skipped, the actions may be duplicated
+            // when a view is rebound.
+            removeAccessibilityActions(binding.root)
+
             addArchiveAccessibilityAction(taskListItem)
+            addStarAccessibilityAction(taskListItem)
         }
 
         override fun onSwipe() {
@@ -147,10 +154,6 @@ class TasksAdapter(
          * may not be able to perform the swipe gesture.
          */
         private fun addArchiveAccessibilityAction(taskListItem: TaskListItem) {
-            // Clear previously added actions. If this is skipped, the actions may be duplicated
-            // when a view is rebound.
-            removeAccessibilityActions(binding.root)
-
             accessibilityActionIds.add(
                 ViewCompat.addAccessibilityAction(
                     binding.root,
@@ -166,6 +169,26 @@ class TasksAdapter(
         private fun removeAccessibilityActions(view: View) {
             accessibilityActionIds.forEach { ViewCompat.removeAccessibilityAction(view, it) }
             accessibilityActionIds.clear()
+        }
+
+        /**
+         * Creates a custom accessibility action for starring / unstarring tasks.
+         */
+        private fun addStarAccessibilityAction(taskListItem: TaskListItem) {
+            accessibilityActionIds.add(
+                ViewCompat.addAccessibilityAction(
+                    binding.root,
+                    // The label surfaced to end user by an accessibility service.
+                    if (taskListItem.starUsers.contains(currentUser)) {
+                        binding.root.context.getString(R.string.unstar)
+                    } else {
+                        binding.root.context.getString(R.string.star)
+                    }
+                ) { _, _ ->
+                    // The functionality associated with the label.
+                    binding.listener?.onStarClicked(taskListItem)
+                    true
+                })
         }
 
         companion object {

@@ -50,15 +50,19 @@
             android:layout_marginBottom="6dp"
             android:padding="16dp">
 
+            <!-- Marked as not importantForAccessibility because this functionality is exposed
+             as a custom accessibility action. See TasksAdapter.kt for implementation. -->
             <CheckBox
                 android:id="@+id/star"
                 android:layout_width="@dimen/home_task_star_size"
                 android:layout_height="@dimen/home_task_star_size"
                 android:background="@drawable/selector_star"
                 android:button="@null"
+                android:checked="@{taskListItem.starUsers.contains(currentUser)}"
                 android:contentDescription="@string/star"
                 android:gravity="center"
-                android:checked="@{taskListItem.starUsers.contains(currentUser)}"
+                android:importantForAccessibility="no"
+                android:onClick="@{() -> listener.onStarClicked(taskListItem)}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -108,10 +112,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/home_task_star_detail_margin"
                 android:layout_marginLeft="@dimen/home_task_star_detail_margin"
-                app:showAllTags="@{false}"
                 app:layout_constraintBottom_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/star"
                 app:layout_constraintTop_toBottomOf="@id/due_date"
+                app:showAllTags="@{false}"
                 app:tags="@{taskListItem.tags}">
 
                 <include layout="@layout/tag" />

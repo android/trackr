@@ -16,6 +16,7 @@
 
 package com.example.android.trackr.ui.tasks
 
+import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -25,6 +26,8 @@ import androidx.lifecycle.viewModelScope
 
 import com.example.android.trackr.data.TaskListItem
 import com.example.android.trackr.data.TaskState
+import com.example.android.trackr.data.User
+import com.example.android.trackr.data.UserTask
 import com.example.android.trackr.db.dao.TaskDao
 import kotlinx.coroutines.launch
 
@@ -43,10 +46,13 @@ class TasksViewModel @ViewModelInject constructor(
 
     // TODO: don't hardcode TaskState values; instead, read from the db
     private val _expandedStatesMap: MutableLiveData<MutableMap<TaskState, Boolean>> =
-        MutableLiveData(mutableMapOf(
-            TaskState.IN_PROGRESS to true,
-            TaskState.NOT_STARTED to true,
-            TaskState.COMPLETED to true))
+        MutableLiveData(
+            mutableMapOf(
+                TaskState.IN_PROGRESS to true,
+                TaskState.NOT_STARTED to true,
+                TaskState.COMPLETED to true
+            )
+        )
     private val expandedStatesMap: LiveData<MutableMap<TaskState, Boolean>> = _expandedStatesMap
 
     var dataItems: LiveData<List<DataItem>> = MediatorLiveData<List<DataItem>>().apply {
@@ -74,6 +80,24 @@ class TasksViewModel @ViewModelInject constructor(
         }
     }
 
+    fun toggleTaskStarState(taskListItem: TaskListItem, currentUser: User) {
+        viewModelScope.launch {
+            val isTaskStarred = taskListItem.starUsers.contains(currentUser)
+
+            if (isTaskStarred) {
+                val existingUserTask = taskDao.getUserTask(taskListItem.id, currentUser.id)
+                if (existingUserTask != null) {
+                    taskDao.deleteUserTasks(listOf(existingUserTask))
+                } else {
+                    Log.e(TAG, "Error deleting user task because it's not in the database")
+                }
+            } else {
+                val newUserTask = UserTask(userId = currentUser.id, taskId = taskListItem.id)
+                taskDao.insertUserTasks(listOf(newUserTask))
+            }
+        }
+    }
+
     fun archiveTask(taskListItem: TaskListItem) {
         _archivedItem.value = ArchivedItem(taskListItem.id, taskListItem.state)
 
@@ -89,6 +113,10 @@ class TasksViewModel @ViewModelInject constructor(
             }
             _archivedItem.value = null
         }
+    }
+
+    companion object {
+        private const val TAG = "TasksViewModel"
     }
 }
 
