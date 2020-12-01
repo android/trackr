@@ -71,4 +71,7 @@ interface TaskDao {
 
     @Query("SELECT * FROM user_tasks WHERE taskId = :taskId AND userId = :userId")
     suspend fun getUserTask(taskId: Long, userId: Long): UserTask?
+
+    @Query("SELECT * FROM users")
+    suspend fun loadUsers(): List<User>
 }

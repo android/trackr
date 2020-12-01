@@ -153,6 +153,13 @@ class TaskDaoTest {
         }
     }
 
+    @Test
+    fun loadUsers() = runBlocking {
+        taskDao.insertUsers(SeedData.Users)
+        val users = taskDao.loadUsers()
+        assertThat(users).hasSize(2)
+    }
+
     companion object {
         fun insertData(
             taskDao: TaskDao,

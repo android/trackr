@@ -22,9 +22,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.android.trackr.NavTaskEditGraphArgs
 import com.example.android.trackr.R
 import com.example.android.trackr.databinding.FragmentTaskDetailBinding
-import com.example.android.trackr.ui.edit.TaskEditFragmentArgs
 import dagger.hilt.android.AndroidEntryPoint
 import org.threeten.bp.Clock
 import javax.inject.Inject
@@ -56,8 +56,8 @@ class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
         }
         binding.edit.setOnClickListener {
             findNavController().navigate(
-                R.id.nav_task_edit,
-                TaskEditFragmentArgs(
+                R.id.nav_task_edit_graph,
+                NavTaskEditGraphArgs(
                     taskId = args.taskId
                 ).toBundle()
             )

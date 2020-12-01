@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright (C) 2020 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -103,9 +104,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
-                        android:inputType="textMultiLine|textCapSentences"
                         android:layout_marginTop="@dimen/spacing_medium"
                         android:autofillHints="description"
+                        android:inputType="textMultiLine|textCapSentences"
                         android:text="@={viewModel.description}"
                         android:textAppearance="?textAppearanceBody1"
                         tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
@@ -118,14 +119,16 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_large"
                         android:text="@string/owner"
-                        app:drawableStartCompat="@drawable/ic_user" />
+                        app:drawableStartCompat="@drawable/ic_person" />
 
-                    <TextView
-                        android:layout_width="match_parent"
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/owner"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
-                        android:text="OWNER"
+                        android:text="@{viewModel.owner.username}"
                         android:textAppearance="?textAppearanceBody1"
+                        app:chipIcon="@drawable/ic_user"
                         tools:text="Daring Dove" />
 
                     <!-- Creator -->
@@ -136,14 +139,15 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_large"
                         android:text="@string/creator"
-                        app:drawableStartCompat="@drawable/ic_user" />
+                        app:drawableStartCompat="@drawable/ic_person" />
 
-                    <TextView
-                        android:layout_width="match_parent"
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
-                        android:text="CREATOR"
+                        android:text="@{viewModel.creator.username}"
                         android:textAppearance="?textAppearanceBody1"
+                        app:chipIcon="@drawable/ic_user"
                         tools:text="Peaceful Puffin" />
 
                     <!-- Due date -->

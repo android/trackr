@@ -67,7 +67,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
             }
         }
         binding.add.setOnClickListener {
-            findNavController().navigate(R.id.nav_task_edit)
+            findNavController().navigate(R.id.nav_task_edit_graph)
         }
     }
 

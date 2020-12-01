@@ -55,6 +55,8 @@ class TaskEditViewModelTest {
         assertThat(viewModel.modified.valueBlocking).isFalse()
         assertThat(viewModel.title.valueBlocking).isEmpty()
         assertThat(viewModel.description.valueBlocking).isEmpty()
+        assertThat(viewModel.owner.valueBlocking).isNull()
+        assertThat(viewModel.creator.valueBlocking).isNull()
 
         viewModel.title.value = "a"
 
@@ -73,10 +75,29 @@ class TaskEditViewModelTest {
         assertThat(viewModel.modified.valueBlocking).isFalse()
         assertThat(viewModel.title.valueBlocking).isEqualTo("title")
         assertThat(viewModel.description.valueBlocking).isEqualTo("description")
+        assertThat(viewModel.owner.valueBlocking).isEqualTo(User(1L, "owner"))
+        assertThat(viewModel.creator.valueBlocking).isEqualTo(User(2L, "creator"))
+        assertThat(viewModel.users).hasSize(3)
 
         viewModel.title.value = "a"
 
         assertThat(viewModel.title.valueBlocking).isEqualTo("a")
+        assertThat(viewModel.modified.valueBlocking).isTrue()
+    }
+
+    @Test
+    fun editOwner() {
+        val db = createDatabase()
+        populate(db)
+        val viewModel = TaskEditViewModel(db.taskDao())
+        viewModel.taskId = 1L
+
+        assertThat(viewModel.owner.valueBlocking).isEqualTo(User(1L, "owner"))
+        assertThat(viewModel.modified.valueBlocking).isFalse()
+
+        viewModel.updateOwner(User(3L, "another"))
+
+        assertThat(viewModel.owner.valueBlocking).isEqualTo(User(3L, "another"))
         assertThat(viewModel.modified.valueBlocking).isTrue()
     }
 
@@ -94,7 +115,13 @@ class TaskEditViewModelTest {
         runBlocking {
             with(db.taskDao()) {
                 insertTags(listOf(Tag(1L, "tag", Color.RED)))
-                insertUsers(listOf(User(1L, "owner"), User(2L, "creator")))
+                insertUsers(
+                    listOf(
+                        User(1L, "owner"),
+                        User(2L, "creator"),
+                        User(3L, "another")
+                    )
+                )
                 insertTasks(
                     listOf(
                         Task(

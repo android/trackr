@@ -23,6 +23,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.viewModelScope
+import com.example.android.trackr.data.User
 import com.example.android.trackr.db.dao.TaskDao
 import kotlinx.coroutines.launch
 
@@ -33,14 +34,21 @@ class TaskEditViewModel @ViewModelInject constructor(
     var taskId: Long = 0L
         set(value) {
             field = value
-            if (value != 0L) {
-                loadTask(value)
-            }
+            loadInitialData(value)
         }
 
     val title = MutableLiveData("")
 
     val description = MutableLiveData("")
+
+    private val _owner = MutableLiveData<User>()
+    val owner: LiveData<User> = _owner
+
+    private val _creator = MutableLiveData<User>()
+    val creator: LiveData<User> = _creator
+
+    lateinit var users: List<User>
+        private set
 
     private val _modified = MediatorLiveData<Boolean>().apply {
         val sources = listOf(title, description)
@@ -63,15 +71,25 @@ class TaskEditViewModel @ViewModelInject constructor(
      */
     val modified: LiveData<Boolean> = _modified
 
-    private fun loadTask(taskId: Long) {
+    private fun loadInitialData(taskId: Long) {
         viewModelScope.launch {
-            val detail = taskDao.loadTaskDetailById(taskId)
-            if (detail != null) {
-                title.value = detail.title
-                description.value = detail.description
-                _modified.value = false
+            users = taskDao.loadUsers()
+            if (taskId != 0L) {
+                val detail = taskDao.loadTaskDetailById(taskId)
+                if (detail != null) {
+                    title.value = detail.title
+                    description.value = detail.description
+                    _owner.value = detail.owner
+                    _creator.value = detail.reporter
+                    _modified.value = false
+                }
             }
         }
+    }
+
+    fun updateOwner(user: User) {
+        _owner.value = user
+        _modified.value = true
     }
 
     fun save() {

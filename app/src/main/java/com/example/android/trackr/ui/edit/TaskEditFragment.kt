@@ -19,9 +19,10 @@ package com.example.android.trackr.ui.edit
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.navGraphViewModels
+import com.example.android.trackr.NavTaskEditGraphArgs
 import com.example.android.trackr.R
 import com.example.android.trackr.databinding.FragmentTaskEditBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,8 +30,10 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
 
-    private val args: TaskEditFragmentArgs by navArgs()
-    private val viewModel: TaskEditViewModel by viewModels()
+    private val args: NavTaskEditGraphArgs by navArgs()
+    private val viewModel: TaskEditViewModel by navGraphViewModels(R.id.nav_task_edit_graph) {
+        defaultViewModelProviderFactory
+    }
     private lateinit var binding: FragmentTaskEditBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +60,9 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         val menuItemSave = binding.toolbar.menu.findItem(R.id.action_save)
         viewModel.modified.observe(viewLifecycleOwner) { modified ->
             menuItemSave.isEnabled = modified
+        }
+        binding.owner.setOnClickListener {
+            findNavController().navigate(R.id.nav_user_selection)
         }
     }
 }
