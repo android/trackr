@@ -53,6 +53,7 @@
 
     <string name="title">Title</string>
     <string name="description">Description</string>
+    <string name="status">Status</string>
     <string name="owner">Owner</string>
     <string name="creator">Creator</string>
     <string name="due_at">Due date</string>
