@@ -27,6 +27,7 @@ import com.example.android.trackr.data.TaskState
 import com.example.android.trackr.data.User
 import com.example.android.trackr.db.dao.TaskDao
 import kotlinx.coroutines.launch
+import org.threeten.bp.Instant
 
 class TaskEditViewModel @ViewModelInject constructor(
     private val taskDao: TaskDao
@@ -50,6 +51,12 @@ class TaskEditViewModel @ViewModelInject constructor(
 
     private val _creator = MutableLiveData<User>()
     val creator: LiveData<User> = _creator
+
+    private val _dueAt = MutableLiveData<Instant>()
+    val dueAt: LiveData<Instant> = _dueAt
+
+    private val _createdAt = MutableLiveData(Instant.now())
+    val createdAt: LiveData<Instant> = _createdAt
 
     lateinit var users: List<User>
         private set
@@ -86,6 +93,8 @@ class TaskEditViewModel @ViewModelInject constructor(
                     _status.value = detail.state
                     _owner.value = detail.owner
                     _creator.value = detail.reporter
+                    _dueAt.value = detail.dueAt
+                    _createdAt.value = detail.createdAt
                     _modified.value = false
                 }
             }
@@ -101,6 +110,11 @@ class TaskEditViewModel @ViewModelInject constructor(
 
     fun updateOwner(user: User) {
         _owner.value = user
+        _modified.value = true
+    }
+
+    fun updateDueAt(instant: Instant) {
+        _dueAt.value = instant
         _modified.value = true
     }
 

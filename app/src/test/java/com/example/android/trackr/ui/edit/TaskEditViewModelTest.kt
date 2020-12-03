@@ -77,6 +77,10 @@ class TaskEditViewModelTest {
         assertThat(viewModel.description.valueBlocking).isEqualTo("description")
         assertThat(viewModel.owner.valueBlocking).isEqualTo(User(1L, "owner"))
         assertThat(viewModel.creator.valueBlocking).isEqualTo(User(2L, "creator"))
+        assertThat(viewModel.dueAt.valueBlocking)
+            .isEqualTo(Instant.parse("2020-11-01T00:00:00.00Z"))
+        assertThat(viewModel.createdAt.valueBlocking)
+            .isEqualTo(Instant.parse("2020-09-01T00:00:00.00Z"))
         assertThat(viewModel.users).hasSize(3)
 
         viewModel.title.value = "a"
@@ -117,6 +121,24 @@ class TaskEditViewModelTest {
         assertThat(viewModel.modified.valueBlocking).isTrue()
     }
 
+    @Test
+    fun editDueAt() {
+        val db = createDatabase()
+        populate(db)
+        val viewModel = TaskEditViewModel(db.taskDao())
+        viewModel.taskId = 1L
+
+        assertThat(viewModel.dueAt.valueBlocking)
+            .isEqualTo(Instant.parse("2020-11-01T00:00:00.00Z"))
+        assertThat(viewModel.modified.valueBlocking).isFalse()
+
+        viewModel.updateDueAt(Instant.parse("2020-12-01T00:00:00.00Z"))
+
+        assertThat(viewModel.dueAt.valueBlocking)
+            .isEqualTo(Instant.parse("2020-12-01T00:00:00.00Z"))
+        assertThat(viewModel.modified.valueBlocking).isTrue()
+    }
+
     private fun createDatabase(): AppDatabase {
         return Room
             .inMemoryDatabaseBuilder(
@@ -147,8 +169,8 @@ class TaskEditViewModelTest {
                             state = TaskState.IN_PROGRESS,
                             reporterId = 2L,
                             ownerId = 1L,
-                            createdAt = Instant.now(),
-                            dueAt = Instant.now()
+                            createdAt = Instant.parse("2020-09-01T00:00:00.00Z"),
+                            dueAt = Instant.parse("2020-11-01T00:00:00.00Z")
                         )
                     )
                 )
