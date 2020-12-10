@@ -66,8 +66,7 @@ android {
     }
 
     lintOptions {
-        disable "UnsafeExperimentalUsageError",
-                "UnsafeExperimentalUsageWarning"
+        lintConfig file('lint.xml')
     }
 
     testOptions {
