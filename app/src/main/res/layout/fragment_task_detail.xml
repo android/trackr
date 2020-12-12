@@ -85,7 +85,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
-                        android:layout_marginLeft="@dimen/spacing_huge"
                         android:layout_marginTop="@dimen/spacing_medium"
                         android:text="@{viewModel.detail.description}"
                         android:textAppearance="?textAppearanceBody1"
@@ -105,7 +104,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
-                        android:layout_marginLeft="@dimen/spacing_huge"
                         android:text="@{viewModel.detail.owner.username}"
                         android:textAppearance="?textAppearanceBody1"
                         tools:text="Daring Dove" />
@@ -124,7 +122,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
-                        android:layout_marginLeft="@dimen/spacing_huge"
                         android:text="@{viewModel.detail.reporter.username}"
                         android:textAppearance="?textAppearanceBody1"
                         tools:text="Peaceful Puffin" />
@@ -143,7 +140,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
-                        android:layout_marginLeft="@dimen/spacing_huge"
                         android:textAppearance="?textAppearanceBody1"
                         app:instant="@{viewModel.detail.dueAt}"
                         tools:text="Sept 2, 2020 (Wed)" />
@@ -152,7 +148,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
-                        android:layout_marginLeft="@dimen/spacing_huge"
                         android:textAppearance="?textAppearanceBody1"
                         app:clock="@{clock}"
                         app:dueMessage="@{viewModel.detail.dueAt}"
@@ -172,7 +167,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
-                        android:layout_marginLeft="@dimen/spacing_huge"
                         android:textAppearance="?textAppearanceBody1"
                         app:instant="@{viewModel.detail.createdAt}"
                         tools:text="July 16, 2020 (Thur)" />
@@ -191,7 +185,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
-                        android:layout_marginLeft="@dimen/spacing_huge"
                         android:layout_marginBottom="@dimen/spacing_large"
                         app:showAllTags="@{true}"
                         app:tags="@{viewModel.detail.tags}" />
