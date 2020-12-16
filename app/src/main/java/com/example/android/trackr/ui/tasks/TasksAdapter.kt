@@ -26,12 +26,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.trackr.R
-import com.example.android.trackr.databinding.ListHeaderBinding
-import com.example.android.trackr.databinding.ListTaskBinding
 import com.example.android.trackr.data.TaskListItem
 import com.example.android.trackr.data.TaskState
 import com.example.android.trackr.data.User
+import com.example.android.trackr.databinding.ListHeaderBinding
+import com.example.android.trackr.databinding.ListTaskBinding
 import org.threeten.bp.Clock
+import java.util.Collections
 
 
 class TasksAdapter(
@@ -48,6 +49,7 @@ class TasksAdapter(
         fun onStarClicked(taskListItem: TaskListItem)
         fun onTaskClicked(taskListItem: TaskListItem)
         fun onTaskArchived(taskListItem: TaskListItem)
+        fun onTaskDragged(fromPosition: Int, toPosition: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -90,6 +92,13 @@ class TasksAdapter(
         return getItem(0) as DataItem.HeaderItem
     }
 
+    fun changeTaskPosition(fromPosition: Int, toPosition: Int) {
+        // TODO: persist new order in the db instead of calling submitList()
+        val newList = currentList.toMutableList()
+        Collections.swap(newList, fromPosition, toPosition)
+        submitList(newList)
+    }
+
     class HeaderViewHolder private constructor(
         val binding: ListHeaderBinding,
         private val itemListener: ItemListener
@@ -122,7 +131,7 @@ class TasksAdapter(
         private val currentUser: User,
         private val clock: Clock
     ) :
-        RecyclerView.ViewHolder(binding.root), SwipeActionCallback.SwipeActionListener {
+        RecyclerView.ViewHolder(binding.root), SwipeAndDragCallback.ItemTouchListener {
 
         val accessibilityActionIds = arrayListOf<Int>()
 
@@ -141,10 +150,14 @@ class TasksAdapter(
             addStarAccessibilityAction(taskListItem)
         }
 
-        override fun onSwipe() {
+        override fun onItemSwiped() {
             binding.taskListItem?.let {
                 binding.listener?.onTaskArchived(it)
             }
+        }
+
+        override fun onItemMoved(fromPosition: Int, toPosition: Int) {
+            binding.listener?.onTaskDragged(fromPosition, toPosition)
         }
 
         /**
