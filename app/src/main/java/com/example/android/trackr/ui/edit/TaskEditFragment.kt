@@ -29,7 +29,11 @@ import com.example.android.trackr.NavTaskEditGraphArgs
 import com.example.android.trackr.R
 import com.example.android.trackr.data.TaskState
 import com.example.android.trackr.databinding.FragmentTaskEditBinding
+import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
+import org.threeten.bp.Instant
+
+private const val FRAGMENT_DATE_PICKER = "DatePicker"
 
 @AndroidEntryPoint
 class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
@@ -79,6 +83,13 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         }
         binding.owner.setOnClickListener {
             findNavController().navigate(R.id.nav_user_selection)
+        }
+        binding.dueAt.setOnClickListener {
+            MaterialDatePicker.Builder.datePicker().build().apply {
+                addOnPositiveButtonClickListener { time ->
+                    viewModel.updateDueAt(Instant.ofEpochMilli(time))
+                }
+            }.show(childFragmentManager, FRAGMENT_DATE_PICKER)
         }
     }
 }

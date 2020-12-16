@@ -182,20 +182,16 @@
                         app:drawableStartCompat="@drawable/ic_due_at" />
 
                     <TextView
+                        android:id="@+id/due_at"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
-                        android:text="DUE_AT"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:gravity="center_vertical"
+                        android:minHeight="@dimen/min_touch_target"
                         android:textAppearance="?textAppearanceBody1"
+                        app:instant="@{viewModel.dueAt}"
                         tools:text="Sept 2, 2020 (Wed)" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/spacing_huge"
-                        android:text="DUE_AT 2"
-                        android:textAppearance="?textAppearanceBody1"
-                        tools:text="Due in 3 days" />
 
                     <!-- Creation date -->
 
@@ -211,8 +207,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
-                        android:text="CREATED_AT"
+                        android:gravity="center_vertical"
+                        android:minHeight="@dimen/min_touch_target"
                         android:textAppearance="?textAppearanceBody1"
+                        app:instant="@{viewModel.createdAt}"
                         tools:text="July 16, 2020 (Thur)" />
 
                     <!-- Tags -->
