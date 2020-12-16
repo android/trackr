@@ -101,6 +101,22 @@ class TaskEditViewModelTest {
         assertThat(viewModel.modified.valueBlocking).isTrue()
     }
 
+    @Test
+    fun editStatus() {
+        val db = createDatabase()
+        populate(db)
+        val viewModel = TaskEditViewModel(db.taskDao())
+        viewModel.taskId = 1L
+
+        assertThat(viewModel.status.valueBlocking).isEqualTo(TaskState.IN_PROGRESS)
+        assertThat(viewModel.modified.valueBlocking).isFalse()
+
+        viewModel.updateState(TaskState.COMPLETED)
+
+        assertThat(viewModel.status.valueBlocking).isEqualTo(TaskState.COMPLETED)
+        assertThat(viewModel.modified.valueBlocking).isTrue()
+    }
+
     private fun createDatabase(): AppDatabase {
         return Room
             .inMemoryDatabaseBuilder(

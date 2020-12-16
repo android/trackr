@@ -20,6 +20,7 @@
     <dimen name="text_size_header_2">23sp</dimen>
     <dimen name="text_size_body_1">19sp</dimen>
 
+    <dimen name="spacing_small">8dp</dimen>
     <dimen name="spacing_medium">16dp</dimen>
     <dimen name="spacing_large">32dp</dimen>
     <dimen name="spacing_huge">64dp</dimen>

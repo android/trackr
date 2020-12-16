@@ -23,6 +23,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.viewModelScope
+import com.example.android.trackr.data.TaskState
 import com.example.android.trackr.data.User
 import com.example.android.trackr.db.dao.TaskDao
 import kotlinx.coroutines.launch
@@ -40,6 +41,9 @@ class TaskEditViewModel @ViewModelInject constructor(
     val title = MutableLiveData("")
 
     val description = MutableLiveData("")
+
+    private val _status = MutableLiveData(TaskState.NOT_STARTED)
+    val status: LiveData<TaskState> = _status
 
     private val _owner = MutableLiveData<User>()
     val owner: LiveData<User> = _owner
@@ -79,11 +83,19 @@ class TaskEditViewModel @ViewModelInject constructor(
                 if (detail != null) {
                     title.value = detail.title
                     description.value = detail.description
+                    _status.value = detail.state
                     _owner.value = detail.owner
                     _creator.value = detail.reporter
                     _modified.value = false
                 }
             }
+        }
+    }
+
+    fun updateState(state: TaskState) {
+        if (_status.value != state) {
+            _status.value = state
+            _modified.value = true
         }
     }
 

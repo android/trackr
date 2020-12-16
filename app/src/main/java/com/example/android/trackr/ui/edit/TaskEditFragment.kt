@@ -18,12 +18,16 @@ package com.example.android.trackr.ui.edit
 
 import android.os.Bundle
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.example.android.trackr.NavTaskEditGraphArgs
 import com.example.android.trackr.R
+import com.example.android.trackr.data.TaskState
 import com.example.android.trackr.databinding.FragmentTaskEditBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -61,8 +65,32 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         viewModel.modified.observe(viewLifecycleOwner) { modified ->
             menuItemSave.isEnabled = modified
         }
+        binding.status.adapter = ArrayAdapter(
+            requireContext(),
+            R.layout.item_status_spinner,
+            R.id.status_text,
+            TaskState.values().map { getString(it.stringResId) }
+        )
+        binding.status.doOnItemSelected { position ->
+            viewModel.updateState(TaskState.values()[position])
+        }
+        viewModel.status.observe(viewLifecycleOwner) { status ->
+            binding.status.setSelection(status.ordinal)
+        }
         binding.owner.setOnClickListener {
             findNavController().navigate(R.id.nav_user_selection)
+        }
+    }
+}
+
+fun Spinner.doOnItemSelected(onItemSelected: (position: Int) -> Unit) {
+    onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            onItemSelected(position)
+        }
+
+        override fun onNothingSelected(parent: AdapterView<*>?) {
+            // Ignore
         }
     }
 }
