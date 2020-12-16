@@ -16,7 +16,6 @@
 
 package com.example.android.trackr.data
 
-import android.graphics.Color
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
@@ -111,8 +110,16 @@ data class Tag(
     /**
      * A color associated with the tag.
      */
-    var color: Int = Color.rgb(255, 255, 255)
+    var color: TagColor
 )
+
+// Denotes the tag text and background color to be displayed
+enum class TagColor(val textColor: Int, val backgroundColor: Int) {
+    BLUE(R.color.trackr_teal_700, R.color.trackr_teal_100),
+    GREEN(R.color.trackr_green_700, R.color.trackr_green_100),
+    PURPLE(R.color.trackr_purple_700, R.color.trackr_purple_100),
+    RED(R.color.trackr_red_700, R.color.trackr_red_100)
+}
 
 @Entity(
     tableName = "task_tags",

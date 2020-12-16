@@ -23,6 +23,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.android.trackr.data.SeedData
 import com.example.android.trackr.data.Tag
+import com.example.android.trackr.data.TagColor
 import com.example.android.trackr.data.Task
 import com.example.android.trackr.data.TaskState
 import com.example.android.trackr.data.TaskTag
@@ -183,8 +184,8 @@ class TaskDaoTest {
             id = 2L, title = "Task 2", state = TaskState.ARCHIVED, ownerId = 1L, reporterId = 1L
         )
 
-        val tag1 = Tag(id = 1L, label = "tag1", color = Color.rgb(0x81, 0xC7, 0x84))
-        val tag2 = Tag(id = 2L, label = "tag2", color = Color.rgb(0xE5, 0x73, 0x73))
+        val tag1 = Tag(id = 1L, label = "tag1", color = TagColor.RED)
+        val tag2 = Tag(id = 2L, label = "tag2", color = TagColor.PURPLE)
 
         val taskTag1 = TaskTag(taskId = 1L, tagId = 1L)
         val taskTag2 = TaskTag(taskId = 1L, tagId = 2L)

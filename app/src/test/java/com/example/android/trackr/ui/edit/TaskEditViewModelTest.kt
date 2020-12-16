@@ -22,6 +22,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.example.android.trackr.TestApplication
 import com.example.android.trackr.data.Tag
+import com.example.android.trackr.data.TagColor
 import com.example.android.trackr.data.Task
 import com.example.android.trackr.data.TaskState
 import com.example.android.trackr.data.TaskTag
@@ -152,7 +153,7 @@ class TaskEditViewModelTest {
     private fun populate(db: AppDatabase) {
         runBlocking {
             with(db.taskDao()) {
-                insertTags(listOf(Tag(1L, "tag", Color.RED)))
+                insertTags(listOf(Tag(1L, "tag", TagColor.RED)))
                 insertUsers(
                     listOf(
                         User(1L, "owner"),

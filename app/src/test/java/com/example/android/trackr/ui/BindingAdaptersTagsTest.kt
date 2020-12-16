@@ -24,6 +24,7 @@ import android.widget.TextView
 import androidx.test.core.app.ApplicationProvider
 import com.example.android.trackr.TestApplication
 import com.example.android.trackr.data.Tag
+import com.example.android.trackr.data.TagColor
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.common.truth.Truth.assertThat
@@ -60,7 +61,7 @@ class BindingAdaptersTagsTest {
     fun tags_oneTag() {
         val chips = (0 until 3).map { createChip().also { chipGroup.addView(it) } }
         val label = createLabel().also { chipGroup.addView(it) }
-        val tags = listOf(Tag(1L, "a", Color.RED))
+        val tags = listOf(Tag(1L, "a", TagColor.RED))
         chipGroup.tags(tags, false)
         assertThat(chips[0].text).isEqualTo("a")
         assertThat(chips[0].visibility).isEqualTo(View.VISIBLE)
@@ -74,10 +75,10 @@ class BindingAdaptersTagsTest {
         val chips = (0 until 3).map { createChip().also { chipGroup.addView(it) } }
         val label = createLabel().also { chipGroup.addView(it) }
         val tags = listOf(
-            Tag(1L, "a", Color.RED),
-            Tag(2L, "b", Color.RED),
-            Tag(3L, "c", Color.RED),
-            Tag(4L, "d", Color.RED),
+            Tag(1L, "a", TagColor.RED),
+            Tag(2L, "b", TagColor.RED),
+            Tag(3L, "c", TagColor.RED),
+            Tag(4L, "d", TagColor.RED),
         )
         chipGroup.tags(tags, false)
         assertThat(chips[0].text).isEqualTo("a")
@@ -94,10 +95,10 @@ class BindingAdaptersTagsTest {
     fun tags_fourTags_append() {
         val chips = (0 until 3).map { createChip().also { chipGroup.addView(it) } }
         val tags = listOf(
-            Tag(1L, "a", Color.RED),
-            Tag(2L, "b", Color.RED),
-            Tag(3L, "c", Color.RED),
-            Tag(4L, "d", Color.RED),
+            Tag(1L, "a", TagColor.RED),
+            Tag(2L, "b", TagColor.RED),
+            Tag(3L, "c", TagColor.RED),
+            Tag(4L, "d", TagColor.RED),
         )
         chipGroup.tags(tags, true)
         assertThat(chips[0].text).isEqualTo("a")

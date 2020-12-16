@@ -17,6 +17,7 @@
 package com.example.android.trackr.ui
 
 import android.content.res.ColorStateList
+import android.content.res.Resources
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -27,6 +28,7 @@ import androidx.core.graphics.red
 import androidx.databinding.BindingAdapter
 import com.example.android.trackr.R
 import com.example.android.trackr.data.Tag
+import com.example.android.trackr.data.TagColor
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import org.threeten.bp.Clock
@@ -90,10 +92,9 @@ private fun ChipGroup.bind(tags: List<Tag>, showAllTags: Boolean) {
 
 private fun Chip.bind(tag: Tag) {
     text = tag.label
-    setTextColor(tag.color)
     val color = tag.color
-    chipBackgroundColor =
-        ColorStateList.valueOf(Color.argb(0x17, color.red, color.green, color.blue))
+    setTextColor(resources.getColor(color.textColor, context.theme))
+    chipBackgroundColor = ColorStateList.valueOf(resources.getColor(color.backgroundColor))
 }
 
 private val DATE_TIME_FORMATTER_PATTERN = DateTimeFormatter.ofPattern("MMM d, YYYY")

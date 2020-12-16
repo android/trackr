@@ -28,9 +28,9 @@ object SeedData {
     )
 
     val Tags = listOf(
-        Tag(id = 1L, label = "Home", color = Color.rgb(0x81, 0xC7, 0x84)),
-        Tag(id = 2L, label = "Work", color = Color.rgb(0xE5, 0x73, 0x73)),
-        Tag(id = 3L, label = "Hobby", color = Color.rgb(0xFF, 0xB7, 0x4D))
+        Tag(id = 1L, label = "Home", color = TagColor.BLUE),
+        Tag(id = 2L, label = "Work", color = TagColor.GREEN),
+        Tag(id = 3L, label = "Hobby", color = TagColor.PURPLE)
     )
 
     // TODO(b/163065333): add descriptive task titles.

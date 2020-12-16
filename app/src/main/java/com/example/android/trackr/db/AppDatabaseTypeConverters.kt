@@ -17,6 +17,7 @@
 package com.example.android.trackr.db
 
 import androidx.room.TypeConverter
+import com.example.android.trackr.data.TagColor
 import com.example.android.trackr.data.TaskState
 import org.threeten.bp.Instant
 
@@ -43,5 +44,15 @@ class AppDatabaseTypeConverters {
     @TypeConverter
     fun intToTaskState(int: Int): TaskState? {
         return TaskState.fromKey(int)
+    }
+
+    @TypeConverter
+    fun tagColorToString(color: TagColor?): String? {
+        return color?.name
+    }
+
+    @TypeConverter
+    fun stringToTagColor(string: String): TagColor? {
+        return TagColor.valueOf(string)
     }
 }
