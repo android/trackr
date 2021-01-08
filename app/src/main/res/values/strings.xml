@@ -40,6 +40,8 @@
     <!-- When due date is 5 or more days away, display with date. Example: Due Mar 15, 2020 -->
     <string name="due_date_generic">Due %s</string>
 
+    <string name="starred">Starred</string>
+    <string name="unstarred">Unstarred</string>
     <string name="star">Star</string>
     <string name="unstar">Unstar</string>
     <string name="edit_task">Edit task</string>
