@@ -92,6 +92,7 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    implementation "androidx.preference:preference-ktx:$preference_version"
     implementation "net.bytebuddy:byte-buddy:$byte_buddy_version"
     implementation "androidx.recyclerview:recyclerview-selection:$recyclerview_selection_version"
     implementation "androidx.recyclerview:recyclerview:$recyclerview_version"

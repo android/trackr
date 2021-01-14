@@ -69,6 +69,15 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
         binding.add.setOnClickListener {
             findNavController().navigate(R.id.nav_task_edit_graph)
         }
+        binding.bottomAppBar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.settings -> {
+                    findNavController().navigate(R.id.nav_settings)
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2020 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,8 +13,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<navigation
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
@@ -36,6 +34,11 @@
             android:name="taskId"
             app:argType="long" />
     </fragment>
+
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.example.android.trackr.ui.settings.SettingsFragment"
+        android:label="Settings" />
 
     <navigation
         android:id="@+id/nav_task_edit_graph"

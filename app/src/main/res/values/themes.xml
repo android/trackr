@@ -24,7 +24,7 @@
         <item name="colorAccent">@color/trackr_pink_300</item>
 
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@color/trackr_blue_700</item>
+        <item name="android:windowBackground">@color/trackr_blue_500</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
 
@@ -32,6 +32,6 @@
         <item name="textAppearanceHeadline1">@style/TextAppearance.Trackr.Headline1</item>
         <item name="textAppearanceHeadline2">@style/TextAppearance.Trackr.Headline2</item>
         <item name="textAppearanceBody1">@style/TextAppearance.Trackr.Body1</item>
-
     </style>
+
 </resources>

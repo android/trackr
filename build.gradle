@@ -42,6 +42,7 @@ buildscript {
         material_version ="1.2.1"
         multidex_library_version = "1.0.3"
         nav_version = "2.3.1"
+        preference_version = "1.1.1"
         recyclerview_selection_version = "1.1.0-rc03"
         recyclerview_version = "1.1.0"
         robolectric_version = "4.3"
