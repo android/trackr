@@ -44,13 +44,24 @@
             app:headerData="@{headerData}"
             app:listener="@{listener}" />
 
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottomAppBar"
+            style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:backgroundTint="@color/trackr_blue_500"
+            app:fabAlignmentMode="end"
+            app:menu="@menu/bottom_app_bar_menu" />
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
             android:layout_margin="@dimen/spacing_medium"
+            android:backgroundTint="@color/trackr_pink_400"
             android:contentDescription="@string/add_task"
+            app:layout_anchor="@id/bottomAppBar"
             app:srcCompat="@drawable/ic_add"
             app:useCompatPadding="true" />
 

@@ -25,6 +25,9 @@
     <string name="header_label_with_count">%1$s (%2$d)</string>
     <string name="add_task">Add a new task</string>
 
+    <!-- Bottom app bar -->
+    <string name="settings">Settings</string>
+
     <!--Task Item -->
     <string name="user">Owner: %s</string>
     <plurals name="due_date_overdue_x_days">
