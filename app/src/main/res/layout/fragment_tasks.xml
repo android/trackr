@@ -52,6 +52,7 @@
             android:layout_gravity="bottom"
             app:backgroundTint="@color/trackr_blue_500"
             app:fabAlignmentMode="end"
+            app:hideOnScroll="true"
             app:menu="@menu/bottom_app_bar_menu" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
