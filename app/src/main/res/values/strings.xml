@@ -48,6 +48,8 @@
     <string name="star">Star</string>
     <string name="unstar">Unstar</string>
     <string name="edit_task">Edit task</string>
+    <string name="expanded">Expanded</string>
+    <string name="collapsed">Collapsed</string>
 
     <!-- Custom accessibility action strings -->
     <string name="archive">Archive</string>

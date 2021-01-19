@@ -92,7 +92,7 @@ class TasksAdapterTest {
     @Test
     fun bindHeaderViewHolder_initialState() {
         val holder = TasksAdapter.HeaderViewHolder.from(frameLayout, testItemListener)
-        val headerData = HeaderData(1, taskState = TaskState.NOT_STARTED)
+        val headerData = HeaderData(1, taskState = TaskState.NOT_STARTED, expanded = true)
 
         assertThat(holder.binding.headerData).isNull()
         assertThat(ViewCompat.isAccessibilityHeading(holder.binding.root)).isFalse()
@@ -101,6 +101,35 @@ class TasksAdapterTest {
 
         assertThat(holder.binding.headerData).isEqualTo(headerData)
         assertThat(ViewCompat.isAccessibilityHeading(holder.binding.root)).isTrue()
+    }
+
+    // TODO: test expanded/collapsed logic in integration test.
+    @Test
+    fun headerState_Expanded() {
+        val holder = TasksAdapter.HeaderViewHolder.from(frameLayout, testItemListener)
+        val headerData = HeaderData(1, taskState = TaskState.NOT_STARTED, expanded = true)
+
+        holder.bind(headerData)
+
+        assertThat(ViewCompat.getStateDescription(holder.binding.root)).isEqualTo(
+            context.getString(
+                R.string.expanded
+            )
+        )
+    }
+
+    @Test
+    fun headerState_Collapsed() {
+        val holder = TasksAdapter.HeaderViewHolder.from(frameLayout, testItemListener)
+        val headerData = HeaderData(1, taskState = TaskState.NOT_STARTED, expanded = false)
+
+        holder.bind(headerData)
+
+        assertThat(ViewCompat.getStateDescription(holder.binding.root)).isEqualTo(
+            context.getString(
+                R.string.collapsed
+            )
+        )
     }
 
     @Test

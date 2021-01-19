@@ -44,7 +44,8 @@ class DataItemsCreator(
                         DataItem.HeaderItem(
                             HeaderData(
                                 count = sublist?.size ?: 0,
-                                taskState = entry.key
+                                taskState = entry.key,
+                                expanded = entry.value
                             ),
                         )
                     )
