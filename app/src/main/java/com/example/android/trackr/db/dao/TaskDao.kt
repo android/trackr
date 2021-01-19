@@ -74,4 +74,7 @@ interface TaskDao {
 
     @Query("SELECT * FROM users")
     suspend fun loadUsers(): List<User>
+
+    @Query("SELECT * FROM tags")
+    suspend fun loadTags(): List<Tag>
 }

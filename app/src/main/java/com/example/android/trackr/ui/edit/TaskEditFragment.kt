@@ -91,6 +91,9 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
                 }
             }.show(childFragmentManager, FRAGMENT_DATE_PICKER)
         }
+        binding.tags.setOnClickListener {
+            findNavController().navigate(R.id.nav_tag_selection)
+        }
     }
 }
 

@@ -161,6 +161,13 @@ class TaskDaoTest {
         assertThat(users).hasSize(2)
     }
 
+    @Test
+    fun loadTags() = runBlocking {
+        taskDao.insertTags(SeedData.Tags)
+        val tags = taskDao.loadTags()
+        assertThat(tags).hasSize(3)
+    }
+
     companion object {
         fun insertData(
             taskDao: TaskDao,

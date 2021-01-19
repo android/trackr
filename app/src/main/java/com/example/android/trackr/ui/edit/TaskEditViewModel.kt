@@ -23,6 +23,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.viewModelScope
+import com.example.android.trackr.data.Tag
 import com.example.android.trackr.data.TaskState
 import com.example.android.trackr.data.User
 import com.example.android.trackr.db.dao.TaskDao
@@ -58,7 +59,13 @@ class TaskEditViewModel @ViewModelInject constructor(
     private val _createdAt = MutableLiveData(Instant.now())
     val createdAt: LiveData<Instant> = _createdAt
 
+    private val _tags = MutableLiveData<List<Tag>>()
+    val tags: LiveData<List<Tag>> = _tags
+
     lateinit var users: List<User>
+        private set
+
+    lateinit var allTags: List<Tag>
         private set
 
     private val _modified = MediatorLiveData<Boolean>().apply {
@@ -85,6 +92,7 @@ class TaskEditViewModel @ViewModelInject constructor(
     private fun loadInitialData(taskId: Long) {
         viewModelScope.launch {
             users = taskDao.loadUsers()
+            allTags = taskDao.loadTags()
             if (taskId != 0L) {
                 val detail = taskDao.loadTaskDetailById(taskId)
                 if (detail != null) {
@@ -95,6 +103,7 @@ class TaskEditViewModel @ViewModelInject constructor(
                     _creator.value = detail.reporter
                     _dueAt.value = detail.dueAt
                     _createdAt.value = detail.createdAt
+                    _tags.value = detail.tags
                     _modified.value = false
                 }
             }
@@ -116,6 +125,26 @@ class TaskEditViewModel @ViewModelInject constructor(
     fun updateDueAt(instant: Instant) {
         _dueAt.value = instant
         _modified.value = true
+    }
+
+    fun addTag(tag: Tag) {
+        _tags.value?.let { currentTags ->
+            if (!currentTags.contains(tag)) {
+                _tags.value = currentTags + tag
+                _modified.value = true
+            }
+        }
+    }
+
+    fun removeTag(tag: Tag) {
+        _tags.value?.let { currentTags ->
+            if (currentTags.contains(tag)) {
+                val tags = currentTags.toMutableList()
+                tags.remove(tag)
+                _tags.value = tags
+                _modified.value = true
+            }
+        }
     }
 
     fun save() {

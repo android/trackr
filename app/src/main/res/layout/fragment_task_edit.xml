@@ -224,10 +224,14 @@
                         app:drawableStartCompat="@drawable/ic_tags" />
 
                     <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/tags"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
-                        android:layout_marginBottom="@dimen/spacing_large" />
+                        android:layout_marginBottom="@dimen/spacing_large"
+                        android:foreground="?attr/selectableItemBackground"
+                        app:showAllTags="@{true}"
+                        app:tags="@{viewModel.tags}" />
 
                 </LinearLayout>
 
