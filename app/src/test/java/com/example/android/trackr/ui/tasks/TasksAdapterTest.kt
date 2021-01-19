@@ -27,7 +27,6 @@ import com.example.android.trackr.data.TaskListItem
 import com.example.android.trackr.data.TaskState
 import com.example.android.trackr.data.User
 import com.google.common.truth.Truth.assertThat
-import org.junit.Assert
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -112,12 +111,18 @@ class TasksAdapterTest {
         assertThat(holder.binding.taskListItem).isNull()
         assertThat(holder.binding.listener).isNull()
         assertThat(holder.accessibilityActionIds).isEmpty()
+        assertThat(ViewCompat.getStateDescription(holder.binding.root)).isNull()
 
         holder.bind(inProgressTaskListItem)
 
         assertThat(holder.binding.listener).isEqualTo(testItemListener)
         assertThat(holder.accessibilityActionIds.size).isEqualTo(2)
         assertThat(holder.binding.taskListItem).isEqualTo(inProgressTaskListItem)
+        assertThat(ViewCompat.getStateDescription(holder.binding.root)).isEqualTo(
+            context.getString(
+                R.string.unstarred
+            )
+        )
     }
 
     @Test
@@ -128,9 +133,15 @@ class TasksAdapterTest {
 
         assertFalse(holder.binding.star.isChecked)
 
+
         holder.bind(starredTaskListItem)
 
         assertTrue(holder.binding.star.isChecked)
+        assertThat(ViewCompat.getStateDescription(holder.binding.root)).isEqualTo(
+            context.getString(
+                R.string.starred
+            )
+        )
     }
 
     @Test

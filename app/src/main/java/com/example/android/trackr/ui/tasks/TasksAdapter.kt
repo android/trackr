@@ -140,7 +140,12 @@ class TasksAdapter(
             binding.listener = itemListener
             binding.clock = clock
             binding.currentUser = currentUser
-            binding.executePendingBindings()
+            ViewCompat.setStateDescription(
+                binding.root,
+                binding.root.context.resources.getString(
+                    if (taskListItem.starUsers.isEmpty()) R.string.unstarred else R.string.starred
+                )
+            )
 
             // Clear previously added actions. If this is skipped, the actions may be duplicated
             // when a view is rebound.
@@ -148,6 +153,8 @@ class TasksAdapter(
 
             addArchiveAccessibilityAction(taskListItem)
             addStarAccessibilityAction(taskListItem)
+
+            binding.executePendingBindings()
         }
 
         override fun onItemSwiped() {
