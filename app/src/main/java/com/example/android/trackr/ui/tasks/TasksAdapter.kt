@@ -20,6 +20,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.DiffUtil
@@ -150,6 +151,8 @@ class TasksAdapter(
                     if (taskListItem.starUsers.isEmpty()) R.string.unstarred else R.string.starred
                 )
             )
+            // TODO(b/176934848): include chip/tag information in contentDescription of each task in list.
+            binding.chipGroup.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
 
             // Clear previously added actions. If this is skipped, the actions may be duplicated
             // when a view is rebound.
