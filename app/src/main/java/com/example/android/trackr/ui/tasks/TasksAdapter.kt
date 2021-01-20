@@ -108,6 +108,10 @@ class TasksAdapter(
         fun bind(headerData: HeaderData) {
             binding.headerData = headerData
             binding.listener = itemListener
+            ViewCompat.setStateDescription(
+                binding.root,
+                headerData.stateDescription(binding.root.context)
+            )
             ViewCompat.setAccessibilityHeading(binding.root, true)
         }
 
@@ -262,8 +266,13 @@ sealed class DataItem {
 
 data class HeaderData(
     val count: Int,
-    val taskState: TaskState
+    val taskState: TaskState,
+    var expanded: Boolean
 ) {
+    fun stateDescription(context: Context): String {
+        return context.getString(if (expanded) R.string.expanded else R.string.collapsed)
+    }
+
     fun label(context: Context): String {
         return context.getString(
             R.string.header_label_with_count,
