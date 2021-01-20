@@ -16,12 +16,13 @@
 -->
 <com.google.android.material.chip.Chip
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/Widget.MaterialComponents.Chip.Action"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:clickable="false"
+    app:rippleColor="@android:color/transparent"
     tools:backgroundTint="#200000ff"
     tools:text="design"
-    app:rippleColor="@android:color/transparent"
     tools:textColor="#0000ff" />

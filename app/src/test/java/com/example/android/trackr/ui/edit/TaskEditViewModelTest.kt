@@ -16,7 +16,6 @@
 
 package com.example.android.trackr.ui.edit
 
-import android.graphics.Color
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
@@ -140,6 +139,41 @@ class TaskEditViewModelTest {
         assertThat(viewModel.modified.valueBlocking).isTrue()
     }
 
+    @Test
+    fun addTag() {
+        val db = createDatabase()
+        populate(db)
+        val viewModel = TaskEditViewModel(db.taskDao())
+        viewModel.taskId = 1L
+
+        assertThat(viewModel.tags.valueBlocking).containsExactly(Tag(1L, "tag1", TagColor.RED))
+        assertThat(viewModel.modified.valueBlocking).isFalse()
+
+        viewModel.addTag(Tag(2L, "tag2", TagColor.BLUE))
+
+        assertThat(viewModel.tags.valueBlocking).containsExactly(
+            Tag(1L, "tag1", TagColor.RED),
+            Tag(2L, "tag2", TagColor.BLUE)
+        )
+        assertThat(viewModel.modified.valueBlocking).isTrue()
+    }
+
+    @Test
+    fun removeTag() {
+        val db = createDatabase()
+        populate(db)
+        val viewModel = TaskEditViewModel(db.taskDao())
+        viewModel.taskId = 1L
+
+        assertThat(viewModel.tags.valueBlocking).containsExactly(Tag(1L, "tag1", TagColor.RED))
+        assertThat(viewModel.modified.valueBlocking).isFalse()
+
+        viewModel.removeTag(Tag(1L, "tag1", TagColor.RED))
+
+        assertThat(viewModel.tags.valueBlocking).isEmpty()
+        assertThat(viewModel.modified.valueBlocking).isTrue()
+    }
+
     private fun createDatabase(): AppDatabase {
         return Room
             .inMemoryDatabaseBuilder(
@@ -153,7 +187,12 @@ class TaskEditViewModelTest {
     private fun populate(db: AppDatabase) {
         runBlocking {
             with(db.taskDao()) {
-                insertTags(listOf(Tag(1L, "tag", TagColor.RED)))
+                insertTags(
+                    listOf(
+                        Tag(1L, "tag1", TagColor.RED),
+                        Tag(2L, "tag2", TagColor.BLUE)
+                    )
+                )
                 insertUsers(
                     listOf(
                         User(1L, "owner"),

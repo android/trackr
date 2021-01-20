@@ -60,6 +60,11 @@
             android:name="com.example.android.trackr.ui.edit.UserSelectionDialogFragment"
             android:label="User Selection" />
 
+        <dialog
+            android:id="@+id/nav_tag_selection"
+            android:name="com.example.android.trackr.ui.edit.TagSelectionDialogFragment"
+            android:label="Tag Selection" />
+
     </navigation>
 
 </navigation>
