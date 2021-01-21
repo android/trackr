@@ -36,6 +36,10 @@
             name="clock"
             type="org.threeten.bp.Clock" />
 
+        <variable
+            name="dueMessageOrDueDate"
+            type="String" />
+
     </data>
 
     <androidx.cardview.widget.CardView
@@ -97,7 +101,7 @@
                 android:layout_marginStart="@dimen/home_task_star_detail_margin"
                 android:textAppearance="?attr/textAppearanceBody1"
                 app:clock="@{clock}"
-                app:dueDate="@{taskListItem.dueAt}"
+                app:dueMessageOrDueDate="@{taskListItem.dueAt}"
                 app:layout_constraintBottom_toTopOf="@id/chip_group"
                 app:layout_constraintStart_toEndOf="@+id/star"
                 app:layout_constraintTop_toBottomOf="@id/owner"

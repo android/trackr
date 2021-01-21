@@ -21,16 +21,17 @@ import android.content.res.Resources
 import android.view.View
 import android.widget.TextView
 import androidx.test.core.app.ApplicationProvider
-import com.example.android.trackr.R
 import com.example.android.trackr.TestApplication
+import com.example.android.trackr.ui.utils.DateTimeUtils
 import com.google.common.truth.Truth.assertThat
+import io.mockk.every
+import io.mockk.mockkObject
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.threeten.bp.Clock
-import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
 
@@ -52,70 +53,58 @@ class BindingAdaptersTest {
     }
 
     @Test
-    fun formatDueDate_overdue3Day() {
-        val time3DaysAgo = Instant.now(fakeClock) - Duration.ofDays(3)
-        formatDueDate(textView, time3DaysAgo, fakeClock)
-        assertThat(textView.text).isEqualTo(
-            resources.getQuantityString(R.plurals.due_date_overdue_x_days, 3, 3)
-        )
+    fun showFormattedDueMessageOrDueDate_withNullDueDate() {
+        showFormattedDueMessageOrDueDate(textView, null, fakeClock)
+        assertThat(textView.text).isEqualTo("")
     }
 
     @Test
-    fun formatDueDate_overdue1Day() {
-        val timeYesterday = Instant.now(fakeClock) - Duration.ofDays(1)
-        formatDueDate(textView, timeYesterday, fakeClock)
-        assertThat(textView.text).isEqualTo(
-            resources.getQuantityString(R.plurals.due_date_overdue_x_days, 1, 1)
-        )
+    fun showFormattedDueMessageOrDueDate_withValue() {
+        val value = "something"
+        mockkObject(DateTimeUtils)
+        every { DateTimeUtils.durationMessageOrDueDate(resources, any(), fakeClock) } returns value
+
+        showFormattedDueMessageOrDueDate(textView, Instant.now(), fakeClock)
+
+        assertThat(textView.text).isEqualTo(value)
     }
 
     @Test
-    fun formatDueDate_dueToday() {
-        val timeToday = Instant.now(fakeClock) + Duration.ofHours(3)
-        formatDueDate(textView, timeToday, fakeClock)
-        assertThat(textView.text).isEqualTo(
-            resources.getString(R.string.due_date_today)
-        )
-    }
-
-    @Test
-    fun formatDueDate_dueTomorrow() {
-        val timeTomorrow = Instant.now(fakeClock) + Duration.ofDays(1)
-        formatDueDate(textView, timeTomorrow, fakeClock)
-        assertThat(textView.text).isEqualTo(
-            resources.getQuantityString(R.plurals.due_date_days, 1, 1)
-        )
-    }
-
-    @Test
-    fun formatDueDate_dueInXDays() {
-        val timeIn3Days = Instant.now(fakeClock) + Duration.ofDays(3) + Duration.ofHours(2)
-        formatDueDate(textView, timeIn3Days, fakeClock)
-        assertThat(textView.text).isEqualTo(
-            resources.getQuantityString(R.plurals.due_date_days, 3, 3)
-        )
-    }
-
-    @Test
-    fun formatDueMessage_overdue1Day() {
-        val timeYesterday = Instant.now(fakeClock) - Duration.ofDays(1)
-        formatDueMessage(textView, timeYesterday, fakeClock)
-        assertThat(textView.text).isEqualTo(
-            resources.getQuantityString(R.plurals.due_date_overdue_x_days, 1, 1)
-        )
+    fun showFormattedDueMessageOrHide_withNullDueDate() {
         assertThat(textView.visibility).isEqualTo(View.VISIBLE)
-    }
 
-    @Test
-    fun formatDueMessage_dueLongAhead() {
-        val timeIn30Days = Instant.now(fakeClock) + Duration.ofDays(30)
-        formatDueMessage(textView, timeIn30Days, fakeClock)
+        showFormattedDueMessageOrHide(textView, null, fakeClock)
+
         assertThat(textView.visibility).isEqualTo(View.GONE)
     }
 
     @Test
-    fun instant_empty() {
-        instant(textView, null)
-        assertThat(textView.text.toString()).isEmpty()
+    fun showFormattedDueMessageOrHide_withEmptyMessage() {
+        mockkObject(DateTimeUtils)
+        every { DateTimeUtils.durationMessageOrDueDate(resources, any(), fakeClock) } returns ""
+
+        assertThat(textView.visibility).isEqualTo(View.VISIBLE)
+
+        showFormattedDueMessageOrHide(textView, Instant.now(), fakeClock)
+
+        assertThat(textView.visibility).isEqualTo(View.GONE)
+    }
+
+    @Test
+    fun showFormattedDueMessageOrHide_withNonEmptyMessage() {
+        mockkObject(DateTimeUtils)
+        every {
+            DateTimeUtils.durationMessageOrDueDate(
+                resources,
+                any(),
+                fakeClock
+            )
+        } returns "something"
+
+        assertThat(textView.visibility).isEqualTo(View.VISIBLE)
+
+        showFormattedDueMessageOrHide(textView, Instant.now(), fakeClock)
+
+        assertThat(textView.visibility).isEqualTo(View.VISIBLE)
     }
 }
