@@ -39,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:background="@color/trackr_blue_500"
+            android:background="?android:attr/windowBackground"
             android:orientation="vertical"
             android:padding="16dp">
 

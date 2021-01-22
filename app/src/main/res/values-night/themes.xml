@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2020 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,12 +15,17 @@
 -->
 <resources>
     <!--Final, top-level theme-->
-    <style name="Theme.Trackr.DayNight" parent="Theme.Trackr.Dark"/>
+    <style name="Theme.Trackr.DayNight" parent="Theme.Trackr.Dark" />
 
     <style name="Theme.Trackr.Dark" parent="Theme.Trackr">
-
         <item name="colorPrimary">@color/trackr_blue_700</item>
         <item name="colorPrimaryDark">@color/trackr_pink_500</item>
+
+        <item name="android:textColorSecondary">@color/trackr_blue_100</item>
+
+        <item name="android:windowBackground">@color/trackr_blue_700</item>
+
+        <item name="colorOnPrimary">@color/trackr_white_50</item>
     </style>
 
 </resources>
