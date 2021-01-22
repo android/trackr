@@ -59,7 +59,11 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.action_save -> {
-                    viewModel.save()
+                    viewModel.save { success ->
+                        if (success) {
+                            findNavController().popBackStack()
+                        }
+                    }
                     true
                 }
                 else -> false

@@ -24,10 +24,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.viewModelScope
 import com.example.android.trackr.data.Tag
+import com.example.android.trackr.data.TaskDetail
 import com.example.android.trackr.data.TaskState
 import com.example.android.trackr.data.User
 import com.example.android.trackr.db.dao.TaskDao
 import kotlinx.coroutines.launch
+import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 
 class TaskEditViewModel @ViewModelInject constructor(
@@ -61,6 +63,8 @@ class TaskEditViewModel @ViewModelInject constructor(
 
     private val _tags = MutableLiveData<List<Tag>>()
     val tags: LiveData<List<Tag>> = _tags
+
+    private var starUsers = mutableListOf<User>()
 
     lateinit var users: List<User>
         private set
@@ -104,6 +108,8 @@ class TaskEditViewModel @ViewModelInject constructor(
                     _dueAt.value = detail.dueAt
                     _createdAt.value = detail.createdAt
                     _tags.value = detail.tags
+                    starUsers.clear()
+                    starUsers.addAll(detail.starUsers)
                     _modified.value = false
                 }
             }
@@ -147,7 +153,27 @@ class TaskEditViewModel @ViewModelInject constructor(
         }
     }
 
-    fun save() {
-        TODO("Save is not yet implemented")
+    fun save(onSaveFinished: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            try {
+                taskDao.saveTaskDetail(
+                    TaskDetail(
+                        id = taskId,
+                        title = title.value ?: "",
+                        description = description.value ?: "",
+                        state = _status.value ?: TaskState.NOT_STARTED,
+                        createdAt = _createdAt.value ?: Instant.now(),
+                        dueAt = _dueAt.value ?: Instant.now() + Duration.ofDays(7),
+                        owner = _owner.value ?: users[0],
+                        reporter = _creator.value ?: users[0],
+                        tags = _tags.value ?: emptyList(),
+                        starUsers = starUsers
+                    )
+                )
+                onSaveFinished(true)
+            } catch (e: RuntimeException) {
+                onSaveFinished(false)
+            }
+        }
     }
 }

@@ -18,8 +18,9 @@ package com.example.android.trackr.db.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
-import androidx.room.Insert
 import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.example.android.trackr.data.ARCHIVED_KEY
@@ -77,4 +78,38 @@ interface TaskDao {
 
     @Query("SELECT * FROM tags")
     suspend fun loadTags(): List<Tag>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertTask(task: Task)
+
+    @Query("SELECT tagId FROM task_tags WHERE taskId = :taskId")
+    suspend fun loadTaskTagIds(taskId: Long): List<Long>
+
+    @Query("DELETE FROM task_tags WHERE taskId = :taskId AND tagId IN(:tagIds)")
+    suspend fun deleteTaskTags(taskId: Long, tagIds: List<Long>)
+
+    @Transaction
+    suspend fun saveTaskDetail(detail: TaskDetail) {
+        println("# saveTaskDetail")
+        val task = Task(
+            id = detail.id,
+            title = detail.title,
+            description = detail.description,
+            state = detail.state,
+            reporterId = detail.reporter.id,
+            ownerId = detail.owner.id,
+            createdAt = detail.createdAt,
+            dueAt = detail.dueAt
+        )
+        println("insertTask")
+        insertTask(task)
+        val updatedTagIds = detail.tags.map { tag -> tag.id }
+        val currentTagIds = loadTaskTagIds(detail.id)
+        val removedTagIds = currentTagIds.filter { id -> id !in updatedTagIds }
+        println("deleteTaskTags")
+        deleteTaskTags(detail.id, removedTagIds)
+        val newTagIds = updatedTagIds.filter { id -> id !in currentTagIds }
+        println("insertTaskTags")
+        insertTaskTags(newTagIds.map { id -> TaskTag(taskId = detail.id, tagId = id) })
+    }
 }
