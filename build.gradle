@@ -40,6 +40,7 @@ buildscript {
         lifecycle_extensions_version = "2.2.0"
         lifecycle_livedata_ktx_version = "2.3.0-beta01"
         material_version ="1.2.1"
+        mockk_version="1.10.5"
         multidex_library_version = "1.0.3"
         nav_version = "2.3.1"
         preference_version = "1.1.1"

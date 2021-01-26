@@ -141,7 +141,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
                         android:textAppearance="?textAppearanceBody1"
-                        app:instant="@{viewModel.detail.dueAt}"
+                        app:clock="@{clock}"
+                        app:formattedDate="@{viewModel.detail.dueAt}"
                         tools:text="Sept 2, 2020 (Wed)" />
 
                     <TextView
@@ -150,7 +151,7 @@
                         android:layout_marginStart="@dimen/spacing_huge"
                         android:textAppearance="?textAppearanceBody1"
                         app:clock="@{clock}"
-                        app:dueMessage="@{viewModel.detail.dueAt}"
+                        app:dueMessageOrHide="@{viewModel.detail.dueAt}"
                         tools:text="Due in 3 days" />
 
                     <!-- Creation date -->
@@ -168,7 +169,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
                         android:textAppearance="?textAppearanceBody1"
-                        app:instant="@{viewModel.detail.createdAt}"
+                        app:clock="@{clock}"
+                        app:formattedDate="@{viewModel.detail.createdAt}"
                         tools:text="July 16, 2020 (Thur)" />
 
                     <!-- Tags -->

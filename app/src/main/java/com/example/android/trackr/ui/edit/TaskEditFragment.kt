@@ -31,7 +31,9 @@ import com.example.android.trackr.data.TaskState
 import com.example.android.trackr.databinding.FragmentTaskEditBinding
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
+import org.threeten.bp.Clock
 import org.threeten.bp.Instant
+import javax.inject.Inject
 
 private const val FRAGMENT_DATE_PICKER = "DatePicker"
 
@@ -44,6 +46,9 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     }
     private lateinit var binding: FragmentTaskEditBinding
 
+    @Inject
+    lateinit var clock: Clock
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.taskId = args.taskId
@@ -53,6 +58,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         binding = FragmentTaskEditBinding.bind(view)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
+        binding.clock = clock
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }

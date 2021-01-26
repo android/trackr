@@ -24,6 +24,10 @@
             name="viewModel"
             type="com.example.android.trackr.ui.edit.TaskEditViewModel" />
 
+        <variable
+            name="clock"
+            type="org.threeten.bp.Clock" />
+
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -190,7 +194,8 @@
                         android:gravity="center_vertical"
                         android:minHeight="@dimen/min_touch_target"
                         android:textAppearance="?textAppearanceBody1"
-                        app:instant="@{viewModel.dueAt}"
+                        app:clock="@{clock}"
+                        app:formattedDate="@{viewModel.dueAt}"
                         tools:text="Sept 2, 2020 (Wed)" />
 
                     <!-- Creation date -->
@@ -210,7 +215,8 @@
                         android:gravity="center_vertical"
                         android:minHeight="@dimen/min_touch_target"
                         android:textAppearance="?textAppearanceBody1"
-                        app:instant="@{viewModel.createdAt}"
+                        app:clock="@{clock}"
+                        app:formattedDate="@{viewModel.createdAt}"
                         tools:text="July 16, 2020 (Thur)" />
 
                     <!-- Tags -->
