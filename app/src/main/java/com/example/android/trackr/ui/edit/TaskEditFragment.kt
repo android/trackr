@@ -21,7 +21,10 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.core.view.ViewCompat
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
@@ -29,6 +32,7 @@ import com.example.android.trackr.NavTaskEditGraphArgs
 import com.example.android.trackr.R
 import com.example.android.trackr.data.TaskState
 import com.example.android.trackr.databinding.FragmentTaskEditBinding
+import com.example.android.trackr.ui.utils.DateTimeUtils
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import org.threeten.bp.Clock
@@ -90,13 +94,31 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         binding.owner.setOnClickListener {
             findNavController().navigate(R.id.nav_user_selection)
         }
-        binding.dueAt.setOnClickListener {
-            MaterialDatePicker.Builder.datePicker().build().apply {
-                addOnPositiveButtonClickListener { time ->
-                    viewModel.updateDueAt(Instant.ofEpochMilli(time))
-                }
-            }.show(childFragmentManager, FRAGMENT_DATE_PICKER)
+
+        viewModel.dueAt.observe(viewLifecycleOwner) {
+            // Combine the label ("Due date") with the date value. This consolidates the announced text
+            // for screenreader users.
+            binding.dueAt.contentDescription =
+                resources.getString(
+                    R.string.due_date_with_value, DateTimeUtils.formattedDate(resources, it, clock)
+                )
+
+            // Customize the action label.
+            ViewCompat.replaceAccessibilityAction(
+                binding.dueAt,
+                AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_CLICK,
+                resources.getString(R.string.to_edit),
+                null
+            )
+            binding.dueAt.setOnClickListener {
+                MaterialDatePicker.Builder.datePicker().build().apply {
+                    addOnPositiveButtonClickListener { time ->
+                        viewModel.updateDueAt(Instant.ofEpochMilli(time))
+                    }
+                }.show(childFragmentManager, FRAGMENT_DATE_PICKER)
+            }
         }
+
         binding.tags.setOnClickListener {
             findNavController().navigate(R.id.nav_tag_selection)
         }

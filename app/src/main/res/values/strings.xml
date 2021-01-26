@@ -43,12 +43,15 @@
     <string name="more_tags">+%d</string>
     <!-- When due date is 5 or more days away, display with date. Example: Due Mar 15, 2020 -->
     <string name="due_date_generic">Due %s</string>
+    <string name="due_date_with_value">Due date: %s</string>
+    <string name="creation_date_with_value">Creation date: %s</string>
 
     <string name="starred">Starred</string>
     <string name="unstarred">Unstarred</string>
     <string name="star">Star</string>
     <string name="unstar">Unstar</string>
     <string name="edit_task">Edit task</string>
+    <string name="to_edit">To edit</string>
     <string name="expanded">Expanded</string>
     <string name="collapsed">Collapsed</string>
 
