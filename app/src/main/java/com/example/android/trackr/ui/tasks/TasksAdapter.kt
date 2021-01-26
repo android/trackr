@@ -32,6 +32,7 @@ import com.example.android.trackr.data.TaskState
 import com.example.android.trackr.data.User
 import com.example.android.trackr.databinding.ListHeaderBinding
 import com.example.android.trackr.databinding.ListTaskBinding
+import com.example.android.trackr.ui.utils.AccessibilityUtils
 import org.threeten.bp.Clock
 import java.util.Collections
 
@@ -145,6 +146,8 @@ class TasksAdapter(
             binding.listener = itemListener
             binding.clock = clock
             binding.currentUser = currentUser
+            binding.root.contentDescription =
+                AccessibilityUtils.taskListItemLabel(binding.root.context, taskListItem, clock)
             ViewCompat.setStateDescription(
                 binding.root,
                 binding.root.context.resources.getString(

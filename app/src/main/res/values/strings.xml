@@ -39,6 +39,7 @@
         <item quantity="one">Due tomorrow</item>
         <item quantity="other">Due in %d days</item>
     </plurals>
+    <string name="tag_label">Tag: %s</string>
     <string name="more_tags">+%d</string>
     <!-- When due date is 5 or more days away, display with date. Example: Due Mar 15, 2020 -->
     <string name="due_date_generic">Due %s</string>

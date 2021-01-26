@@ -142,6 +142,7 @@ class TasksAdapterTest {
         assertThat(holder.accessibilityActionIds).isEmpty()
         assertThat(ViewCompat.getStateDescription(holder.binding.root)).isNull()
         assertThat(holder.binding.chipGroup.isImportantForAccessibility).isTrue()
+        assertThat(holder.binding.root.contentDescription).isNull()
 
         holder.bind(inProgressTaskListItem)
 
@@ -154,6 +155,7 @@ class TasksAdapterTest {
             )
         )
         assertThat(holder.binding.chipGroup.isImportantForAccessibility).isFalse()
+        assertThat(holder.binding.root.contentDescription).isNotNull()
     }
 
     @Test
