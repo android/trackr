@@ -54,6 +54,7 @@
 
     <!-- Custom accessibility action strings -->
     <string name="archive">Archive</string>
+    <string name="explore_details">Explore details</string>
 
     <!-- Snackbar strings -->
     <string name="task_archived">Task archived</string>

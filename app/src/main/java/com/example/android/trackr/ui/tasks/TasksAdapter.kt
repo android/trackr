@@ -23,6 +23,7 @@ import android.view.View
 import android.view.View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -142,6 +143,7 @@ class TasksAdapter(
         val accessibilityActionIds = arrayListOf<Int>()
 
         fun bind(taskListItem: TaskListItem) {
+            val resources = binding.root.resources
             binding.taskListItem = taskListItem
             binding.listener = itemListener
             binding.clock = clock
@@ -150,12 +152,24 @@ class TasksAdapter(
                 AccessibilityUtils.taskListItemLabel(binding.root.context, taskListItem, clock)
             ViewCompat.setStateDescription(
                 binding.root,
-                binding.root.context.resources.getString(
+                resources.getString(
                     if (taskListItem.starUsers.isEmpty()) R.string.unstarred else R.string.starred
                 )
             )
             // TODO(b/176934848): include chip/tag information in contentDescription of each task in list.
             binding.chipGroup.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
+
+            // Replaces the label for the click action associated with the root view. The custom
+            // label is then passed on to the user of an accessibility service (for instance, this
+            // replaces Talkback's generic "double tap to activate" announcement with the more
+            // descriptive "double tap to explore details" action label).
+            // TODO(b/178437838): write UIAutomation test to confirm the custom action label.
+            ViewCompat.replaceAccessibilityAction(
+                binding.root,
+                AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_CLICK,
+                resources.getString(R.string.explore_details),
+                null
+            )
 
             // Clear previously added actions. If this is skipped, the actions may be duplicated
             // when a view is rebound.

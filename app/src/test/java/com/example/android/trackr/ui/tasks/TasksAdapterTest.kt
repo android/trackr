@@ -18,6 +18,7 @@ package com.example.android.trackr.ui.tasks
 
 import android.app.Application
 import android.content.Context
+import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.FrameLayout
 import androidx.core.view.ViewCompat
 import androidx.test.core.app.ApplicationProvider
@@ -214,6 +215,24 @@ class TasksAdapterTest {
         holder.binding.star.performClick()
 
         assertFalse(holder.binding.star.isChecked)
+    }
+
+    @Test
+    fun replaceAccessibilityAction_ActionClickLabel() {
+        val holder = TasksAdapter.TaskViewHolder.from(
+            frameLayout,
+            testItemListener,
+            user,
+            fakeClock
+        )
+
+        holder.bind(inProgressTaskListItem)
+
+        val nodeInfo = holder.binding.root.createAccessibilityNodeInfo()
+        val actionClick = nodeInfo.actionList.filter {
+            it.id == AccessibilityNodeInfo.ACTION_CLICK
+        }[0]
+        assertThat(actionClick.label).isEqualTo(context.resources.getString(R.string.explore_details))
     }
 
     @Test
