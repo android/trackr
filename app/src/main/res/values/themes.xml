@@ -28,6 +28,8 @@
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
 
+        <item name="android:textColorSecondary">@color/trackr_gray_500</item>
+
         <!--Typography-->
         <item name="textAppearanceHeadline1">@style/TextAppearance.Trackr.Headline1</item>
         <item name="textAppearanceHeadline2">@style/TextAppearance.Trackr.Headline2</item>
