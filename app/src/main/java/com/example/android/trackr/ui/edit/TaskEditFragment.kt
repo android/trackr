@@ -91,9 +91,22 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         viewModel.status.observe(viewLifecycleOwner) { status ->
             binding.status.setSelection(status.ordinal)
         }
+
+        viewModel.owner.observe(viewLifecycleOwner) {
+            binding.owner.contentDescription =
+                resources.getString(R.string.owner_with_value, it.username)
+        }
+
         binding.owner.setOnClickListener {
             findNavController().navigate(R.id.nav_user_selection)
         }
+
+        ViewCompat.replaceAccessibilityAction(
+            binding.owner,
+            AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_CLICK,
+            resources.getString(R.string.change),
+            null
+        )
 
         viewModel.dueAt.observe(viewLifecycleOwner) {
             // Combine the label ("Due date") with the date value. This consolidates the announced text
@@ -107,7 +120,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
             ViewCompat.replaceAccessibilityAction(
                 binding.dueAt,
                 AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_CLICK,
-                resources.getString(R.string.to_edit),
+                resources.getString(R.string.change),
                 null
             )
             binding.dueAt.setOnClickListener {

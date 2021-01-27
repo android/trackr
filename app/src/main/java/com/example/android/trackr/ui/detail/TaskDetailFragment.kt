@@ -68,6 +68,11 @@ class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
                     R.string.creation_date_with_value,
                     DateTimeUtils.formattedDate(resources, it.createdAt, clock)
                 )
+
+                binding.owner.contentDescription =
+                    resources.getString(R.string.owner_with_value, value.owner.username)
+                binding.creator.contentDescription =
+                    resources.getString(R.string.creator_with_value, value.reporter.username)
             }
         }
 

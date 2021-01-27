@@ -144,6 +144,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_large"
                         android:text="@string/owner"
+                        android:importantForAccessibility="no"
                         app:drawableStartCompat="@drawable/ic_person" />
 
                     <com.google.android.material.chip.Chip
@@ -156,24 +157,7 @@
                         app:chipIcon="@drawable/ic_user"
                         tools:text="Daring Dove" />
 
-                    <!-- Creator -->
-
-                    <TextView
-                        style="@style/Widget.Trackr.TextView.Label"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_large"
-                        android:text="@string/creator"
-                        app:drawableStartCompat="@drawable/ic_person" />
-
-                    <com.google.android.material.chip.Chip
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/spacing_huge"
-                        android:text="@{viewModel.creator.username}"
-                        android:textAppearance="?textAppearanceBody1"
-                        app:chipIcon="@drawable/ic_user"
-                        tools:text="Peaceful Puffin" />
+                    <!-- Creator is not editable, so it is not displayed on this screen -->
 
                     <!-- Due date -->
 
@@ -199,26 +183,7 @@
                         app:formattedDate="@{viewModel.dueAt}"
                         tools:text="Sept 2, 2020 (Wed)" />
 
-                    <!-- Creation date -->
-
-                    <TextView
-                        style="@style/Widget.Trackr.TextView.Label"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_large"
-                        android:text="@string/created_at"
-                        app:drawableStartCompat="@drawable/ic_created_at" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/spacing_huge"
-                        android:gravity="center_vertical"
-                        android:minHeight="@dimen/min_touch_target"
-                        android:textAppearance="?textAppearanceBody1"
-                        app:clock="@{clock}"
-                        app:formattedDate="@{viewModel.createdAt}"
-                        tools:text="July 16, 2020 (Thur)" />
+                    <!-- Creation date isn't editable, so it is not displayed on this screen -->
 
                     <!-- Tags -->
 
