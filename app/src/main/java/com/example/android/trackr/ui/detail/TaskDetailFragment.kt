@@ -20,11 +20,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.android.trackr.NavTaskEditGraphArgs
 import com.example.android.trackr.R
 import com.example.android.trackr.databinding.FragmentTaskDetailBinding
+import com.example.android.trackr.ui.utils.DateTimeUtils
 import dagger.hilt.android.AndroidEntryPoint
 import org.threeten.bp.Clock
 import javax.inject.Inject
@@ -54,6 +56,21 @@ class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
+
+        viewModel.detail.observe(viewLifecycleOwner) { value ->
+            value?.let {
+                binding.dueAt.contentDescription = resources.getString(
+                    R.string.due_date_with_value,
+                    DateTimeUtils.formattedDate(resources, it.dueAt, clock)
+                )
+
+                binding.createdAt.contentDescription = resources.getString(
+                    R.string.creation_date_with_value,
+                    DateTimeUtils.formattedDate(resources, it.createdAt, clock)
+                )
+            }
+        }
+
         binding.edit.setOnClickListener {
             findNavController().navigate(
                 R.id.nav_task_edit_graph,

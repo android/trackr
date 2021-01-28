@@ -134,9 +134,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_large"
                         android:text="@string/due_at"
+                        android:importantForAccessibility="no"
                         app:drawableStartCompat="@drawable/ic_due_at" />
 
                     <TextView
+                        android:id="@+id/due_at"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
@@ -162,9 +164,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_large"
                         android:text="@string/created_at"
+                        android:importantForAccessibility="no"
                         app:drawableStartCompat="@drawable/ic_created_at" />
 
                     <TextView
+                        android:id="@+id/created_at"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
