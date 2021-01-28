@@ -98,9 +98,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_large"
                         android:text="@string/owner"
+                        android:importantForAccessibility="no"
                         app:drawableStartCompat="@drawable/ic_user" />
 
                     <TextView
+                        android:id="@+id/owner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
@@ -116,9 +118,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_large"
                         android:text="@string/creator"
+                        android:importantForAccessibility="no"
                         app:drawableStartCompat="@drawable/ic_user" />
 
                     <TextView
+                        android:id="@+id/creator"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
