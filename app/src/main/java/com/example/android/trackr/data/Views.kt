@@ -24,7 +24,7 @@ import org.threeten.bp.Instant
     """
         SELECT
             t.id, t.title, t.state, t.dueAt,
-            o.id AS owner_id, o.username AS owner_username
+            o.id AS owner_id, o.username AS owner_username, o.avatar AS owner_avatar
         FROM tasks AS t
         INNER JOIN users AS o ON o.id = t.ownerId
     """
@@ -70,8 +70,8 @@ data class TaskListItem(
     """
         SELECT
             t.id, t.title, t.description, t.state, t.createdAt, t.dueAt,
-            o.id AS owner_id, o.username AS owner_username,
-            r.id AS reporter_id, r.username AS reporter_username
+            o.id AS owner_id, o.username AS owner_username, o.avatar AS owner_avatar,
+            r.id AS reporter_id, r.username AS reporter_username, r.avatar as reporter_avatar
         FROM tasks AS t
         INNER JOIN users AS o ON o.id = t.ownerId
         INNER JOIN users AS r ON r.id = t.reporterId

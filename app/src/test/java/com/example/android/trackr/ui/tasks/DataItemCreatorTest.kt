@@ -16,7 +16,9 @@
 
 package com.example.android.trackr.ui.tasks
 
+import com.example.android.trackr.R
 import com.example.android.trackr.TestApplication
+import com.example.android.trackr.data.Avatar
 import com.example.android.trackr.data.TaskListItem
 import com.example.android.trackr.data.TaskState
 import com.example.android.trackr.data.User
@@ -84,7 +86,7 @@ class DataItemCreatorTest {
     }
 
     companion object {
-        private val user = User(1, "user")
+        private val user = User(1, "user", Avatar.DEFAULT_USER)
         val inProgressTaskListItem = TaskListItem(
             id = 1,
             title = "task list item 1",

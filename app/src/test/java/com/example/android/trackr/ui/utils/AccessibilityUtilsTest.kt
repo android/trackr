@@ -20,6 +20,8 @@ import android.app.Application
 import android.content.res.Resources
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.android.trackr.R
+import com.example.android.trackr.data.Avatar
 import com.example.android.trackr.data.Tag
 import com.example.android.trackr.data.TagColor
 import com.example.android.trackr.data.TaskListItem
@@ -83,7 +85,7 @@ class AccessibilityUtilsTest {
 
 
     companion object {
-        private val user1 = User(1, "user")
+        private val user1 = User(1, "user", Avatar.DEFAULT_USER)
         private val tag1 = Tag(1, "tag1", TagColor.BLUE)
         private val tag2 = Tag(2, "tag2", TagColor.RED)
         private val dateTimeValue = "Due today"

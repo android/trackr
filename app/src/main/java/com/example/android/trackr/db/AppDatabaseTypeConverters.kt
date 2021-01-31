@@ -17,6 +17,7 @@
 package com.example.android.trackr.db
 
 import androidx.room.TypeConverter
+import com.example.android.trackr.data.Avatar
 import com.example.android.trackr.data.TagColor
 import com.example.android.trackr.data.TaskState
 import org.threeten.bp.Instant
@@ -54,5 +55,15 @@ class AppDatabaseTypeConverters {
     @TypeConverter
     fun stringToTagColor(string: String): TagColor? {
         return TagColor.valueOf(string)
+    }
+
+    @TypeConverter
+    fun avatarToString(avatar: Avatar): String {
+        return avatar.name
+    }
+
+    @TypeConverter
+    fun stringToAvatar(name: String): Avatar? {
+        return Avatar.values().firstOrNull{ it.name == name}
     }
 }

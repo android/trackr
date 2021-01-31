@@ -19,7 +19,9 @@ package com.example.android.trackr.ui.edit
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import com.example.android.trackr.R
 import com.example.android.trackr.TestApplication
+import com.example.android.trackr.data.Avatar
 import com.example.android.trackr.data.Tag
 import com.example.android.trackr.data.TagColor
 import com.example.android.trackr.data.Task
@@ -75,8 +77,14 @@ class TaskEditViewModelTest {
         assertThat(viewModel.modified.valueBlocking).isFalse()
         assertThat(viewModel.title.valueBlocking).isEqualTo("title")
         assertThat(viewModel.description.valueBlocking).isEqualTo("description")
-        assertThat(viewModel.owner.valueBlocking).isEqualTo(User(1L, "owner"))
-        assertThat(viewModel.creator.valueBlocking).isEqualTo(User(2L, "creator"))
+        assertThat(viewModel.owner.valueBlocking).isEqualTo(User(1L, "owner", Avatar.DEFAULT_USER))
+        assertThat(viewModel.creator.valueBlocking).isEqualTo(
+            User(
+                2L,
+                "creator",
+                Avatar.DEFAULT_USER
+            )
+        )
         assertThat(viewModel.dueAt.valueBlocking)
             .isEqualTo(Instant.parse("2020-11-01T00:00:00.00Z"))
         assertThat(viewModel.createdAt.valueBlocking)
@@ -96,12 +104,12 @@ class TaskEditViewModelTest {
         val viewModel = TaskEditViewModel(db.taskDao())
         viewModel.taskId = 1L
 
-        assertThat(viewModel.owner.valueBlocking).isEqualTo(User(1L, "owner"))
+        assertThat(viewModel.owner.valueBlocking).isEqualTo(User(1L, "owner", Avatar.DEFAULT_USER))
         assertThat(viewModel.modified.valueBlocking).isFalse()
 
-        viewModel.updateOwner(User(3L, "another"))
+        viewModel.updateOwner(User(3L, "another", Avatar.DEFAULT_USER))
 
-        assertThat(viewModel.owner.valueBlocking).isEqualTo(User(3L, "another"))
+        assertThat(viewModel.owner.valueBlocking).isEqualTo(User(3L, "another", Avatar.DEFAULT_USER))
         assertThat(viewModel.modified.valueBlocking).isTrue()
     }
 
@@ -195,9 +203,9 @@ class TaskEditViewModelTest {
                 )
                 insertUsers(
                     listOf(
-                        User(1L, "owner"),
-                        User(2L, "creator"),
-                        User(3L, "another")
+                        User(1L, "owner", Avatar.DEFAULT_USER),
+                        User(2L, "creator", Avatar.DEFAULT_USER),
+                        User(3L, "another", Avatar.DEFAULT_USER)
                     )
                 )
                 insertTasks(

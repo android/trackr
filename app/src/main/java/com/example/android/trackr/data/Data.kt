@@ -121,6 +121,13 @@ enum class TagColor(val textColor: Int, val backgroundColor: Int) {
     RED(R.attr.redTagTextColor, R.attr.redTagBackgroundColor)
 }
 
+enum class Avatar(val drawableResId: Int) {
+    DARING_DOVE(R.drawable.ic_daring_dove),
+    LIKEABLE_LARK(R.drawable.ic_likeable_lark),
+    PEACEFUL_PUFFIN(R.drawable.ic_peaceful_puffin),
+    DEFAULT_USER(R.drawable.ic_user)
+}
+
 @Entity(
     tableName = "task_tags",
     foreignKeys = [
@@ -154,9 +161,12 @@ data class User(
     /**
      * A short name for the user.
      */
-    val username: String
+    val username: String,
 
-    // TODO: add field for avatar.
+    /**
+     * The [Avatar] associated with the user.
+     */
+    val avatar: Avatar
 )
 
 @Entity(

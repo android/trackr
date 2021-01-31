@@ -24,6 +24,7 @@ import androidx.core.view.ViewCompat
 import androidx.test.core.app.ApplicationProvider
 import com.example.android.trackr.R
 import com.example.android.trackr.TestApplication
+import com.example.android.trackr.data.Avatar
 import com.example.android.trackr.data.TaskListItem
 import com.example.android.trackr.data.TaskState
 import com.example.android.trackr.data.User
@@ -287,8 +288,8 @@ class TasksAdapterTest {
     }
 
     companion object {
-        private val user = User(1, "user")
-        private val user2 = User(2, "user2")
+        private val user = User(1, "user", Avatar.DEFAULT_USER)
+        private val user2 = User(2, "user2", Avatar.DEFAULT_USER)
 
         val inProgressTaskListItem = TaskListItem(
             id = 1,

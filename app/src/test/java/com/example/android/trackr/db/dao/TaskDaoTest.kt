@@ -20,6 +20,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.android.trackr.R
+import com.example.android.trackr.data.Avatar
 import com.example.android.trackr.data.SeedData
 import com.example.android.trackr.data.Tag
 import com.example.android.trackr.data.TagColor
@@ -268,8 +270,8 @@ class TaskDaoTest {
         val dueAt1: Instant = Instant.parse("2020-12-01T00:00:00.00Z")
         val dueAt2: Instant = Instant.parse("2020-12-11T00:00:00.00Z")
 
-        val user1 = User(id = 1L, username = "user1")
-        val user2 = User(id = 2L, username = "user2")
+        val user1 = User(id = 1L, username = "user1", Avatar.DEFAULT_USER)
+        val user2 = User(id = 2L, username = "user2", Avatar.DEFAULT_USER)
 
         val task1 = Task(id = 1L, title = "Task 1", ownerId = 1L, reporterId = 1L, dueAt = dueAt1)
         val task2 = Task(
