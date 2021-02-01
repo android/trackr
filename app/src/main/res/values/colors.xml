@@ -42,7 +42,7 @@
     <color name="trackr_teal_500" tools:ignore="UnusedResources">#3FC1C9</color>
     <color name="trackr_teal_700">#098591</color>
 
-    <color name="trackr_white_50" tools:ignore="UnusedResources">#FFFFFF</color>
+    <color name="trackr_white_50">#FFFFFF</color>
 
     <color name="trackr_yellow_300" tools:ignore="UnusedResources">#F3BB59</color>
     <color name="trackr_yellow_500">#C88004</color>
