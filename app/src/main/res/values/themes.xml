@@ -34,6 +34,16 @@
         <item name="textAppearanceHeadline1">@style/TextAppearance.Trackr.Headline1</item>
         <item name="textAppearanceHeadline2">@style/TextAppearance.Trackr.Headline2</item>
         <item name="textAppearanceBody1">@style/TextAppearance.Trackr.Body1</item>
+
+        <!-- Custom theme attrs -->
+        <item name="blueTagBackgroundColor">@color/trackr_teal_100</item>
+        <item name="blueTagTextColor">@color/trackr_teal_700</item>
+        <item name="greenTagBackgroundColor">@color/trackr_green_100</item>
+        <item name="greenTagTextColor">@color/trackr_green_700</item>
+        <item name="purpleTagBackgroundColor">@color/trackr_purple_100</item>
+        <item name="purpleTagTextColor">@color/trackr_purple_700</item>
+        <item name="redTagBackgroundColor">@color/trackr_red_100</item>
+        <item name="redTagTextColor">@color/trackr_red_700</item>
     </style>
 
 </resources>

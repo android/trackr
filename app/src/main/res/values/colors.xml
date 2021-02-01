@@ -24,25 +24,32 @@
     <color name="trackr_blue_700">#1C2A3A</color>
 
     <color name="trackr_green_100">#E6F4EA</color>
+    <color name="trackr_green_200">#CEEAD6</color>
     <color name="trackr_green_500" tools:ignore="UnusedResources">#90C178</color>
     <color name="trackr_green_700">#137333</color>
+    <color name="trackr_green_800">#37694E</color>
 
     <color name="trackr_pink_300">#EA7699</color>
     <color name="trackr_pink_400">#FF85AA</color>
     <color name="trackr_pink_500">#F95184</color>
+    <color name="trackr_pink_800">#843B6F</color>
 
     <color name="trackr_purple_100">#F3E8FD</color>
+    <color name="trackr_purple_200">#E9D2FD</color>
     <color name="trackr_purple_700">#7627BB</color>
+    <color name="trackr_purple_800">#5B3691</color>
 
     <color name="trackr_red_100">#FDE7F3</color>
     <color name="trackr_red_700">#B80672</color>
 
+    <color name="trackr_teal_50">#CBF0F8</color>
     <color name="trackr_teal_100">#E4F7FB</color>
     <color name="trackr_teal_300" tools:ignore="UnusedResources">#72BCC0</color>
     <color name="trackr_teal_500" tools:ignore="UnusedResources">#3FC1C9</color>
     <color name="trackr_teal_700">#098591</color>
+    <color name="trackr_teal_800">#226C84</color>
 
-    <color name="trackr_white_50" tools:ignore="UnusedResources">#FFFFFF</color>
+    <color name="trackr_white_50">#FFFFFF</color>
 
     <color name="trackr_yellow_300" tools:ignore="UnusedResources">#F3BB59</color>
     <color name="trackr_yellow_500">#C88004</color>

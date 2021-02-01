@@ -26,6 +26,16 @@
         <item name="android:windowBackground">@color/trackr_blue_700</item>
 
         <item name="colorOnPrimary">@color/trackr_white_50</item>
+
+        <!-- Custom theme attrs -->
+        <item name="blueTagBackgroundColor">@color/trackr_teal_800</item>
+        <item name="blueTagTextColor">@color/trackr_teal_50</item>
+        <item name="greenTagBackgroundColor">@color/trackr_green_800</item>
+        <item name="greenTagTextColor">@color/trackr_green_200</item>
+        <item name="purpleTagBackgroundColor">@color/trackr_purple_800</item>
+        <item name="purpleTagTextColor">@color/trackr_purple_200</item>
+        <item name="redTagBackgroundColor">@color/trackr_pink_800</item>
+        <item name="redTagTextColor">@color/trackr_white_50</item>
     </style>
 
 </resources>
