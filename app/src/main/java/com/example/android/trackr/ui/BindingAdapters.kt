@@ -17,6 +17,7 @@
 package com.example.android.trackr.ui
 
 import android.content.res.ColorStateList
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
@@ -84,8 +85,13 @@ private fun ChipGroup.bind(tags: List<Tag>, showAllTags: Boolean) {
 private fun Chip.bind(tag: Tag) {
     text = tag.label
     val color = tag.color
-    setTextColor(resources.getColor(color.textColor, context.theme))
-    chipBackgroundColor = ColorStateList.valueOf(resources.getColor(color.backgroundColor))
+    val typedValue = TypedValue()
+
+    context.theme.resolveAttribute(color.textColor, typedValue, true)
+    setTextColor(typedValue.data)
+
+    context.theme.resolveAttribute(color.backgroundColor, typedValue, true)
+    chipBackgroundColor = ColorStateList.valueOf(typedValue.data)
 }
 
 @BindingAdapter("dueMessageOrDueDate", "clock")

@@ -115,10 +115,10 @@ data class Tag(
 
 // Denotes the tag text and background color to be displayed
 enum class TagColor(val textColor: Int, val backgroundColor: Int) {
-    BLUE(R.color.trackr_teal_700, R.color.trackr_teal_100),
-    GREEN(R.color.trackr_green_700, R.color.trackr_green_100),
-    PURPLE(R.color.trackr_purple_700, R.color.trackr_purple_100),
-    RED(R.color.trackr_red_700, R.color.trackr_red_100)
+    BLUE(R.attr.blueTagTextColor, R.attr.blueTagBackgroundColor),
+    GREEN(R.attr.greenTagTextColor, R.attr.greenTagBackgroundColor),
+    PURPLE(R.attr.purpleTagTextColor, R.attr.purpleTagBackgroundColor),
+    RED(R.attr.redTagTextColor, R.attr.redTagBackgroundColor)
 }
 
 @Entity(
