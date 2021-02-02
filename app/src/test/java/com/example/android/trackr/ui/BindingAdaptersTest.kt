@@ -34,6 +34,7 @@ import org.robolectric.annotation.Config
 import org.threeten.bp.Clock
 import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
+import android.view.accessibility.AccessibilityNodeInfo
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestApplication::class)
@@ -42,12 +43,13 @@ class BindingAdaptersTest {
     private val dateInEpochSecond = 1584310694L // March 15, 2020
     private val fakeClock =
         Clock.fixed(Instant.ofEpochSecond(dateInEpochSecond), ZoneId.systemDefault())
+    private lateinit var application: Application
     private lateinit var resources: Resources
     private lateinit var textView: TextView
 
     @Before
     fun setup() {
-        val application: Application = ApplicationProvider.getApplicationContext()
+        application = ApplicationProvider.getApplicationContext()
         resources = application.resources
         textView = TextView(application)
     }
@@ -106,5 +108,20 @@ class BindingAdaptersTest {
         showFormattedDueMessageOrHide(textView, Instant.now(), fakeClock)
 
         assertThat(textView.visibility).isEqualTo(View.VISIBLE)
+    }
+
+    @Test
+    fun addClickActionLabel_replacesActionLabel() {
+        val view = View(application)
+        val label = "something"
+
+        addClickActionLabel(view, label)
+
+        val nodeInfo = view.createAccessibilityNodeInfo()
+        val actionClick = nodeInfo.actionList.filter {
+            it.id == AccessibilityNodeInfo.ACTION_CLICK
+        }[0]
+
+        assertThat(actionClick.label).isEqualTo(label)
     }
 }
