@@ -212,6 +212,7 @@
             android:layout_gravity="end|bottom"
             android:layout_margin="@dimen/spacing_medium"
             android:contentDescription="@string/edit_task"
+            app:backgroundTint="@color/trackr_pink_400"
             app:srcCompat="@drawable/ic_edit"
             app:useCompatPadding="true" />
 
