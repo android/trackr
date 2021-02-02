@@ -174,6 +174,18 @@ class TaskEditViewModelTest {
         assertThat(viewModel.modified.valueBlocking).isTrue()
     }
 
+    @Test
+    fun discardChanges() {
+        val db = createDatabase()
+        populate(db)
+        val viewModel = TaskEditViewModel(db.taskDao())
+        viewModel.taskId = 1L
+
+        assertThat(viewModel.discarded.valueBlocking).isFalse()
+        viewModel.discardChanges()
+        assertThat(viewModel.discarded.valueBlocking).isTrue()
+    }
+
     private fun createDatabase(): AppDatabase {
         return Room
             .inMemoryDatabaseBuilder(
