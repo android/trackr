@@ -90,7 +90,6 @@ interface TaskDao {
 
     @Transaction
     suspend fun saveTaskDetail(detail: TaskDetail) {
-        println("# saveTaskDetail")
         val task = Task(
             id = detail.id,
             title = detail.title,
@@ -101,15 +100,12 @@ interface TaskDao {
             createdAt = detail.createdAt,
             dueAt = detail.dueAt
         )
-        println("insertTask")
         insertTask(task)
         val updatedTagIds = detail.tags.map { tag -> tag.id }
         val currentTagIds = loadTaskTagIds(detail.id)
         val removedTagIds = currentTagIds.filter { id -> id !in updatedTagIds }
-        println("deleteTaskTags")
         deleteTaskTags(detail.id, removedTagIds)
         val newTagIds = updatedTagIds.filter { id -> id !in currentTagIds }
-        println("insertTaskTags")
         insertTaskTags(newTagIds.map { id -> TaskTag(taskId = detail.id, tagId = id) })
     }
 }

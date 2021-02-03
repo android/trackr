@@ -65,6 +65,11 @@
             android:name="com.example.android.trackr.ui.edit.TagSelectionDialogFragment"
             android:label="Tag Selection" />
 
+        <dialog
+            android:id="@+id/nav_discard_confirmation"
+            android:name="com.example.android.trackr.ui.edit.DiscardConfirmationDialogFragment"
+            android:label="Discard Confirmation" />
+
     </navigation>
 
 </navigation>

@@ -88,6 +88,9 @@ class TaskEditViewModel @ViewModelInject constructor(
         value = false
     }
 
+    private val _discarded = MutableLiveData(false)
+    val discarded: LiveData<Boolean> = _discarded
+
     /**
      * Whether any of the content is modified or not.
      */
@@ -175,5 +178,9 @@ class TaskEditViewModel @ViewModelInject constructor(
                 onSaveFinished(false)
             }
         }
+    }
+
+    fun discardChanges() {
+        _discarded.value = true
     }
 }

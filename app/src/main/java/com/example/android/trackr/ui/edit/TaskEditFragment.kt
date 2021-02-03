@@ -21,10 +21,10 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.activity.addCallback
 import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
@@ -56,6 +56,9 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.taskId = args.taskId
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            close()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -63,8 +66,9 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
         binding.clock = clock
+
         binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
+            close()
         }
         binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
@@ -138,6 +142,21 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
 
         binding.tags.setOnClickListener {
             findNavController().navigate(R.id.nav_tag_selection)
+        }
+
+        // TODO: Add a fragment test to verify LiveData changes result in navigation.
+        viewModel.discarded.observe(viewLifecycleOwner) { discarded ->
+            if (discarded) {
+                findNavController().popBackStack(R.id.nav_task_edit_graph, true)
+            }
+        }
+    }
+
+    private fun close() {
+        if (viewModel.modified.value == true) {
+            findNavController().navigate(R.id.nav_discard_confirmation)
+        } else {
+            findNavController().popBackStack()
         }
     }
 }
