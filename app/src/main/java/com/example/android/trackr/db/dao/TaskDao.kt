@@ -36,6 +36,7 @@ import com.example.android.trackr.data.UserTask
 @Dao
 interface TaskDao {
 
+    // TODO :consider creating UserDao and moving some of the logic in this Dao there
     @Insert
     suspend fun insertUsers(users: List<User>)
 
@@ -56,6 +57,9 @@ interface TaskDao {
 
     @Query("SELECT * FROM tasks")
     fun getTasks(): LiveData<List<Task>>
+
+    @Query("SELECT * FROM USERS WHERE id = :id")
+    fun getUserById(id: Long): LiveData<User?>
 
     @Query("SELECT * FROM TaskDetail WHERE id = :id")
     fun getTaskDetailById(id: Long): LiveData<TaskDetail?>

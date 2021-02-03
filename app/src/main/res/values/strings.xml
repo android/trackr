@@ -77,7 +77,11 @@
 
     <string name="back">Back</string>
     <string name="save">Save</string>
+
     <string name="discard_confirmation">Discard changes?</string>
     <string name="discard">Discard</string>
     <string name="keep_editing">Keep editing</string>
+
+    <!-- Profile strings -->
+    <string name="avatar_of">Avatar of %s</string>
 </resources>

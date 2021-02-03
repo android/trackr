@@ -50,6 +50,7 @@ class TasksAdapterTest {
         override fun onTaskClicked(taskListItem: TaskListItem) {}
         override fun onTaskArchived(taskListItem: TaskListItem) {}
         override fun onTaskDragged(fromPosition: Int, toPosition: Int) {}
+        override fun onAvatarClicked(taskListItem: TaskListItem) {}
     }
 
     private val dateInEpochSecond = 1584310694L // March 15, 2020

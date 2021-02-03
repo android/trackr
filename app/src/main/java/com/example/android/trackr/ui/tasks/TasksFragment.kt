@@ -18,12 +18,6 @@ package com.example.android.trackr.ui.tasks
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
-import androidx.core.view.doOnLayout
-import androidx.core.view.doOnNextLayout
-import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -35,7 +29,9 @@ import com.example.android.trackr.data.TaskListItem
 import com.example.android.trackr.data.User
 import com.example.android.trackr.databinding.FragmentTasksBinding
 import com.example.android.trackr.ui.detail.TaskDetailFragmentArgs
+
 import com.example.android.trackr.ui.utils.configureEdgeToEdge
+import com.example.android.trackr.ui.profile.ProfileDialogFragmentArgs
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import org.threeten.bp.Clock
@@ -138,6 +134,13 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
 
     override fun onTaskDragged(fromPosition: Int, toPosition: Int) {
         tasksAdapter.changeTaskPosition(fromPosition, toPosition)
+    }
+
+    override fun onAvatarClicked(taskListItem: TaskListItem) {
+        findNavController().navigate(
+            R.id.nav_profile,
+            ProfileDialogFragmentArgs(taskListItem.owner.id).toBundle()
+        )
     }
 }
 

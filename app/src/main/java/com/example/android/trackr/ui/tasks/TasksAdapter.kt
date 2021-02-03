@@ -53,6 +53,7 @@ class TasksAdapter(
         fun onTaskClicked(taskListItem: TaskListItem)
         fun onTaskArchived(taskListItem: TaskListItem)
         fun onTaskDragged(fromPosition: Int, toPosition: Int)
+        fun onAvatarClicked(taskListItem: TaskListItem)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -156,6 +157,12 @@ class TasksAdapter(
                     if (taskListItem.starUsers.isEmpty()) R.string.unstarred else R.string.starred
                 )
             )
+            binding.ownerAvatar.setOnClickListener {
+                binding.listener?.let {
+                    it.onAvatarClicked(taskListItem)
+                }
+            }
+
             // TODO(b/176934848): include chip/tag information in contentDescription of each task in list.
             binding.chipGroup.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
 

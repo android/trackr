@@ -113,6 +113,14 @@ class TaskDaoTest {
     }
 
     @Test
+    fun getUserById() = runBlocking {
+        taskDao.insertUsers(SeedData.Users)
+        taskDao.getUserById(1L).valueBlocking!!.let { user ->
+            assertThat(user.id).isEqualTo(1L)
+        }
+    }
+
+    @Test
     fun getTaskListItem() {
         val users = listOf(user1)
         val tasks = listOf(task1)
