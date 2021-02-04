@@ -16,6 +16,7 @@
 
 package com.example.android.trackr.ui.settings
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -33,7 +34,16 @@ class SettingsFragment : PreferenceFragmentCompat() {
         savedInstanceState: Bundle?
     ): View? {
         return super.onCreateView(inflater, container, savedInstanceState)?.apply {
-            setBackgroundColor(resources.getColor(R.color.trackr_white_50, context.theme))
+            val currentNightMode =
+                resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+            when (currentNightMode) {
+                Configuration.UI_MODE_NIGHT_NO -> {
+                    setBackgroundColor(resources.getColor(R.color.trackr_white_50, context.theme))
+                }
+                Configuration.UI_MODE_NIGHT_YES -> {
+                    setBackgroundColor(resources.getColor(R.color.trackr_blue_700, context.theme))
+                }
+            }
         }
     }
 
