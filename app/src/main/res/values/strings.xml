@@ -83,6 +83,18 @@
     <string name="discard">Discard</string>
     <string name="keep_editing">Keep editing</string>
 
+
     <!-- Profile strings -->
     <string name="avatar_of">Avatar of %s</string>
+
+    <!-- Settings -->
+    <string name="dark_mode_title">Dark Mode</string>
+    <string name="enabled">Enabled</string>
+    <string name="disabled">Disabled</string>
+    <string name="system_default">System Default</string>
+
+    <string name="dark_mode_key" translatable="false">darkMode</string>
+    <string name="enabled_value" translatable="false">enabled</string>
+    <string name="disabled_value" translatable="false">disabled</string>
+    <string name="system_default_value" translatable="false">default</string>
 </resources>
