@@ -18,6 +18,12 @@ package com.example.android.trackr.ui.tasks
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.doOnLayout
+import androidx.core.view.doOnNextLayout
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -29,6 +35,7 @@ import com.example.android.trackr.data.TaskListItem
 import com.example.android.trackr.data.User
 import com.example.android.trackr.databinding.FragmentTasksBinding
 import com.example.android.trackr.ui.detail.TaskDetailFragmentArgs
+import com.example.android.trackr.ui.utils.configureEdgeToEdge
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import org.threeten.bp.Clock
@@ -54,6 +61,13 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
 
         binding = FragmentTasksBinding.bind(view)
         binding.listener = this
+        configureEdgeToEdge(
+            root = view,
+            scrollingContent = binding.tasksList,
+            topBar = binding.stickyHeader.headerContent,
+            bottomBar = binding.bottomAppBar
+        )
+
         binding.tasksList.apply {
             val itemTouchHelper = ItemTouchHelper(SwipeAndDragCallback())
             itemTouchHelper.attachToRecyclerView(this)

@@ -33,6 +33,7 @@ import com.example.android.trackr.R
 import com.example.android.trackr.data.TaskState
 import com.example.android.trackr.databinding.FragmentTaskEditBinding
 import com.example.android.trackr.ui.utils.DateTimeUtils
+import com.example.android.trackr.ui.utils.configureEdgeToEdge
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import org.threeten.bp.Clock
@@ -66,6 +67,12 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
         binding.clock = clock
+
+        configureEdgeToEdge(
+            root = view,
+            scrollingContent = binding.scrollingContent,
+            topBar = binding.toolbar
+        )
 
         binding.toolbar.setNavigationOnClickListener {
             close()

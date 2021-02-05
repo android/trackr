@@ -36,6 +36,7 @@
             android:id="@+id/tasks_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:clipToPadding="false"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <include
@@ -52,19 +53,15 @@
             android:layout_gravity="bottom"
             app:backgroundTint="?android:attr/windowBackground"
             app:fabAlignmentMode="end"
-            app:hideOnScroll="true"
             app:menu="@menu/bottom_app_bar_menu" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/spacing_medium"
             android:contentDescription="@string/add_task"
-            app:backgroundTint="@color/trackr_pink_400"
             app:layout_anchor="@id/bottomAppBar"
-            app:srcCompat="@drawable/ic_add"
-            app:useCompatPadding="true" />
+            app:srcCompat="@drawable/ic_add" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

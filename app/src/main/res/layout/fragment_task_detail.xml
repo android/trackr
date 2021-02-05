@@ -58,6 +58,7 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <ScrollView
+                android:id="@+id/scrolling_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -97,8 +98,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_large"
-                        android:text="@string/owner"
                         android:importantForAccessibility="no"
+                        android:text="@string/owner"
                         app:drawableStartCompat="@drawable/ic_user" />
 
                     <TextView
@@ -117,8 +118,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_large"
-                        android:text="@string/creator"
                         android:importantForAccessibility="no"
+                        android:text="@string/creator"
                         app:drawableStartCompat="@drawable/ic_user" />
 
                     <TextView
@@ -137,8 +138,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_large"
-                        android:text="@string/due_at"
                         android:importantForAccessibility="no"
+                        android:text="@string/due_at"
                         app:drawableStartCompat="@drawable/ic_due_at" />
 
                     <TextView
@@ -167,8 +168,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_large"
-                        android:text="@string/created_at"
                         android:importantForAccessibility="no"
+                        android:text="@string/created_at"
                         app:drawableStartCompat="@drawable/ic_created_at" />
 
                     <TextView
@@ -210,11 +211,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
-            android:layout_margin="@dimen/spacing_medium"
+            android:layout_margin="@dimen/spacing_large"
             android:contentDescription="@string/edit_task"
-            app:backgroundTint="@color/trackr_pink_400"
-            app:srcCompat="@drawable/ic_edit"
-            app:useCompatPadding="true" />
+            app:srcCompat="@drawable/ic_edit" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

@@ -18,6 +18,7 @@ package com.example.android.trackr
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
 import com.jakewharton.threetenabp.AndroidThreeTen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         // TODO(b/163065333): move to application.
         AndroidThreeTen.init(this)
     }
