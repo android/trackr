@@ -150,7 +150,7 @@ class TasksAdapterTest {
         holder.bind(inProgressTaskListItem)
 
         assertThat(holder.binding.listener).isEqualTo(testItemListener)
-        assertThat(holder.accessibilityActionIds.size).isEqualTo(2)
+        assertThat(holder.accessibilityActionIds.size).isEqualTo(3)
         assertThat(holder.binding.taskListItem).isEqualTo(inProgressTaskListItem)
         assertThat(ViewCompat.getStateDescription(holder.binding.root)).isEqualTo(
             context.getString(
@@ -248,16 +248,26 @@ class TasksAdapterTest {
     }
 
     @Test
+    fun accessibilityAction_seeProfile() {
+        val mockListener = Mockito.mock(TasksAdapter.ItemListener::class.java)
+        val holder = setUpAndBindTaskViewHolder(mockListener)
+
+        holder.binding.root.performAccessibilityAction(holder.accessibilityActionIds[2], null)
+
+        Mockito.verify(mockListener).onAvatarClicked(inProgressTaskListItem)
+    }
+
+    @Test
     fun bindTaskViewHolder_addingAccessibilityAction_isIdempotent() {
         val holder =
             TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, user, fakeClock)
         holder.bind(inProgressTaskListItem)
-        assertThat(holder.accessibilityActionIds.size).isEqualTo(2)
+        assertThat(holder.accessibilityActionIds.size).isEqualTo(3)
 
         holder.bind(inProgressTaskListItem)
         // If previously added accessibility actions are not cleared, when the holder is rebound,
         // the actions will get added again. This check guards against that.
-        assertThat(holder.accessibilityActionIds.size).isEqualTo(2)
+        assertThat(holder.accessibilityActionIds.size).isEqualTo(3)
     }
 
     @Test

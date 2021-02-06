@@ -174,6 +174,7 @@ class TasksAdapter(
 
             addArchiveAccessibilityAction(taskListItem)
             addStarAccessibilityAction(taskListItem)
+            addSeeProfileDialogAccessibilityAction(taskListItem)
 
             binding.executePendingBindings()
         }
@@ -228,6 +229,21 @@ class TasksAdapter(
                 ) { _, _ ->
                     // The functionality associated with the label.
                     binding.listener?.onStarClicked(taskListItem)
+                    true
+                })
+        }
+
+        /**
+         * Creates a custom accessibility action for showing the user profile dialog.
+         */
+        private fun addSeeProfileDialogAccessibilityAction(taskListItem: TaskListItem) {
+            accessibilityActionIds.add(
+                ViewCompat.addAccessibilityAction(
+                    binding.root,
+                    binding.root.context.getString(R.string.see_profile)
+                ) { _, _ ->
+                    // The functionality associated with the label.
+                    binding.listener?.onAvatarClicked(taskListItem)
                     true
                 })
         }
