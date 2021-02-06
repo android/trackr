@@ -156,6 +156,7 @@
                         android:text="@{viewModel.owner.username}"
                         android:textAppearance="?textAppearanceBody1"
                         app:chipIcon="@drawable/ic_user"
+                        app:clickActionLabel="@{@string/change}"
                         tools:text="Daring Dove" />
 
                     <!-- Creator is not editable, so it is not displayed on this screen -->
@@ -182,6 +183,7 @@
                         android:textAppearance="?textAppearanceBody1"
                         app:clock="@{clock}"
                         app:formattedDate="@{viewModel.dueAt}"
+                        app:clickActionLabel="@{@string/change}"
                         tools:text="Sept 2, 2020 (Wed)" />
 
                     <!-- Creation date isn't editable, so it is not displayed on this screen -->

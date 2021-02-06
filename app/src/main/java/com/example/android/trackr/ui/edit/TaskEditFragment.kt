@@ -116,13 +116,6 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
             findNavController().navigate(R.id.nav_user_selection)
         }
 
-        ViewCompat.replaceAccessibilityAction(
-            binding.owner,
-            AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_CLICK,
-            resources.getString(R.string.change),
-            null
-        )
-
         viewModel.dueAt.observe(viewLifecycleOwner) {
             // Combine the label ("Due date") with the date value. This consolidates the announced text
             // for screenreader users.
@@ -131,13 +124,6 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
                     R.string.due_date_with_value, DateTimeUtils.formattedDate(resources, it, clock)
                 )
 
-            // Customize the action label.
-            ViewCompat.replaceAccessibilityAction(
-                binding.dueAt,
-                AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_CLICK,
-                resources.getString(R.string.change),
-                null
-            )
             binding.dueAt.setOnClickListener {
                 MaterialDatePicker.Builder.datePicker().build().apply {
                     addOnPositiveButtonClickListener { time ->

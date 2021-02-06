@@ -21,6 +21,9 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.core.view.ViewCompat
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.databinding.BindingAdapter
 import com.example.android.trackr.R
 import com.example.android.trackr.data.Tag
@@ -124,4 +127,23 @@ fun formattedGenericDate(view: TextView, instant: Instant?, clock: Clock) {
     instant?.let {
         view.text = DateTimeUtils.formattedDate(view.resources, it, clock)
     }
+}
+
+/**
+ * Replaces the label for the click action associated with [view]. The custom
+ * label is then passed on to the user of an accessibility service, which can use [label].
+ * For example, this replaces Talkback's generic "double tap to activate" announcement with the more
+ * descriptive "double tap to <label>" action label.
+ */
+@BindingAdapter("clickActionLabel")
+fun addClickActionLabel(
+    view: View,
+   label: String
+) {
+    ViewCompat.replaceAccessibilityAction(
+        view,
+        AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_CLICK,
+        label,
+        null
+    )
 }
