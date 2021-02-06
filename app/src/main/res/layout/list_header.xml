@@ -14,7 +14,8 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -39,8 +40,17 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:background="?android:attr/windowBackground"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/expand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAccessibility="no"
+                android:paddingStart="@dimen/drawable_padding"
+                android:paddingEnd="@dimen/drawable_padding"
+                android:src="@{headerData.expanded ? @drawable/ic_expand_more : @drawable/ic_expand_less}" />
 
             <TextView
                 style="@style/HomeSectionHeaderText"
