@@ -71,6 +71,10 @@ interface TaskDao {
     @Query("SELECT * FROM TaskListItem WHERE state != $ARCHIVED_KEY")
     fun getOngoingTaskListItems(): LiveData<List<TaskListItem>>
 
+    @Transaction
+    @Query("SELECT * FROM TaskListItem WHERE state = $ARCHIVED_KEY")
+    fun getArchivedTaskListItems(): LiveData<List<TaskListItem>>
+
     @Query("UPDATE tasks SET state = :state WHERE id = :id")
     suspend fun updateTaskState(id: Long, state: TaskState)
 

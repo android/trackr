@@ -81,6 +81,10 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
         }
         binding.bottomAppBar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
+                R.id.archive -> {
+                    findNavController().navigate(R.id.nav_archives)
+                    true
+                }
                 R.id.settings -> {
                     findNavController().navigate(R.id.nav_settings)
                     true

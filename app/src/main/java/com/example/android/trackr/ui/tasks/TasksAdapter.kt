@@ -23,7 +23,6 @@ import android.view.View
 import android.view.View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -146,7 +145,8 @@ class TasksAdapter(
         fun bind(taskListItem: TaskListItem) {
             val resources = binding.root.resources
             binding.taskListItem = taskListItem
-            binding.listener = itemListener
+            binding.card.setOnClickListener { itemListener.onTaskClicked(taskListItem) }
+            binding.star.setOnClickListener { itemListener.onStarClicked(taskListItem) }
             binding.clock = clock
             binding.currentUser = currentUser
             binding.root.contentDescription =
@@ -157,11 +157,7 @@ class TasksAdapter(
                     if (taskListItem.starUsers.isEmpty()) R.string.unstarred else R.string.starred
                 )
             )
-            binding.ownerAvatar.setOnClickListener {
-                binding.listener?.let {
-                    it.onAvatarClicked(taskListItem)
-                }
-            }
+            binding.ownerAvatar.setOnClickListener { itemListener.onAvatarClicked(taskListItem) }
 
             // TODO(b/176934848): include chip/tag information in contentDescription of each task in list.
             binding.chipGroup.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
@@ -181,12 +177,12 @@ class TasksAdapter(
 
         override fun onItemSwiped() {
             binding.taskListItem?.let {
-                binding.listener?.onTaskArchived(it)
+                itemListener.onTaskArchived(it)
             }
         }
 
         override fun onItemMoved(fromPosition: Int, toPosition: Int) {
-            binding.listener?.onTaskDragged(fromPosition, toPosition)
+            itemListener.onTaskDragged(fromPosition, toPosition)
         }
 
         /**
@@ -203,7 +199,7 @@ class TasksAdapter(
                     binding.root.context.getString(R.string.archive)
                 ) { _, _ ->
                     // The functionality associated with the label.
-                    binding.listener?.onTaskArchived(taskListItem)
+                    itemListener.onTaskArchived(taskListItem)
                     true
                 })
         }
@@ -228,7 +224,7 @@ class TasksAdapter(
                     }
                 ) { _, _ ->
                     // The functionality associated with the label.
-                    binding.listener?.onStarClicked(taskListItem)
+                    itemListener.onStarClicked(taskListItem)
                     true
                 })
         }
@@ -243,7 +239,7 @@ class TasksAdapter(
                     binding.root.context.getString(R.string.see_profile)
                 ) { _, _ ->
                     // The functionality associated with the label.
-                    binding.listener?.onAvatarClicked(taskListItem)
+                    itemListener.onAvatarClicked(taskListItem)
                     true
                 })
         }

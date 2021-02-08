@@ -98,8 +98,8 @@ private fun Chip.bind(tag: Tag) {
 }
 
 @BindingAdapter("dueMessageOrDueDate", "clock")
-fun showFormattedDueMessageOrDueDate(view: TextView, instant: Instant?, clock: Clock) {
-    view.text = if (instant == null) {
+fun showFormattedDueMessageOrDueDate(view: TextView, instant: Instant?, clock: Clock?) {
+    view.text = if (instant == null || clock == null) {
         ""
     } else {
         DateTimeUtils.durationMessageOrDueDate(view.resources, instant, clock)

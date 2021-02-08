@@ -141,7 +141,6 @@ class TasksAdapterTest {
             TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, user, fakeClock)
 
         assertThat(holder.binding.taskListItem).isNull()
-        assertThat(holder.binding.listener).isNull()
         assertThat(holder.accessibilityActionIds).isEmpty()
         assertThat(ViewCompat.getStateDescription(holder.binding.root)).isNull()
         assertThat(holder.binding.chipGroup.isImportantForAccessibility).isTrue()
@@ -149,7 +148,6 @@ class TasksAdapterTest {
 
         holder.bind(inProgressTaskListItem)
 
-        assertThat(holder.binding.listener).isEqualTo(testItemListener)
         assertThat(holder.accessibilityActionIds.size).isEqualTo(3)
         assertThat(holder.binding.taskListItem).isEqualTo(inProgressTaskListItem)
         assertThat(ViewCompat.getStateDescription(holder.binding.root)).isEqualTo(

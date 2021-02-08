@@ -149,7 +149,24 @@ class TaskDaoTest {
 
         insertData(taskDao, users, tasks, tags, taskTags, userTasks)
         assertThat(taskDao.getTasks().valueBlocking).hasSize(2)
-        assertThat(taskDao.getOngoingTaskListItems().valueBlocking).hasSize(1)
+        val ongoingTasks = taskDao.getOngoingTaskListItems().valueBlocking
+        assertThat(ongoingTasks).hasSize(1)
+        assertThat(ongoingTasks[0].id).isEqualTo(task1.id)
+    }
+
+    @Test
+    fun getArchivedTaskListItems() {
+        val users = listOf(user1)
+        val tasks = listOf(task1, task2)
+        val tags = listOf(tag1, tag2)
+        val taskTags = listOf(taskTag1, taskTag2)
+        val userTasks = listOf(userTask1)
+
+        insertData(taskDao, users, tasks, tags, taskTags, userTasks)
+        assertThat(taskDao.getTasks().valueBlocking).hasSize(2)
+        val archivedTasks = taskDao.getArchivedTaskListItems().valueBlocking
+        assertThat(archivedTasks).hasSize(1)
+        assertThat(archivedTasks[0].id).isEqualTo(task2.id)
     }
 
     @Test
