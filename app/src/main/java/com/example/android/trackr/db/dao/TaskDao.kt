@@ -99,7 +99,7 @@ interface TaskDao {
             title = detail.title,
             description = detail.description,
             state = detail.state,
-            reporterId = detail.reporter.id,
+            creatorId = detail.creator.id,
             ownerId = detail.owner.id,
             createdAt = detail.createdAt,
             dueAt = detail.dueAt

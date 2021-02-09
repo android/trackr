@@ -20,7 +20,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.android.trackr.R
 import com.example.android.trackr.data.Avatar
 import com.example.android.trackr.data.SeedData
 import com.example.android.trackr.data.Tag
@@ -41,8 +40,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.threeten.bp.Instant
 import java.util.concurrent.Executors
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 @RunWith(AndroidJUnit4::class)
 class TaskDaoTest {
@@ -103,7 +100,7 @@ class TaskDaoTest {
             assertThat(detail.id).isEqualTo(1L)
             assertThat(detail.title).isEqualTo("Task 1")
             assertThat(detail.owner.username).isEqualTo("You")
-            assertThat(detail.reporter.username).isEqualTo("John")
+            assertThat(detail.creator.username).isEqualTo("John")
             assertThat(detail.tags).hasSize(2)
             assertThat(detail.tags[0].label).isEqualTo("Home")
             assertThat(detail.tags[1].label).isEqualTo("Hobby")
@@ -202,7 +199,7 @@ class TaskDaoTest {
             createdAt = Instant.now(),
             dueAt = dueAt2,
             owner = user2,
-            reporter = user1,
+            creator = user1,
             tags = listOf(tag1, tag3),
             starUsers = emptyList()
         )
@@ -214,7 +211,7 @@ class TaskDaoTest {
         assertThat(updatedDetail.state).isEqualTo(TaskState.IN_PROGRESS)
         assertThat(updatedDetail.dueAt).isEqualTo(dueAt2)
         assertThat(updatedDetail.tags).containsExactly(tag1, tag3)
-        assertThat(updatedDetail.reporter).isEqualTo(user1)
+        assertThat(updatedDetail.creator).isEqualTo(user1)
         assertThat(updatedDetail.owner).isEqualTo(user2)
     }
 
@@ -244,7 +241,7 @@ class TaskDaoTest {
             createdAt = initialDetail.createdAt, // The UI doesn't allow editing this.
             dueAt = dueAt2,
             owner = user2,
-            reporter = initialDetail.reporter, // The UI doesn't allow editing this.
+            creator = initialDetail.creator, // The UI doesn't allow editing this.
             tags = listOf(tag1, tag3),
             starUsers = emptyList()
         )
@@ -281,9 +278,9 @@ class TaskDaoTest {
         val user1 = User(id = 1L, username = "user1", Avatar.DEFAULT_USER)
         val user2 = User(id = 2L, username = "user2", Avatar.DEFAULT_USER)
 
-        val task1 = Task(id = 1L, title = "Task 1", ownerId = 1L, reporterId = 1L, dueAt = dueAt1)
+        val task1 = Task(id = 1L, title = "Task 1", ownerId = 1L, creatorId = 1L, dueAt = dueAt1)
         val task2 = Task(
-            id = 2L, title = "Task 2", state = TaskState.ARCHIVED, ownerId = 1L, reporterId = 1L
+            id = 2L, title = "Task 2", state = TaskState.ARCHIVED, ownerId = 1L, creatorId = 1L
         )
 
         val tag1 = Tag(id = 1L, label = "tag1", color = TagColor.RED)

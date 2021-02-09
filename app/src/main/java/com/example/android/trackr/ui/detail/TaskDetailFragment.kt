@@ -80,7 +80,7 @@ class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
                 binding.owner.contentDescription =
                     resources.getString(R.string.owner_with_value, value.owner.username)
                 binding.creator.contentDescription =
-                    resources.getString(R.string.creator_with_value, value.reporter.username)
+                    resources.getString(R.string.creator_with_value, value.creator.username)
             }
         }
 

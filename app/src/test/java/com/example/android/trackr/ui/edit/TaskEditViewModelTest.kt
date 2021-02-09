@@ -19,7 +19,6 @@ package com.example.android.trackr.ui.edit
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import com.example.android.trackr.R
 import com.example.android.trackr.TestApplication
 import com.example.android.trackr.data.Avatar
 import com.example.android.trackr.data.Tag
@@ -227,7 +226,7 @@ class TaskEditViewModelTest {
                             title = "title",
                             description = "description",
                             state = TaskState.IN_PROGRESS,
-                            reporterId = 2L,
+                            creatorId = 2L,
                             ownerId = 1L,
                             createdAt = Instant.parse("2020-09-01T00:00:00.00Z"),
                             dueAt = Instant.parse("2020-11-01T00:00:00.00Z")

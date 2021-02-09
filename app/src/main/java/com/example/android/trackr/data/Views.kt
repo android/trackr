@@ -71,10 +71,10 @@ data class TaskListItem(
         SELECT
             t.id, t.title, t.description, t.state, t.createdAt, t.dueAt,
             o.id AS owner_id, o.username AS owner_username, o.avatar AS owner_avatar,
-            r.id AS reporter_id, r.username AS reporter_username, r.avatar as reporter_avatar
+            c.id AS creator_id, c.username AS creator_username, c.avatar as creator_avatar
         FROM tasks AS t
         INNER JOIN users AS o ON o.id = t.ownerId
-        INNER JOIN users AS r ON r.id = t.reporterId
+        INNER JOIN users AS c ON c.id = t.creatorId
     """
 )
 data class TaskDetail(
@@ -94,8 +94,8 @@ data class TaskDetail(
     @Embedded(prefix = "owner_")
     val owner: User,
 
-    @Embedded(prefix = "reporter_")
-    val reporter: User,
+    @Embedded(prefix = "creator_")
+    val creator: User,
 
     @Relation(
         parentColumn = "id",

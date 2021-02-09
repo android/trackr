@@ -29,7 +29,7 @@ import org.threeten.bp.Instant
     tableName = "tasks",
     foreignKeys = [
         ForeignKey(
-            childColumns = ["reporterId"],
+            childColumns = ["creatorId"],
             entity = User::class,
             parentColumns = ["id"]
         ),
@@ -62,7 +62,7 @@ data class Task(
     /**
      * The team member who created the task (this defaults to the current user).
      */
-    val reporterId: Long,
+    val creatorId: Long,
 
     /**
      * The team member who the task has been assigned to.

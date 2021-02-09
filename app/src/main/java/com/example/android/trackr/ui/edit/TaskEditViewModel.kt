@@ -107,7 +107,7 @@ class TaskEditViewModel @ViewModelInject constructor(
                     description.value = detail.description
                     _status.value = detail.state
                     _owner.value = detail.owner
-                    _creator.value = detail.reporter
+                    _creator.value = detail.creator
                     _dueAt.value = detail.dueAt
                     _createdAt.value = detail.createdAt
                     _tags.value = detail.tags
@@ -168,7 +168,7 @@ class TaskEditViewModel @ViewModelInject constructor(
                         createdAt = _createdAt.value ?: Instant.now(),
                         dueAt = _dueAt.value ?: Instant.now() + Duration.ofDays(7),
                         owner = _owner.value ?: users[0],
-                        reporter = _creator.value ?: users[0],
+                        creator = _creator.value ?: users[0],
                         tags = _tags.value ?: emptyList(),
                         starUsers = starUsers
                     )
