@@ -17,6 +17,7 @@
 package com.example.android.trackr.ui.archives
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -28,25 +29,40 @@ import org.threeten.bp.Clock
 
 internal class ArchiveAdapter(
     private val currentUser: User,
-    private val clock: Clock
-) : ListAdapter<TaskListItem, ArchiveHolder>(DiffCallback) {
+    private val clock: Clock,
+    private val onItemSelected: (task: TaskListItem) -> Unit,
+    private val onItemStarClicked: (task: TaskListItem) -> Unit
+) : ListAdapter<ArchivedTask, ArchiveHolder>(DiffCallback) {
+
+    init {
+        setHasStableIds(true)
+    }
+
+    override fun getItemId(position: Int): Long {
+        return getItem(position).taskListItem.id
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArchiveHolder {
         return ArchiveHolder.from(parent, currentUser, clock)
     }
 
     override fun onBindViewHolder(holder: ArchiveHolder, position: Int) {
-        holder.bind(getItem(position))
+        val task = getItem(position)
+        holder.bind(
+            task = task,
+            cardOnClickListener = { onItemSelected(task.taskListItem) },
+            starOnClickListener = { onItemStarClicked(task.taskListItem) },
+        )
     }
 }
 
-private val DiffCallback = object : DiffUtil.ItemCallback<TaskListItem>() {
+private val DiffCallback = object : DiffUtil.ItemCallback<ArchivedTask>() {
 
-    override fun areItemsTheSame(oldItem: TaskListItem, newItem: TaskListItem): Boolean {
-        return oldItem.id == newItem.id
+    override fun areItemsTheSame(oldItem: ArchivedTask, newItem: ArchivedTask): Boolean {
+        return oldItem.taskListItem.id == newItem.taskListItem.id
     }
 
-    override fun areContentsTheSame(oldItem: TaskListItem, newItem: TaskListItem): Boolean {
+    override fun areContentsTheSame(oldItem: ArchivedTask, newItem: ArchivedTask): Boolean {
         return oldItem == newItem
     }
 }
@@ -55,10 +71,15 @@ internal class ArchiveHolder private constructor(
     private val binding: ListTaskBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(task: TaskListItem) {
-        binding.taskListItem = task
-        binding.card.setOnClickListener { /* TODO */ }
-        binding.star.setOnClickListener { /* TODO */ }
+    fun bind(
+        task: ArchivedTask,
+        cardOnClickListener: View.OnClickListener,
+        starOnClickListener: View.OnClickListener
+    ) {
+        binding.taskListItem = task.taskListItem
+        binding.card.isSelected = task.selected
+        binding.card.setOnClickListener(cardOnClickListener)
+        binding.star.setOnClickListener(starOnClickListener)
     }
 
     companion object {

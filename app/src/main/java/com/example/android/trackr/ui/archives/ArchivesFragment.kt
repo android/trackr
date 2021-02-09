@@ -48,9 +48,14 @@ class ArchivesFragment : Fragment(R.layout.fragment_archive) {
             topBar = binding.toolbar
         )
 
-        val adapter = ArchiveAdapter(currentUser, clock)
+        val adapter = ArchiveAdapter(
+            currentUser = currentUser,
+            clock = clock,
+            onItemSelected = { task -> viewModel.toggleTaskSelection(task.id) },
+            onItemStarClicked = { /* TODO */ }
+        )
         binding.archivedTasks.adapter = adapter
-        viewModel.archivedTaskListItems.observe(viewLifecycleOwner) { tasks ->
+        viewModel.archivedTasks.observe(viewLifecycleOwner) { tasks ->
             adapter.submitList(tasks)
         }
     }

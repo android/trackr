@@ -17,8 +17,6 @@
 package com.example.android.trackr.ui.edit
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.room.Room
-import androidx.test.core.app.ApplicationProvider
 import com.example.android.trackr.TestApplication
 import com.example.android.trackr.data.Avatar
 import com.example.android.trackr.data.Tag
@@ -30,6 +28,7 @@ import com.example.android.trackr.data.User
 import com.example.android.trackr.data.UserTask
 import com.example.android.trackr.db.AppDatabase
 import com.example.android.trackr.db.dao.valueBlocking
+import com.example.android.trackr.ui.createDatabase
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
@@ -191,16 +190,6 @@ class TaskEditViewModelTest {
         assertThat(viewModel.discarded.valueBlocking).isFalse()
         viewModel.discardChanges()
         assertThat(viewModel.discarded.valueBlocking).isTrue()
-    }
-
-    private fun createDatabase(): AppDatabase {
-        return Room
-            .inMemoryDatabaseBuilder(
-                ApplicationProvider.getApplicationContext(),
-                AppDatabase::class.java
-            )
-            .allowMainThreadQueries()
-            .build()
     }
 
     private fun populate(db: AppDatabase) {
