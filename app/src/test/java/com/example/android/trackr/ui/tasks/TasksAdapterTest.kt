@@ -41,6 +41,7 @@ import org.threeten.bp.Clock
 import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
 
+
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestApplication::class)
 class TasksAdapterTest {
@@ -288,6 +289,34 @@ class TasksAdapterTest {
         Mockito.verify(mockListener).onTaskArchived(inProgressTaskListItem)
     }
 
+    @Test
+    fun changePosition_whenStateIsDifferent_doesNothing() {
+
+        val item1 = DataItem.TaskItem(inProgressTaskListItem)
+        val item2 = DataItem.TaskItem(notStartedTaskListItem)
+
+        tasksAdapter.submitList(listOf(item1, item2))
+        tasksAdapter.changeTaskPosition(0, 1)
+
+        assertThat(tasksAdapter.currentList[0]).isEqualTo(item1)
+        assertThat(tasksAdapter.currentList[1]).isEqualTo(item2)
+    }
+
+    @Test
+    fun changePosition_whenHeader_doesNothing() {
+
+        val item1 = DataItem.TaskItem(inProgressTaskListItem)
+        val item2 = inProgressHeader
+
+        tasksAdapter.submitList(listOf(item1, item2))
+        tasksAdapter.changeTaskPosition(0, 1)
+
+        assertThat(tasksAdapter.currentList[0]).isEqualTo(item1)
+        assertThat(tasksAdapter.currentList[1]).isEqualTo(item2)
+    }
+
+    // TODO: test for reordered list using drag/drop. See b/180352173
+
     private fun setUpAndBindTaskViewHolder(
         listener: TasksAdapter.ItemListener
     ): TasksAdapter.TaskViewHolder {
@@ -318,6 +347,24 @@ class TasksAdapterTest {
             state = TaskState.IN_PROGRESS,
             starUsers = listOf(user2),
             tags = emptyList()
+        )
+
+        val notStartedTaskListItem = TaskListItem(
+            id = 3,
+            title = "task list item 3",
+            dueAt = Instant.now(),
+            owner = user,
+            state = TaskState.NOT_STARTED,
+            starUsers = emptyList(),
+            tags = emptyList()
+        )
+        
+        val inProgressHeader = DataItem.HeaderItem(
+            HeaderData(
+                count = 3,
+                taskState = TaskState.IN_PROGRESS,
+                expanded = true
+            )
         )
     }
 }

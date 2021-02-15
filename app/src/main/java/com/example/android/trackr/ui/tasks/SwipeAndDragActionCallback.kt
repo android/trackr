@@ -29,6 +29,7 @@ class SwipeAndDragCallback :
         NO_DRAG,
         ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
     ) {
+
     // TODO (b/165431117): consider replacing with lambda that can be passed to a constructor.
     interface ItemTouchListener {
         fun onItemSwiped()
