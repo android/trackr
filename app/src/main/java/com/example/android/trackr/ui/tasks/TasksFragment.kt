@@ -140,6 +140,22 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
         tasksAdapter.changeTaskPosition(fromPosition, toPosition)
     }
 
+    override fun onDragStarted() {
+        tasksAdapter.startDrag()
+    }
+
+    override fun onDragCompleted() {
+        Snackbar.make(
+            binding.root,
+            R.string.task_position_changed,
+            Snackbar.LENGTH_LONG
+        )
+            .setAction(getString(R.string.undo)) {
+                tasksAdapter.undoDrag()
+            }
+            .show()
+    }
+
     override fun onAvatarClicked(taskListItem: TaskListItem) {
         findNavController().navigate(
             R.id.nav_profile,

@@ -30,10 +30,14 @@ class SwipeAndDragCallback :
         ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
     ) {
 
+    private var initialPosition = NO_POSITION
+
     // TODO (b/165431117): consider replacing with lambda that can be passed to a constructor.
     interface ItemTouchListener {
         fun onItemSwiped()
         fun onItemMoved(fromPosition: Int, toPosition: Int)
+        fun onDragStarted()
+        fun onDragCompleted()
     }
 
     override fun getMovementFlags(
@@ -86,9 +90,37 @@ class SwipeAndDragCallback :
         x: Int,
         y: Int
     ) {
+        // Store the initial position. This helps check if the item was actually dragged to a new
+        // position.
+        if (initialPosition == NO_POSITION) {
+            initialPosition = viewHolder.adapterPosition
+        }
+
         if (viewHolder is ItemTouchListener) {
             (viewHolder as ItemTouchListener).onItemMoved(fromPos, toPos)
         }
+    }
+
+    override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
+        super.onSelectedChanged(viewHolder, actionState)
+        when (actionState) {
+            ItemTouchHelper.ACTION_STATE_DRAG -> {
+                if (viewHolder is TasksAdapter.TaskViewHolder) {
+                    viewHolder.onDragStarted()
+                }
+            }
+        }
+    }
+
+    override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+        super.clearView(recyclerView, viewHolder)
+        if (viewHolder is TasksAdapter.TaskViewHolder) {
+            if (initialPosition != NO_POSITION /* drag was initiated but abandoned */ &&
+                viewHolder.adapterPosition != initialPosition /* item was dragged back to the */) {
+                viewHolder.onDragCompleted()
+            }
+        }
+        initialPosition = NO_POSITION
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -100,5 +132,6 @@ class SwipeAndDragCallback :
     companion object {
         const val NO_DRAG = 0
         const val NO_SWIPE = 0
+        const val NO_POSITION = -1
     }
 }

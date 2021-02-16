@@ -63,6 +63,7 @@
 
     <!-- Snackbar strings -->
     <string name="task_archived">Task archived</string>
+    <string name="task_position_changed">Task position changed</string>
     <string name="undo">Undo</string>
 
     <string name="title">Title</string>
