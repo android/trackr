@@ -13,13 +13,16 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
-    <ListPreference
-        app:defaultValue="@string/system_default_value"
-        app:entries="@array/darkmode_preference_entries"
-        app:entryValues="@array/darkmode_preference_entry_values"
-        app:key="darkMode"
-        app:title="@string/dark_mode_title"
-        app:useSimpleSummaryProvider="true" />
+<resources>
+    <string-array name="darkmode_preference_entries">
+        <item>@string/enabled</item>
+        <item>@string/disabled</item>
+        <item>@string/system_default</item>
+    </string-array>
 
-</PreferenceScreen>
+    <string-array name="darkmode_preference_entry_values">
+        <item>@string/enabled_value</item>
+        <item>@string/disabled_value</item>
+        <item>@string/system_default_value</item>
+    </string-array>
+</resources>
