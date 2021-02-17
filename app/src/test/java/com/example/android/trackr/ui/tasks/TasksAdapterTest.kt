@@ -51,6 +51,8 @@ class TasksAdapterTest {
         override fun onTaskClicked(taskListItem: TaskListItem) {}
         override fun onTaskArchived(taskListItem: TaskListItem) {}
         override fun onTaskDragged(fromPosition: Int, toPosition: Int) {}
+        override fun onDragStarted() {}
+        override fun onDragCompleted() {}
         override fun onAvatarClicked(taskListItem: TaskListItem) {}
     }
 
@@ -315,7 +317,19 @@ class TasksAdapterTest {
         assertThat(tasksAdapter.currentList[1]).isEqualTo(item2)
     }
 
-    // TODO: test for reordered list using drag/drop. See b/180352173
+    // TODO: test for reordered list using drag/drop and undo actions See b/180352173
+
+    @Test
+    fun dragStarted_dragCompleted() {
+        val mockListener = Mockito.mock(TasksAdapter.ItemListener::class.java)
+        val holder = setUpAndBindTaskViewHolder(mockListener)
+
+        holder.onDragStarted()
+        Mockito.verify(mockListener).onDragStarted()
+
+        holder.onDragCompleted()
+        Mockito.verify(mockListener).onDragCompleted()
+    }
 
     private fun setUpAndBindTaskViewHolder(
         listener: TasksAdapter.ItemListener

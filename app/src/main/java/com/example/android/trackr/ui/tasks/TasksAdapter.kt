@@ -46,12 +46,18 @@ class TasksAdapter(
         DataItemDiffCallback()
     ) {
 
+    // We cache the current list associated with this adapter. If the user requests to undo a
+    // drag and drop operation, this list can be submitted to the adapter.
+    private var cachedList: List<DataItem>? = null
+
     interface ItemListener {
         fun onHeaderClicked(headerData: HeaderData)
         fun onStarClicked(taskListItem: TaskListItem)
         fun onTaskClicked(taskListItem: TaskListItem)
         fun onTaskArchived(taskListItem: TaskListItem)
         fun onTaskDragged(fromPosition: Int, toPosition: Int)
+        fun onDragStarted()
+        fun onDragCompleted()
         fun onAvatarClicked(taskListItem: TaskListItem)
     }
 
@@ -107,6 +113,14 @@ class TasksAdapter(
             Collections.swap(newList, fromPosition, toPosition)
             submitList(newList)
         }
+    }
+
+    fun startDrag() {
+        cachedList = currentList.toMutableList()
+    }
+
+    fun undoDrag() {
+        submitList(cachedList)
     }
 
     class HeaderViewHolder private constructor(
@@ -190,6 +204,14 @@ class TasksAdapter(
 
         override fun onItemMoved(fromPosition: Int, toPosition: Int) {
             itemListener.onTaskDragged(fromPosition, toPosition)
+        }
+
+        override fun onDragStarted() {
+            itemListener.onDragStarted()
+        }
+
+        override fun onDragCompleted() {
+            itemListener.onDragCompleted()
         }
 
         /**
