@@ -97,9 +97,16 @@ class TasksAdapter(
 
     fun changeTaskPosition(fromPosition: Int, toPosition: Int) {
         // TODO: persist new order in the db instead of calling submitList()
-        val newList = currentList.toMutableList()
-        Collections.swap(newList, fromPosition, toPosition)
-        submitList(newList)
+        if (currentList[fromPosition] is DataItem.TaskItem && currentList[toPosition] is DataItem.TaskItem) {
+            val fromItem = (currentList[fromPosition] as DataItem.TaskItem).taskListItem
+            val toItem = (currentList[toPosition] as DataItem.TaskItem).taskListItem
+            if (fromItem.state != toItem.state) {
+                return
+            }
+            val newList = currentList.toMutableList()
+            Collections.swap(newList, fromPosition, toPosition)
+            submitList(newList)
+        }
     }
 
     class HeaderViewHolder private constructor(
