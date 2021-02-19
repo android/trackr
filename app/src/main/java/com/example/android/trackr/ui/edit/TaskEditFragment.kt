@@ -78,9 +78,13 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.action_save -> {
-                    viewModel.save { success ->
-                        if (success) {
-                            findNavController().popBackStack()
+                    if (binding.title.text.toString().isEmpty()) {
+                        binding.title.error = resources.getString(R.string.missing_title_error)
+                    } else {
+                        viewModel.save { success ->
+                            if (success) {
+                                findNavController().popBackStack()
+                            }
                         }
                     }
                     true

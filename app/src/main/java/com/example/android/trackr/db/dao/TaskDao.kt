@@ -101,6 +101,9 @@ interface TaskDao {
 
     @Transaction
     suspend fun saveTaskDetail(detail: TaskDetail) {
+        if (detail.title.isEmpty()) {
+            throw IllegalArgumentException("Task must include non-empty title.")
+        }
         val task = Task(
             id = detail.id,
             title = detail.title,

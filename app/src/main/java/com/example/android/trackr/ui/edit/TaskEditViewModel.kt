@@ -175,6 +175,7 @@ class TaskEditViewModel @ViewModelInject constructor(
                 )
                 onSaveFinished(true)
             } catch (e: RuntimeException) {
+                e.printStackTrace()
                 onSaveFinished(false)
             }
         }
