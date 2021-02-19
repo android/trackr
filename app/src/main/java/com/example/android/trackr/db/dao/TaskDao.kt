@@ -28,7 +28,7 @@ import com.example.android.trackr.data.Tag
 import com.example.android.trackr.data.Task
 import com.example.android.trackr.data.TaskDetail
 import com.example.android.trackr.data.TaskListItem
-import com.example.android.trackr.data.TaskState
+import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.data.TaskTag
 import com.example.android.trackr.data.User
 import com.example.android.trackr.data.UserTask
@@ -68,15 +68,15 @@ interface TaskDao {
     suspend fun loadTaskDetailById(id: Long): TaskDetail?
 
     @Transaction
-    @Query("SELECT * FROM TaskListItem WHERE state != $ARCHIVED_KEY")
+    @Query("SELECT * FROM TaskListItem WHERE status != $ARCHIVED_KEY")
     fun getOngoingTaskListItems(): LiveData<List<TaskListItem>>
 
     @Transaction
-    @Query("SELECT * FROM TaskListItem WHERE state = $ARCHIVED_KEY")
+    @Query("SELECT * FROM TaskListItem WHERE status = $ARCHIVED_KEY")
     fun getArchivedTaskListItems(): LiveData<List<TaskListItem>>
 
-    @Query("UPDATE tasks SET state = :state WHERE id = :id")
-    suspend fun updateTaskState(id: Long, state: TaskState)
+    @Query("UPDATE tasks SET status = :status WHERE id = :id")
+    suspend fun updateTaskStatus(id: Long, status: TaskStatus)
 
     @Query("SELECT * FROM user_tasks WHERE taskId = :taskId AND userId = :userId")
     suspend fun getUserTask(taskId: Long, userId: Long): UserTask?
@@ -102,7 +102,7 @@ interface TaskDao {
             id = detail.id,
             title = detail.title,
             description = detail.description,
-            state = detail.state,
+            status = detail.status,
             creatorId = detail.creator.id,
             ownerId = detail.owner.id,
             createdAt = detail.createdAt,

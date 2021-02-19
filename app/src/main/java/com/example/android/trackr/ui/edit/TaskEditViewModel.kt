@@ -25,7 +25,7 @@ import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.viewModelScope
 import com.example.android.trackr.data.Tag
 import com.example.android.trackr.data.TaskDetail
-import com.example.android.trackr.data.TaskState
+import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.data.User
 import com.example.android.trackr.db.dao.TaskDao
 import kotlinx.coroutines.launch
@@ -46,8 +46,8 @@ class TaskEditViewModel @ViewModelInject constructor(
 
     val description = MutableLiveData("")
 
-    private val _status = MutableLiveData(TaskState.NOT_STARTED)
-    val status: LiveData<TaskState> = _status
+    private val _status = MutableLiveData(TaskStatus.NOT_STARTED)
+    val status: LiveData<TaskStatus> = _status
 
     private val _owner = MutableLiveData<User>()
     val owner: LiveData<User> = _owner
@@ -105,7 +105,7 @@ class TaskEditViewModel @ViewModelInject constructor(
                 if (detail != null) {
                     title.value = detail.title
                     description.value = detail.description
-                    _status.value = detail.state
+                    _status.value = detail.status
                     _owner.value = detail.owner
                     _creator.value = detail.creator
                     _dueAt.value = detail.dueAt
@@ -119,9 +119,9 @@ class TaskEditViewModel @ViewModelInject constructor(
         }
     }
 
-    fun updateState(state: TaskState) {
-        if (_status.value != state) {
-            _status.value = state
+    fun updateState(status: TaskStatus) {
+        if (_status.value != status) {
+            _status.value = status
             _modified.value = true
         }
     }
@@ -164,7 +164,7 @@ class TaskEditViewModel @ViewModelInject constructor(
                         id = taskId,
                         title = title.value ?: "",
                         description = description.value ?: "",
-                        state = _status.value ?: TaskState.NOT_STARTED,
+                        status = _status.value ?: TaskStatus.NOT_STARTED,
                         createdAt = _createdAt.value ?: Instant.now(),
                         dueAt = _dueAt.value ?: Instant.now() + Duration.ofDays(7),
                         owner = _owner.value ?: users[0],

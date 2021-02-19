@@ -19,7 +19,7 @@ package com.example.android.trackr.db
 import androidx.room.TypeConverter
 import com.example.android.trackr.data.Avatar
 import com.example.android.trackr.data.TagColor
-import com.example.android.trackr.data.TaskState
+import com.example.android.trackr.data.TaskStatus
 import org.threeten.bp.Instant
 
 /**
@@ -38,13 +38,13 @@ class AppDatabaseTypeConverters {
     }
 
     @TypeConverter
-    fun taskStateToInt(taskState: TaskState?): Int? {
-        return taskState?.key
+    fun taskStatusToInt(taskStatus: TaskStatus?): Int? {
+        return taskStatus?.key
     }
 
     @TypeConverter
-    fun intToTaskState(int: Int): TaskState? {
-        return TaskState.fromKey(int)
+    fun intToTaskStatus(int: Int): TaskStatus? {
+        return TaskStatus.fromKey(int)
     }
 
     @TypeConverter

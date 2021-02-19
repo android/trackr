@@ -26,7 +26,7 @@ import com.example.android.trackr.data.Tag
 import com.example.android.trackr.data.TagColor
 import com.example.android.trackr.data.Task
 import com.example.android.trackr.data.TaskDetail
-import com.example.android.trackr.data.TaskState
+import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.data.TaskTag
 import com.example.android.trackr.data.User
 import com.example.android.trackr.data.UserTask
@@ -133,7 +133,7 @@ class TaskDaoTest {
             assertThat(item.title).isEqualTo(tasks[0].title)
             assertThat(item.owner).isEqualTo(users[0])
             assertThat(item.dueAt).isEqualTo(tasks[0].dueAt)
-            assertThat(item.state).isEqualTo(tasks[0].state)
+            assertThat(item.status).isEqualTo(tasks[0].status)
             assertThat(item.tags).hasSize(tags.size)
             assertThat(item.starUsers).hasSize(userTasks.size)
         }
@@ -174,13 +174,13 @@ class TaskDaoTest {
         insertData(taskDao, listOf(user1), listOf(task1))
 
         taskDao.getTasks().valueBlocking.let { tasks ->
-            assertThat(tasks[0].state).isEqualTo(TaskState.NOT_STARTED)
+            assertThat(tasks[0].status).isEqualTo(TaskStatus.NOT_STARTED)
         }
 
-        taskDao.updateTaskState(task1.id, TaskState.ARCHIVED)
+        taskDao.updateTaskStatus(task1.id, TaskStatus.ARCHIVED)
 
         taskDao.getTasks().valueBlocking.let { tasks ->
-            assertThat(tasks[0].state).isEqualTo(TaskState.ARCHIVED)
+            assertThat(tasks[0].status).isEqualTo(TaskStatus.ARCHIVED)
         }
     }
 
@@ -212,7 +212,7 @@ class TaskDaoTest {
             id = 1L,
             title = "title",
             description = "description",
-            state = TaskState.IN_PROGRESS,
+            status = TaskStatus.IN_PROGRESS,
             createdAt = Instant.now(),
             dueAt = dueAt2,
             owner = user2,
@@ -225,7 +225,7 @@ class TaskDaoTest {
         val updatedDetail = taskDao.loadTaskDetailById(1L)!!
         assertThat(updatedDetail.title).isEqualTo("title")
         assertThat(updatedDetail.description).isEqualTo("description")
-        assertThat(updatedDetail.state).isEqualTo(TaskState.IN_PROGRESS)
+        assertThat(updatedDetail.status).isEqualTo(TaskStatus.IN_PROGRESS)
         assertThat(updatedDetail.dueAt).isEqualTo(dueAt2)
         assertThat(updatedDetail.tags).containsExactly(tag1, tag3)
         assertThat(updatedDetail.creator).isEqualTo(user1)
@@ -245,7 +245,7 @@ class TaskDaoTest {
         val initialDetail = taskDao.loadTaskDetailById(1L)!!
         assertThat(initialDetail.title).isEqualTo("Task 1")
         assertThat(initialDetail.description).isEmpty()
-        assertThat(initialDetail.state).isEqualTo(TaskState.NOT_STARTED)
+        assertThat(initialDetail.status).isEqualTo(TaskStatus.NOT_STARTED)
         assertThat(initialDetail.dueAt).isEqualTo(dueAt1)
         assertThat(initialDetail.tags).containsExactly(tag1, tag2)
         assertThat(initialDetail.owner).isEqualTo(user1)
@@ -254,7 +254,7 @@ class TaskDaoTest {
             id = 1L,
             title = "new title",
             description = "new description",
-            state = TaskState.IN_PROGRESS,
+            status = TaskStatus.IN_PROGRESS,
             createdAt = initialDetail.createdAt, // The UI doesn't allow editing this.
             dueAt = dueAt2,
             owner = user2,
@@ -267,7 +267,7 @@ class TaskDaoTest {
         val updatedDetail = taskDao.loadTaskDetailById(1L)!!
         assertThat(updatedDetail.title).isEqualTo("new title")
         assertThat(updatedDetail.description).isEqualTo("new description")
-        assertThat(updatedDetail.state).isEqualTo(TaskState.IN_PROGRESS)
+        assertThat(updatedDetail.status).isEqualTo(TaskStatus.IN_PROGRESS)
         assertThat(updatedDetail.dueAt).isEqualTo(dueAt2)
         assertThat(updatedDetail.tags).containsExactly(tag1, tag3)
         assertThat(updatedDetail.owner).isEqualTo(user2)
@@ -297,7 +297,7 @@ class TaskDaoTest {
 
         val task1 = Task(id = 1L, title = "Task 1", ownerId = 1L, creatorId = 1L, dueAt = dueAt1)
         val task2 = Task(
-            id = 2L, title = "Task 2", state = TaskState.ARCHIVED, ownerId = 1L, creatorId = 1L
+            id = 2L, title = "Task 2", status = TaskStatus.ARCHIVED, ownerId = 1L, creatorId = 1L
         )
 
         val tag1 = Tag(id = 1L, label = "tag1", color = TagColor.RED)

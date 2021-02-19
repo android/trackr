@@ -22,7 +22,7 @@ import com.example.android.trackr.data.Avatar
 import com.example.android.trackr.data.Tag
 import com.example.android.trackr.data.TagColor
 import com.example.android.trackr.data.Task
-import com.example.android.trackr.data.TaskState
+import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.data.TaskTag
 import com.example.android.trackr.data.User
 import com.example.android.trackr.data.UserTask
@@ -118,12 +118,12 @@ class TaskEditViewModelTest {
         val viewModel = TaskEditViewModel(db.taskDao())
         viewModel.taskId = 1L
 
-        assertThat(viewModel.status.valueBlocking).isEqualTo(TaskState.IN_PROGRESS)
+        assertThat(viewModel.status.valueBlocking).isEqualTo(TaskStatus.IN_PROGRESS)
         assertThat(viewModel.modified.valueBlocking).isFalse()
 
-        viewModel.updateState(TaskState.COMPLETED)
+        viewModel.updateState(TaskStatus.COMPLETED)
 
-        assertThat(viewModel.status.valueBlocking).isEqualTo(TaskState.COMPLETED)
+        assertThat(viewModel.status.valueBlocking).isEqualTo(TaskStatus.COMPLETED)
         assertThat(viewModel.modified.valueBlocking).isTrue()
     }
 
@@ -214,7 +214,7 @@ class TaskEditViewModelTest {
                             id = 1L,
                             title = "title",
                             description = "description",
-                            state = TaskState.IN_PROGRESS,
+                            status = TaskStatus.IN_PROGRESS,
                             creatorId = 2L,
                             ownerId = 1L,
                             createdAt = Instant.parse("2020-09-01T00:00:00.00Z"),

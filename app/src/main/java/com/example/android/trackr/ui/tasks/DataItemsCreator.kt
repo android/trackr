@@ -17,34 +17,34 @@
 package com.example.android.trackr.ui.tasks
 
 import com.example.android.trackr.data.TaskListItem
-import com.example.android.trackr.data.TaskState
+import com.example.android.trackr.data.TaskStatus
 
 
 /**
  * Combines the results of [expandedStatesMap] and [taskListItems] and returns a list of
  * [DataItem]s.
  * @param taskListItems List of TaskListItems, which could be null
- * @param  expandedStatesMap A [TaskState] to [Boolean] map, which determines the
+ * @param  expandedStatesMap A [TaskStatus] to [Boolean] map, which determines the
  * collapsed/expanded state of a category of [TaskListItem]s
  * TODO: refactor into a UseCase.
  */
 class DataItemsCreator(
     private val taskListItems: List<TaskListItem>?,
-    private val expandedStatesMap: MutableMap<TaskState, Boolean>?
+    private val expandedStatesMap: MutableMap<TaskStatus, Boolean>?
 ) {
     fun execute(): List<DataItem>? {
         taskListItems?.let { items ->
             expandedStatesMap?.let { statesMap ->
                 val itemsToSubmit = mutableListOf<DataItem>()
-                val stateToItemsMap: Map<TaskState, List<TaskListItem>>? =
-                    items.groupBy { it.state }
+                val statusToItemsMap: Map<TaskStatus, List<TaskListItem>>? =
+                    items.groupBy { it.status }
                 for (entry in statesMap) {
-                    val sublist: List<TaskListItem>? = stateToItemsMap?.get(entry.key)
+                    val sublist: List<TaskListItem>? = statusToItemsMap?.get(entry.key)
                     itemsToSubmit.add(
                         DataItem.HeaderItem(
                             HeaderData(
                                 count = sublist?.size ?: 0,
-                                taskState = entry.key,
+                                taskStatus = entry.key,
                                 expanded = entry.value
                             ),
                         )

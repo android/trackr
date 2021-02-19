@@ -20,12 +20,11 @@ import android.app.Application
 import android.content.res.Resources
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.android.trackr.R
 import com.example.android.trackr.data.Avatar
 import com.example.android.trackr.data.Tag
 import com.example.android.trackr.data.TagColor
 import com.example.android.trackr.data.TaskListItem
-import com.example.android.trackr.data.TaskState
+import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.data.User
 import io.mockk.every
 import io.mockk.mockkObject
@@ -95,7 +94,7 @@ class AccessibilityUtilsTest {
             title = "task 1",
             dueAt = Instant.now(),
             owner = user1,
-            state = TaskState.IN_PROGRESS,
+            status = TaskStatus.IN_PROGRESS,
             starUsers = emptyList(),
             tags = emptyList()
         )
@@ -105,7 +104,7 @@ class AccessibilityUtilsTest {
             title = "task 2",
             dueAt = Instant.now(),
             owner = user1,
-            state = TaskState.IN_PROGRESS,
+            status = TaskStatus.IN_PROGRESS,
             starUsers = emptyList(),
             tags = listOf(tag1, tag2)
         )

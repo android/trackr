@@ -17,13 +17,12 @@
 package com.example.android.trackr.data
 
 import androidx.room.*
-import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 
 @DatabaseView(
     """
         SELECT
-            t.id, t.title, t.state, t.dueAt,
+            t.id, t.title, t.status, t.dueAt,
             o.id AS owner_id, o.username AS owner_username, o.avatar AS owner_avatar
         FROM tasks AS t
         INNER JOIN users AS o ON o.id = t.ownerId
@@ -34,7 +33,7 @@ data class TaskListItem(
 
     val title: String,
 
-    val state: TaskState,
+    val status: TaskStatus,
 
     val dueAt: Instant,
 
@@ -69,7 +68,7 @@ data class TaskListItem(
 @DatabaseView(
     """
         SELECT
-            t.id, t.title, t.description, t.state, t.createdAt, t.dueAt,
+            t.id, t.title, t.description, t.status, t.createdAt, t.dueAt,
             o.id AS owner_id, o.username AS owner_username, o.avatar AS owner_avatar,
             c.id AS creator_id, c.username AS creator_username, c.avatar as creator_avatar
         FROM tasks AS t
@@ -85,7 +84,7 @@ data class TaskDetail(
 
     val description: String,
 
-    val state: TaskState,
+    val status: TaskStatus,
 
     val createdAt: Instant,
 

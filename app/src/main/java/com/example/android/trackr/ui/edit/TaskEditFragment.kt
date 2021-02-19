@@ -22,15 +22,13 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.activity.addCallback
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.example.android.trackr.NavTaskEditGraphArgs
 import com.example.android.trackr.R
-import com.example.android.trackr.data.TaskState
+import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.databinding.FragmentTaskEditBinding
 import com.example.android.trackr.ui.utils.DateTimeUtils
 import com.example.android.trackr.ui.utils.configureEdgeToEdge
@@ -98,10 +96,10 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
             requireContext(),
             R.layout.item_status_spinner,
             R.id.status_text,
-            TaskState.values().map { getString(it.stringResId) }
+            TaskStatus.values().map { getString(it.stringResId) }
         )
         binding.status.doOnItemSelected { position ->
-            viewModel.updateState(TaskState.values()[position])
+            viewModel.updateState(TaskStatus.values()[position])
         }
         viewModel.status.observe(viewLifecycleOwner) { status ->
             binding.status.setSelection(status.ordinal)

@@ -16,11 +16,10 @@
 
 package com.example.android.trackr.ui.tasks
 
-import com.example.android.trackr.R
 import com.example.android.trackr.TestApplication
 import com.example.android.trackr.data.Avatar
 import com.example.android.trackr.data.TaskListItem
-import com.example.android.trackr.data.TaskState
+import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.data.User
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -47,26 +46,26 @@ class DataItemCreatorTest {
 
     @Test
     fun execute_withNullTaskListItems() {
-        val subject = DataItemsCreator(null, mutableMapOf(TaskState.IN_PROGRESS to true))
+        val subject = DataItemsCreator(null, mutableMapOf(TaskStatus.IN_PROGRESS to true))
         assertThat(subject.execute()).isNull()
     }
 
     @Test
     fun execute_whenNoTaskListItems() {
-        val subject = DataItemsCreator(emptyList(), mutableMapOf(TaskState.IN_PROGRESS to true))
+        val subject = DataItemsCreator(emptyList(), mutableMapOf(TaskStatus.IN_PROGRESS to true))
         val dataItems = subject.execute()
         assertThat(dataItems!!.size).isEqualTo(1)
         assertThat(dataItems[0]).isInstanceOf(DataItem.HeaderItem::class.java)
         val header = (dataItems[0] as DataItem.HeaderItem)
         assertThat(header.headerData.count).isEqualTo(0)
-        assertThat(header.headerData.taskState).isEqualTo(TaskState.IN_PROGRESS)
+        assertThat(header.headerData.taskStatus).isEqualTo(TaskStatus.IN_PROGRESS)
     }
 
     @Test
     fun execute_whenExpandedState_returnsHeaderAndTaskListItem() {
         val subject = DataItemsCreator(
             listOf(inProgressTaskListItem),
-            mutableMapOf(TaskState.IN_PROGRESS to true)
+            mutableMapOf(TaskStatus.IN_PROGRESS to true)
         )
         val dataItems = subject.execute()
         assertThat(dataItems!!.size).isEqualTo(2)
@@ -78,7 +77,7 @@ class DataItemCreatorTest {
     fun execute_whenCollapsedState_savesCountInHeader() {
         val subject = DataItemsCreator(
             listOf(inProgressTaskListItem),
-            mutableMapOf(TaskState.IN_PROGRESS to false)
+            mutableMapOf(TaskStatus.IN_PROGRESS to false)
         )
         val dataItems = subject.execute()
         val header = (dataItems!![0] as DataItem.HeaderItem)
@@ -92,7 +91,7 @@ class DataItemCreatorTest {
             title = "task list item 1",
             dueAt = Instant.now(),
             owner = user,
-            state = TaskState.IN_PROGRESS,
+            status = TaskStatus.IN_PROGRESS,
             starUsers = emptyList(),
             tags = emptyList()
         )

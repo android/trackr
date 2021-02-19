@@ -57,7 +57,7 @@ data class Task(
     /**
      * The state of the task.
      */
-    val state: TaskState = TaskState.NOT_STARTED,
+    val status: TaskStatus = TaskStatus.NOT_STARTED,
 
     /**
      * The team member who created the task (this defaults to the current user).
@@ -82,7 +82,7 @@ data class Task(
 
 const val ARCHIVED_KEY = 4 // This is referenced in a query.
 
-enum class TaskState(val key: Int, val stringResId: Int) {
+enum class TaskStatus(val key: Int, val stringResId: Int) {
     NOT_STARTED(1, R.string.not_started),
     IN_PROGRESS(2, R.string.in_progress),
     COMPLETED(3, R.string.completed),
@@ -90,7 +90,7 @@ enum class TaskState(val key: Int, val stringResId: Int) {
 
     companion object {
         // TODO (b/163065333): find more efficient solution, since map may be high memory.
-        private val map = values().associateBy(TaskState::key)
+        private val map = values().associateBy(TaskStatus::key)
         fun fromKey(key: Int) = map[key]
     }
 }

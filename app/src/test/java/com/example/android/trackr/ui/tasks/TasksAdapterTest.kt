@@ -26,7 +26,7 @@ import com.example.android.trackr.R
 import com.example.android.trackr.TestApplication
 import com.example.android.trackr.data.Avatar
 import com.example.android.trackr.data.TaskListItem
-import com.example.android.trackr.data.TaskState
+import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.data.User
 import com.google.common.truth.Truth.assertThat
 import org.junit.Assert.assertFalse
@@ -98,7 +98,7 @@ class TasksAdapterTest {
     @Test
     fun bindHeaderViewHolder_initialState() {
         val holder = TasksAdapter.HeaderViewHolder.from(frameLayout, testItemListener)
-        val headerData = HeaderData(1, taskState = TaskState.NOT_STARTED, expanded = true)
+        val headerData = HeaderData(1, taskStatus = TaskStatus.NOT_STARTED, expanded = true)
 
         assertThat(holder.binding.headerData).isNull()
         assertThat(ViewCompat.isAccessibilityHeading(holder.binding.root)).isFalse()
@@ -113,7 +113,7 @@ class TasksAdapterTest {
     @Test
     fun headerState_Expanded() {
         val holder = TasksAdapter.HeaderViewHolder.from(frameLayout, testItemListener)
-        val headerData = HeaderData(1, taskState = TaskState.NOT_STARTED, expanded = true)
+        val headerData = HeaderData(1, taskStatus = TaskStatus.NOT_STARTED, expanded = true)
 
         holder.bind(headerData)
 
@@ -127,7 +127,7 @@ class TasksAdapterTest {
     @Test
     fun headerState_Collapsed() {
         val holder = TasksAdapter.HeaderViewHolder.from(frameLayout, testItemListener)
-        val headerData = HeaderData(1, taskState = TaskState.NOT_STARTED, expanded = false)
+        val headerData = HeaderData(1, taskStatus = TaskStatus.NOT_STARTED, expanded = false)
 
         holder.bind(headerData)
 
@@ -348,7 +348,7 @@ class TasksAdapterTest {
             title = "task list item 1",
             dueAt = Instant.now(),
             owner = user,
-            state = TaskState.IN_PROGRESS,
+            status = TaskStatus.IN_PROGRESS,
             starUsers = emptyList(),
             tags = emptyList()
         )
@@ -358,7 +358,7 @@ class TasksAdapterTest {
             title = "task list item 2",
             dueAt = Instant.now(),
             owner = user2,
-            state = TaskState.IN_PROGRESS,
+            status = TaskStatus.IN_PROGRESS,
             starUsers = listOf(user2),
             tags = emptyList()
         )
@@ -368,7 +368,7 @@ class TasksAdapterTest {
             title = "task list item 3",
             dueAt = Instant.now(),
             owner = user,
-            state = TaskState.NOT_STARTED,
+            status = TaskStatus.NOT_STARTED,
             starUsers = emptyList(),
             tags = emptyList()
         )
@@ -376,7 +376,7 @@ class TasksAdapterTest {
         val inProgressHeader = DataItem.HeaderItem(
             HeaderData(
                 count = 3,
-                taskState = TaskState.IN_PROGRESS,
+                taskStatus = TaskStatus.IN_PROGRESS,
                 expanded = true
             )
         )

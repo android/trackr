@@ -25,7 +25,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 
 import com.example.android.trackr.data.TaskListItem
-import com.example.android.trackr.data.TaskState
+import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.data.User
 import com.example.android.trackr.data.UserTask
 import com.example.android.trackr.db.dao.TaskDao
@@ -44,16 +44,16 @@ class TasksViewModel @ViewModelInject constructor(
     private val taskListItems: LiveData<List<TaskListItem>>
         get() = taskDao.getOngoingTaskListItems()
 
-    // TODO: don't hardcode TaskState values; instead, read from the db
-    private val _expandedStatesMap: MutableLiveData<MutableMap<TaskState, Boolean>> =
+    // TODO: don't hardcode TaskStatus values; instead, read from the db
+    private val _expandedStatesMap: MutableLiveData<MutableMap<TaskStatus, Boolean>> =
         MutableLiveData(
             mutableMapOf(
-                TaskState.IN_PROGRESS to true,
-                TaskState.NOT_STARTED to true,
-                TaskState.COMPLETED to true
+                TaskStatus.IN_PROGRESS to true,
+                TaskStatus.NOT_STARTED to true,
+                TaskStatus.COMPLETED to true
             )
         )
-    private val expandedStatesMap: LiveData<MutableMap<TaskState, Boolean>> = _expandedStatesMap
+    private val expandedStatesMap: LiveData<MutableMap<TaskStatus, Boolean>> = _expandedStatesMap
 
     var dataItems: LiveData<List<DataItem>> = MediatorLiveData<List<DataItem>>().apply {
         var cachedTaskListItems: List<TaskListItem>? = null
@@ -76,7 +76,7 @@ class TasksViewModel @ViewModelInject constructor(
 
     fun toggleExpandedState(headerData: HeaderData) {
         _expandedStatesMap.value = _expandedStatesMap.value?.also { it ->
-            it[headerData.taskState] = !it[headerData.taskState]!!
+            it[headerData.taskStatus] = !it[headerData.taskStatus]!!
         }
     }
 
@@ -99,17 +99,17 @@ class TasksViewModel @ViewModelInject constructor(
     }
 
     fun archiveTask(taskListItem: TaskListItem) {
-        _archivedItem.value = ArchivedItem(taskListItem.id, taskListItem.state)
+        _archivedItem.value = ArchivedItem(taskListItem.id, taskListItem.status)
 
         viewModelScope.launch {
-            taskDao.updateTaskState(taskListItem.id, TaskState.ARCHIVED)
+            taskDao.updateTaskStatus(taskListItem.id, TaskStatus.ARCHIVED)
         }
     }
 
     fun unarchiveTask() {
         archivedItem.value?.let {
             viewModelScope.launch {
-                taskDao.updateTaskState(it.taskId, it.previousState)
+                taskDao.updateTaskStatus(it.taskId, it.previousStatus)
             }
             _archivedItem.value = null
         }
@@ -126,5 +126,5 @@ class TasksViewModel @ViewModelInject constructor(
  */
 data class ArchivedItem(
     val taskId: Long,
-    val previousState: TaskState
+    val previousStatus: TaskStatus
 )

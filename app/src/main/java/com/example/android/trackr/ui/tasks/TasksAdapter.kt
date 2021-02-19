@@ -28,7 +28,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.trackr.R
 import com.example.android.trackr.data.TaskListItem
-import com.example.android.trackr.data.TaskState
+import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.data.User
 import com.example.android.trackr.databinding.ListHeaderBinding
 import com.example.android.trackr.databinding.ListTaskBinding
@@ -106,7 +106,7 @@ class TasksAdapter(
         if (currentList[fromPosition] is DataItem.TaskItem && currentList[toPosition] is DataItem.TaskItem) {
             val fromItem = (currentList[fromPosition] as DataItem.TaskItem).taskListItem
             val toItem = (currentList[toPosition] as DataItem.TaskItem).taskListItem
-            if (fromItem.state != toItem.state) {
+            if (fromItem.status != toItem.status) {
                 return
             }
             val newList = currentList.toMutableList()
@@ -324,7 +324,7 @@ sealed class DataItem {
 
 data class HeaderData(
     val count: Int,
-    val taskState: TaskState,
+    val taskStatus: TaskStatus,
     var expanded: Boolean
 ) {
     fun stateDescription(context: Context): String {
@@ -334,7 +334,7 @@ data class HeaderData(
     fun label(context: Context): String {
         return context.getString(
             R.string.header_label_with_count,
-            context.getString(taskState.stringResId),
+            context.getString(taskStatus.stringResId),
             count
         )
     }

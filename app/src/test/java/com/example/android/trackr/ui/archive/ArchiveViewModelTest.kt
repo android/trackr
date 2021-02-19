@@ -20,7 +20,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.android.trackr.TestApplication
 import com.example.android.trackr.data.Avatar
 import com.example.android.trackr.data.Task
-import com.example.android.trackr.data.TaskState
+import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.data.User
 import com.example.android.trackr.db.AppDatabase
 import com.example.android.trackr.db.dao.valueBlocking
@@ -82,7 +82,7 @@ class ArchiveViewModelTest {
                             id = 1L,
                             title = "title",
                             description = "description",
-                            state = TaskState.ARCHIVED,
+                            status = TaskStatus.ARCHIVED,
                             creatorId = 2L,
                             ownerId = 1L,
                             createdAt = Instant.parse("2020-09-01T00:00:00.00Z"),
@@ -92,7 +92,7 @@ class ArchiveViewModelTest {
                             id = 2L,
                             title = "title",
                             description = "description",
-                            state = TaskState.ARCHIVED,
+                            status = TaskStatus.ARCHIVED,
                             creatorId = 2L,
                             ownerId = 1L,
                             createdAt = Instant.parse("2020-09-01T00:00:00.00Z"),
