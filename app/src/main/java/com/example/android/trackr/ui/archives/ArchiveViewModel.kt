@@ -17,17 +17,21 @@
 package com.example.android.trackr.ui.archives
 
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import com.example.android.trackr.data.TaskListItem
-import com.example.android.trackr.db.dao.TaskDao
+import com.example.android.trackr.repository.TrackrRepository
+import kotlinx.coroutines.launch
 
 class ArchiveViewModel @ViewModelInject constructor(
-    taskDao: TaskDao
+    private val repository: TrackrRepository
 ) : ViewModel() {
 
-    private val archivedTaskListItems = taskDao.getArchivedTaskListItems()
+    private val archivedTaskListItems = repository.getArchivedTaskListItems()
     private val selectedTaskIds = MutableLiveData(emptySet<Long>())
 
     val archivedTasks = MediatorLiveData<List<ArchivedTask>>().apply {
@@ -42,12 +46,32 @@ class ArchiveViewModel @ViewModelInject constructor(
         addSource(selectedTaskIds) { update() }
     }
 
+    val selectedCount = selectedTaskIds.map { it.size }
+
     fun toggleTaskSelection(taskId: Long) {
         val selected = selectedTaskIds.value ?: emptySet()
         if (taskId in selected) {
             selectedTaskIds.value = selected - taskId
         } else {
             selectedTaskIds.value = selected + taskId
+        }
+    }
+
+    fun toggleTaskStarState(taskId: Long) {
+        viewModelScope.launch {
+            repository.toggleTaskStarState(taskId)
+        }
+    }
+
+    fun clearSelection() {
+        selectedTaskIds.value = emptySet()
+    }
+
+    fun unarchiveSelectedTasks() {
+        val ids = selectedTaskIds.value ?: return
+        viewModelScope.launch {
+            repository.unarchive(ids.toList())
+            selectedTaskIds.value = emptySet()
         }
     }
 }

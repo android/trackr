@@ -78,6 +78,9 @@ interface TaskDao {
     @Query("UPDATE tasks SET status = :status WHERE id = :id")
     suspend fun updateTaskStatus(id: Long, status: TaskStatus)
 
+    @Query("UPDATE tasks SET status = :status WHERE id IN (:ids)")
+    suspend fun updateTaskStatus(ids: List<Long>, status: TaskStatus)
+
     @Query("UPDATE tasks SET orderInCategory = :orderInCategory WHERE id = :id")
     suspend fun updateOrderInCategory(id: Long,  orderInCategory: Int)
 

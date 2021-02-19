@@ -84,6 +84,9 @@
     <string name="discard">Discard</string>
     <string name="keep_editing">Keep editing</string>
 
+    <!-- Archive strings -->
+    <string name="unarchive">Unarchive</string>
+    <string name="close">Close</string>
 
     <!-- Profile strings -->
     <string name="avatar_of">Avatar of %s</string>

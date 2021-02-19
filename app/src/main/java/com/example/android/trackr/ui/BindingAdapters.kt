@@ -21,7 +21,6 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.databinding.BindingAdapter
@@ -32,6 +31,16 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import org.threeten.bp.Clock
 import org.threeten.bp.Instant
+
+/**
+ * Sets the visibility of this view to either [View.GONE] or [View.VISIBLE].
+ */
+@BindingAdapter("isGone")
+fun View.setIsGone(
+    isGone: Boolean
+) {
+    visibility = if (isGone) View.GONE else View.VISIBLE
+}
 
 /**
  * Sets tags to be shown in this [ChipGroup].
@@ -138,7 +147,7 @@ fun formattedGenericDate(view: TextView, instant: Instant?, clock: Clock) {
 @BindingAdapter("clickActionLabel")
 fun addClickActionLabel(
     view: View,
-   label: String
+    label: String
 ) {
     ViewCompat.replaceAccessibilityAction(
         view,

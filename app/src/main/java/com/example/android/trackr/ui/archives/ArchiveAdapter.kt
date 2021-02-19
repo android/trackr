@@ -30,7 +30,8 @@ import org.threeten.bp.Clock
 internal class ArchiveAdapter(
     private val currentUser: User,
     private val clock: Clock,
-    private val onItemSelected: (task: TaskListItem) -> Unit,
+    private val onItemClick: (task: TaskListItem) -> Unit,
+    private val onItemLongClick: (task: TaskListItem) -> Unit,
     private val onItemStarClicked: (task: TaskListItem) -> Unit
 ) : ListAdapter<ArchivedTask, ArchiveHolder>(DiffCallback) {
 
@@ -50,8 +51,9 @@ internal class ArchiveAdapter(
         val task = getItem(position)
         holder.bind(
             task = task,
-            cardOnClickListener = { onItemSelected(task.taskListItem) },
-            starOnClickListener = { onItemStarClicked(task.taskListItem) },
+            cardOnClickListener = { onItemClick(task.taskListItem) },
+            cardOnLongClickListener = { onItemLongClick(task.taskListItem); true },
+            starOnClickListener = { onItemStarClicked(task.taskListItem) }
         )
     }
 }
@@ -74,11 +76,13 @@ internal class ArchiveHolder private constructor(
     fun bind(
         task: ArchivedTask,
         cardOnClickListener: View.OnClickListener,
+        cardOnLongClickListener: View.OnLongClickListener,
         starOnClickListener: View.OnClickListener
     ) {
         binding.taskListItem = task.taskListItem
         binding.card.isSelected = task.selected
         binding.card.setOnClickListener(cardOnClickListener)
+        binding.card.setOnLongClickListener(cardOnLongClickListener)
         binding.star.setOnClickListener(starOnClickListener)
     }
 

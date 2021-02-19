@@ -25,7 +25,7 @@ import com.example.android.trackr.data.User
 import com.example.android.trackr.db.AppDatabase
 import com.example.android.trackr.db.dao.valueBlocking
 import com.example.android.trackr.ui.archives.ArchiveViewModel
-import com.example.android.trackr.ui.createDatabase
+import com.example.android.trackr.ui.createTrackrRepository
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
@@ -42,27 +42,44 @@ class ArchiveViewModelTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    private fun createViewModel(): ArchiveViewModel {
+        return ArchiveViewModel(createTrackrRepository(doOnDatabase = { db -> populate(db) }))
+    }
+
     @Test
     fun select() {
-        val db = createDatabase()
-        populate(db)
-        val viewModel = ArchiveViewModel(db.taskDao())
+        val viewModel = createViewModel()
         viewModel.archivedTasks.valueBlocking.let { tasks ->
             assertThat(tasks).hasSize(2)
             assertThat(tasks[0].selected).isFalse()
             assertThat(tasks[1].selected).isFalse()
         }
+        assertThat(viewModel.selectedCount.valueBlocking).isEqualTo(0)
         viewModel.toggleTaskSelection(1L)
         viewModel.archivedTasks.valueBlocking.let { tasks ->
             assertThat(tasks).hasSize(2)
             assertThat(tasks[0].selected).isTrue()
             assertThat(tasks[1].selected).isFalse()
         }
+        assertThat(viewModel.selectedCount.valueBlocking).isEqualTo(1)
         viewModel.toggleTaskSelection(1L)
         viewModel.archivedTasks.valueBlocking.let { tasks ->
             assertThat(tasks).hasSize(2)
             assertThat(tasks[0].selected).isFalse()
             assertThat(tasks[1].selected).isFalse()
+        }
+        assertThat(viewModel.selectedCount.valueBlocking).isEqualTo(0)
+    }
+
+    @Test
+    fun unarchive() {
+        val viewModel = createViewModel()
+        assertThat(viewModel.selectedCount.valueBlocking).isEqualTo(0)
+        viewModel.toggleTaskSelection(1L)
+        assertThat(viewModel.selectedCount.valueBlocking).isEqualTo(1)
+        viewModel.unarchiveSelectedTasks()
+        viewModel.archivedTasks.valueBlocking.let { tasks ->
+            assertThat(tasks).hasSize(1)
         }
     }
 
@@ -106,4 +123,3 @@ class ArchiveViewModelTest {
         }
     }
 }
-

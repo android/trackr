@@ -63,6 +63,22 @@ object SeedData {
             ownerId = 2L,
             creatorId = 2L,
             orderInCategory = 7
+        ),
+        Task(
+            id = 8L,
+            title = "Task 8",
+            status = TaskStatus.ARCHIVED,
+            ownerId = 1L,
+            creatorId = 2L,
+            orderInCategory = 8
+        ),
+        Task(
+            id = 9L,
+            title = "Task 9",
+            status = TaskStatus.ARCHIVED,
+            ownerId = 1L,
+            creatorId = 1L,
+            orderInCategory = 9
         )
     )
 

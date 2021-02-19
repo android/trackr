@@ -16,23 +16,21 @@
 
 package com.example.android.trackr.ui.tasks
 
-import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-
 import com.example.android.trackr.data.TaskListItem
 import com.example.android.trackr.data.TaskStatus
-import com.example.android.trackr.data.User
-import com.example.android.trackr.data.UserTask
 import com.example.android.trackr.db.dao.TaskDao
+import com.example.android.trackr.repository.TrackrRepository
 import kotlinx.coroutines.launch
 
 class TasksViewModel @ViewModelInject constructor(
-    private val taskDao: TaskDao
+    private val taskDao: TaskDao,
+    private val repository: TrackrRepository
 ) : ViewModel() {
 
     // This can be observed by a client interested in presenting the undo logic for the task that
@@ -80,21 +78,9 @@ class TasksViewModel @ViewModelInject constructor(
         }
     }
 
-    fun toggleTaskStarState(taskListItem: TaskListItem, currentUser: User) {
+    fun toggleTaskStarState(taskListItem: TaskListItem) {
         viewModelScope.launch {
-            val isTaskStarred = taskListItem.starUsers.contains(currentUser)
-
-            if (isTaskStarred) {
-                val existingUserTask = taskDao.getUserTask(taskListItem.id, currentUser.id)
-                if (existingUserTask != null) {
-                    taskDao.deleteUserTasks(listOf(existingUserTask))
-                } else {
-                    Log.e(TAG, "Error deleting user task because it's not in the database")
-                }
-            } else {
-                val newUserTask = UserTask(userId = currentUser.id, taskId = taskListItem.id)
-                taskDao.insertUserTasks(listOf(newUserTask))
-            }
+            repository.toggleTaskStarState(taskListItem.id)
         }
     }
 

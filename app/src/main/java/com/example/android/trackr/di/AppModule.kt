@@ -9,6 +9,7 @@ import com.example.android.trackr.data.SeedData
 import com.example.android.trackr.data.User
 import com.example.android.trackr.db.AppDatabase
 import com.example.android.trackr.db.dao.TaskDao
+import com.example.android.trackr.repository.TrackrRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -69,6 +70,12 @@ object AppModule {
     @Provides
     fun provideTaskDao(appDatabase: AppDatabase): TaskDao {
         return appDatabase.taskDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideTrackrRepository(db: AppDatabase, currentUser: User): TrackrRepository {
+        return TrackrRepository(db, currentUser)
     }
 
     @Provides

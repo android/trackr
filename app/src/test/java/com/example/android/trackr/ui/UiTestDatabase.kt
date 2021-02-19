@@ -17,8 +17,11 @@
 package com.example.android.trackr.ui
 
 import androidx.room.Room
+import androidx.room.RoomDatabase
 import androidx.test.core.app.ApplicationProvider
+import com.example.android.trackr.data.SeedData
 import com.example.android.trackr.db.AppDatabase
+import com.example.android.trackr.repository.TrackrRepository
 
 fun createDatabase(): AppDatabase {
     return Room
@@ -28,4 +31,13 @@ fun createDatabase(): AppDatabase {
         )
         .allowMainThreadQueries()
         .build()
+}
+
+fun createTrackrRepository(
+    doOnDatabase: (db: AppDatabase) -> Unit
+): TrackrRepository {
+    return TrackrRepository(
+        createDatabase().also { doOnDatabase(it) },
+        SeedData.Users[0]
+    )
 }

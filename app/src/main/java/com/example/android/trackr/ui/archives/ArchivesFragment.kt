@@ -20,9 +20,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.android.trackr.R
 import com.example.android.trackr.data.User
 import com.example.android.trackr.databinding.FragmentArchiveBinding
+import com.example.android.trackr.ui.detail.TaskDetailFragmentArgs
 import com.example.android.trackr.ui.utils.configureEdgeToEdge
 import dagger.hilt.android.AndroidEntryPoint
 import org.threeten.bp.Clock
@@ -42,21 +44,50 @@ class ArchivesFragment : Fragment(R.layout.fragment_archive) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentArchiveBinding.bind(view)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
         configureEdgeToEdge(
             root = view,
             scrollingContent = binding.archivedTasks,
-            topBar = binding.toolbar
+            topBar = binding.toolbar,
+            bottomBar = binding.bottomBar
         )
 
         val adapter = ArchiveAdapter(
             currentUser = currentUser,
             clock = clock,
-            onItemSelected = { task -> viewModel.toggleTaskSelection(task.id) },
-            onItemStarClicked = { /* TODO */ }
+            onItemClick = { task ->
+                if (viewModel.selectedCount.value ?: 0 > 0) {
+                    viewModel.toggleTaskSelection(task.id)
+                } else {
+                    navigateToDetail(task.id)
+                }
+            },
+            onItemLongClick = { task -> viewModel.toggleTaskSelection(task.id) },
+            onItemStarClicked = { task -> viewModel.toggleTaskStarState(task.id) }
         )
         binding.archivedTasks.adapter = adapter
+
         viewModel.archivedTasks.observe(viewLifecycleOwner) { tasks ->
             adapter.submitList(tasks)
         }
+
+        binding.bottomBar.setNavigationOnClickListener { viewModel.clearSelection() }
+        binding.bottomBar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.action_unarchive -> {
+                    viewModel.unarchiveSelectedTasks()
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    private fun navigateToDetail(taskId: Long) {
+        findNavController().navigate(
+            R.id.nav_task_detail,
+            TaskDetailFragmentArgs(taskId).toBundle()
+        )
     }
 }
