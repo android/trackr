@@ -15,6 +15,8 @@
 -->
 <resources>
     <declare-styleable name="Theme">
+        <attr name="starIconColor" format="reference|color" />
+
         <!-- Defined colors for tags/chips used for task items -->
         <attr name="blueTagBackgroundColor" format="reference|color" />
         <attr name="blueTagTextColor" format="reference|color" />
