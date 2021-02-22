@@ -40,7 +40,7 @@
         <item name="starIconColor">@color/trackr_yellow_500</item>
 
         <item name="blueTagBackgroundColor">@color/trackr_teal_100</item>
-        <item name="blueTagTextColor">@color/trackr_teal_700</item>
+        <item name="blueTagTextColor">@color/trackr_teal_800</item>
         <item name="greenTagBackgroundColor">@color/trackr_green_100</item>
         <item name="greenTagTextColor">@color/trackr_green_700</item>
         <item name="purpleTagBackgroundColor">@color/trackr_purple_100</item>
