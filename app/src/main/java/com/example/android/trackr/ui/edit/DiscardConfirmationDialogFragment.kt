@@ -30,8 +30,8 @@ class DiscardConfirmationDialogFragment : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return MaterialAlertDialogBuilder(requireContext())
-            .setMessage(R.string.discard_confirmation)
+        return MaterialAlertDialogBuilder(requireContext(), R.style.MaterialAlertDialog)
+            .setTitle(R.string.discard_confirmation)
             .setPositiveButton(R.string.discard) { _, _ ->
                 dismiss()
                 viewModel.discardChanges()
