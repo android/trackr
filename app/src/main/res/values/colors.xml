@@ -51,7 +51,7 @@
 
     <color name="trackr_white_50">#FFFFFF</color>
 
-    <color name="trackr_yellow_300" tools:ignore="UnusedResources">#F3BB59</color>
+    <color name="trackr_yellow_300">#F3BB59</color>
     <color name="trackr_yellow_500">#C88004</color>
 
     <color name="trackr_gray_500">#3D444B</color>

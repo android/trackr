@@ -28,6 +28,8 @@
         <item name="colorOnPrimary">@color/trackr_white_50</item>
 
         <!-- Custom theme attrs -->
+        <item name="starIconColor">@color/trackr_yellow_300</item>
+
         <item name="blueTagBackgroundColor">@color/trackr_teal_800</item>
         <item name="blueTagTextColor">@color/trackr_teal_50</item>
         <item name="greenTagBackgroundColor">@color/trackr_green_800</item>
