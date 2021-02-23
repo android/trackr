@@ -141,17 +141,24 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
     }
 
     override fun onDragStarted() {
-        tasksAdapter.startDrag()
+        viewModel.cacheCurrentList(currentListToTaskListItems())
     }
 
-    override fun onDragCompleted() {
-        Snackbar.make(
+    override fun onDragCompleted(position: Int) {
+        val draggedItem = tasksAdapter.currentList[position]
+
+        viewModel.persistUpdatedList(
+            (draggedItem as DataItem.TaskItem).taskListItem.status,
+            currentListToTaskListItems()
+        )
+
+        Snackbar.make (
             binding.root,
             R.string.task_position_changed,
             Snackbar.LENGTH_LONG
         )
             .setAction(getString(R.string.undo)) {
-                tasksAdapter.undoDrag()
+                viewModel.restoreListFromCache()
             }
             .show()
     }
@@ -162,6 +169,11 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
             ProfileDialogFragmentArgs(taskListItem.owner.id).toBundle()
         )
     }
+
+    private fun currentListToTaskListItems() : List<TaskListItem> {
+        return tasksAdapter.currentList.filterIsInstance<DataItem.TaskItem>().map { it.taskListItem }
+    }
+
 }
 
 private inline fun RecyclerView.doOnScroll(crossinline action: (dx: Int, dy: Int) -> Unit) {

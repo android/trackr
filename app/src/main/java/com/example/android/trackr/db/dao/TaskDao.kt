@@ -122,9 +122,9 @@ interface TaskDao {
     }
 
     @Transaction
-    suspend fun bulkUpdateOrderInCategory(status: TaskStatus, tasks: List<Task>) {
-        tasks.filter {it.status == status}.forEachIndexed{ index, task ->
-            updateOrderInCategory(task.id, index)
+    suspend fun reorderList(status: TaskStatus, taskListItems: List<TaskListItem>) {
+        taskListItems.filter {it.status == status}.forEachIndexed{ index, taskListItem ->
+            updateOrderInCategory(taskListItem.id, index)
         }
     }
 }

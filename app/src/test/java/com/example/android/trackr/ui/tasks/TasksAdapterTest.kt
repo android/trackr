@@ -52,7 +52,7 @@ class TasksAdapterTest {
         override fun onTaskArchived(taskListItem: TaskListItem) {}
         override fun onTaskDragged(fromPosition: Int, toPosition: Int) {}
         override fun onDragStarted() {}
-        override fun onDragCompleted() {}
+        override fun onDragCompleted(position: Int) {}
         override fun onAvatarClicked(taskListItem: TaskListItem) {}
     }
 
@@ -324,11 +324,11 @@ class TasksAdapterTest {
         val mockListener = Mockito.mock(TasksAdapter.ItemListener::class.java)
         val holder = setUpAndBindTaskViewHolder(mockListener)
 
-        holder.onDragStarted()
+        holder.onItemMoveStarted()
         Mockito.verify(mockListener).onDragStarted()
 
-        holder.onDragCompleted()
-        Mockito.verify(mockListener).onDragCompleted()
+        holder.onItemMoveCompleted(1)
+        Mockito.verify(mockListener).onDragCompleted(1)
     }
 
     private fun setUpAndBindTaskViewHolder(

@@ -115,6 +115,28 @@ class TasksViewModel @ViewModelInject constructor(
         }
     }
 
+    private var cachedList: List<TaskListItem> = emptyList()
+    private var dragAndDropCategory: TaskStatus? = null
+
+    fun cacheCurrentList(items: List<TaskListItem>) {
+        cachedList = items
+    }
+
+    fun restoreListFromCache() {
+        viewModelScope.launch {
+            dragAndDropCategory?.let {
+                taskDao.reorderList(it, cachedList)
+            }
+        }
+    }
+
+    fun persistUpdatedList(status: TaskStatus, items: List<TaskListItem>) {
+        dragAndDropCategory = status
+        viewModelScope.launch {
+            taskDao.reorderList(status, items)
+        }
+    }
+
     companion object {
         private const val TAG = "TasksViewModel"
     }

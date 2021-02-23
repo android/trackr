@@ -32,12 +32,11 @@ class SwipeAndDragCallback :
 
     private var initialPosition = NO_POSITION
 
-    // TODO (b/165431117): consider replacing with lambda that can be passed to a constructor.
     interface ItemTouchListener {
         fun onItemSwiped()
         fun onItemMoved(fromPosition: Int, toPosition: Int)
-        fun onDragStarted()
-        fun onDragCompleted()
+        fun onItemMoveStarted()
+        fun onItemMoveCompleted(position: Int)
     }
 
     override fun getMovementFlags(
@@ -105,8 +104,8 @@ class SwipeAndDragCallback :
         super.onSelectedChanged(viewHolder, actionState)
         when (actionState) {
             ItemTouchHelper.ACTION_STATE_DRAG -> {
-                if (viewHolder is TasksAdapter.TaskViewHolder) {
-                    viewHolder.onDragStarted()
+                if (viewHolder is ItemTouchListener) {
+                    viewHolder.onItemMoveStarted()
                 }
             }
         }
@@ -114,10 +113,10 @@ class SwipeAndDragCallback :
 
     override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
         super.clearView(recyclerView, viewHolder)
-        if (viewHolder is TasksAdapter.TaskViewHolder) {
+        if (viewHolder is ItemTouchListener) {
             if (initialPosition != NO_POSITION /* drag was initiated but abandoned */ &&
                 viewHolder.adapterPosition != initialPosition /* item was dragged back to the */) {
-                viewHolder.onDragCompleted()
+                    viewHolder.onItemMoveCompleted(viewHolder.adapterPosition)
             }
         }
         initialPosition = NO_POSITION

@@ -57,7 +57,7 @@ class TasksAdapter(
         fun onTaskArchived(taskListItem: TaskListItem)
         fun onTaskDragged(fromPosition: Int, toPosition: Int)
         fun onDragStarted()
-        fun onDragCompleted()
+        fun onDragCompleted(position: Int)
         fun onAvatarClicked(taskListItem: TaskListItem)
     }
 
@@ -113,14 +113,6 @@ class TasksAdapter(
             Collections.swap(newList, fromPosition, toPosition)
             submitList(newList)
         }
-    }
-
-    fun startDrag() {
-        cachedList = currentList.toMutableList()
-    }
-
-    fun undoDrag() {
-        submitList(cachedList)
     }
 
     class HeaderViewHolder private constructor(
@@ -206,12 +198,12 @@ class TasksAdapter(
             itemListener.onTaskDragged(fromPosition, toPosition)
         }
 
-        override fun onDragStarted() {
+        override fun onItemMoveStarted() {
             itemListener.onDragStarted()
         }
 
-        override fun onDragCompleted() {
-            itemListener.onDragCompleted()
+        override fun onItemMoveCompleted(position: Int) {
+            itemListener.onDragCompleted(position)
         }
 
         /**

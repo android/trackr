@@ -26,6 +26,7 @@ import com.example.android.trackr.data.Tag
 import com.example.android.trackr.data.TagColor
 import com.example.android.trackr.data.Task
 import com.example.android.trackr.data.TaskDetail
+import com.example.android.trackr.data.TaskListItem
 import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.data.TaskTag
 import com.example.android.trackr.data.User
@@ -331,7 +332,16 @@ class TaskDaoTest {
             assertThat(results.map { it.orderInCategory }).isEqualTo(listOf(0, 1, 2))
         }
 
-        taskDao.bulkUpdateOrderInCategory(TaskStatus.IN_PROGRESS, listOf(second, first, third))
+        var items: List<TaskListItem>?
+
+        taskDao.getOngoingTaskListItems().valueBlocking.let {
+            items = it
+        }
+
+        taskDao.reorderList(
+            TaskStatus.IN_PROGRESS,
+            listOf(items!![1], items!![0], items!![2])
+        )
 
         taskDao.getTasks().valueBlocking.let { results ->
             assertThat(results.map { it.id }).isEqualTo(listOf(1L, 2L, 3L))
@@ -383,7 +393,13 @@ class TaskDaoTest {
             assertThat(results.map { it.orderInCategory }).isEqualTo(listOf(0, 1, 2))
         }
 
-        taskDao.bulkUpdateOrderInCategory(TaskStatus.IN_PROGRESS, listOf(second, first).toList())
+        var items: List<TaskListItem>?
+
+        taskDao.getOngoingTaskListItems().valueBlocking.let {
+            items = it
+        }
+
+        taskDao.reorderList(TaskStatus.IN_PROGRESS, listOf(items!![1], items!![0]))
 
         taskDao.getTasks().valueBlocking.let { results ->
             assertThat(results.map { it.id }).isEqualTo(listOf(1L, 2L, 3L))
