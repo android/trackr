@@ -35,4 +35,14 @@
         <item name="android:textSize">@dimen/text_size_home_section_header</item>
     </style>
 
+    <!-- Alert Dialog -->
+    <style name="MaterialAlertDialog" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="buttonBarPositiveButtonStyle">@style/AlertDialogButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/AlertDialogButtonStyle</item>
+    </style>
+
+    <style name="AlertDialogButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
+
 </resources>
