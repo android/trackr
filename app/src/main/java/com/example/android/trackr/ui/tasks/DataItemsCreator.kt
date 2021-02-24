@@ -50,7 +50,8 @@ class DataItemsCreator(
                         )
                     )
                     if (statesMap[entry.key] == true) {
-                        sublist?.map { itemsToSubmit.add(DataItem.TaskItem(it)) }
+                        sublist?.sortedBy { it.orderInCategory }
+                            ?.forEach { itemsToSubmit.add(DataItem.TaskItem(it)) }
                     }
                 }
                 return itemsToSubmit

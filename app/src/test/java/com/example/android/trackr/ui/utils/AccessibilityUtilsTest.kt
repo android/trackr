@@ -96,7 +96,8 @@ class AccessibilityUtilsTest {
             owner = user1,
             status = TaskStatus.IN_PROGRESS,
             starUsers = emptyList(),
-            tags = emptyList()
+            tags = emptyList(),
+            orderInCategory = 1
         )
 
         var taskListItemWithTags = TaskListItem(
@@ -106,7 +107,8 @@ class AccessibilityUtilsTest {
             owner = user1,
             status = TaskStatus.IN_PROGRESS,
             starUsers = emptyList(),
-            tags = listOf(tag1, tag2)
+            tags = listOf(tag1, tag2),
+            orderInCategory = 2
         )
     }
 }

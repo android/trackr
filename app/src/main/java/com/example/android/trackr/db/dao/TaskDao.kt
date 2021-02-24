@@ -78,6 +78,9 @@ interface TaskDao {
     @Query("UPDATE tasks SET status = :status WHERE id = :id")
     suspend fun updateTaskStatus(id: Long, status: TaskStatus)
 
+    @Query("UPDATE tasks SET orderInCategory = :orderInCategory WHERE id = :id")
+    suspend fun updateOrderInCategory(id: Long,  orderInCategory: Int)
+
     @Query("SELECT * FROM user_tasks WHERE taskId = :taskId AND userId = :userId")
     suspend fun getUserTask(taskId: Long, userId: Long): UserTask?
 
@@ -106,7 +109,8 @@ interface TaskDao {
             creatorId = detail.creator.id,
             ownerId = detail.owner.id,
             createdAt = detail.createdAt,
-            dueAt = detail.dueAt
+            dueAt = detail.dueAt,
+            orderInCategory = 1
         )
         insertTask(task)
         val updatedTagIds = detail.tags.map { tag -> tag.id }
@@ -115,5 +119,12 @@ interface TaskDao {
         deleteTaskTags(detail.id, removedTagIds)
         val newTagIds = updatedTagIds.filter { id -> id !in currentTagIds }
         insertTaskTags(newTagIds.map { id -> TaskTag(taskId = detail.id, tagId = id) })
+    }
+
+    @Transaction
+    suspend fun bulkUpdateOrderInCategory(status: TaskStatus, tasks: List<Task>) {
+        tasks.filter {it.status == status}.forEachIndexed{ index, task ->
+            updateOrderInCategory(task.id, index)
+        }
     }
 }

@@ -185,6 +185,21 @@ class TaskDaoTest {
     }
 
     @Test
+    fun updateOrderInCategory_updatesTheOrder() = runBlocking {
+        insertData(taskDao, listOf(user1), listOf(task1))
+
+        taskDao.getTasks().valueBlocking.let { tasks ->
+            assertThat(tasks[0].status).isEqualTo(TaskStatus.NOT_STARTED)
+        }
+
+        taskDao.updateTaskStatus(task1.id, TaskStatus.ARCHIVED)
+
+        taskDao.getTasks().valueBlocking.let { tasks ->
+            assertThat(tasks[0].status).isEqualTo(TaskStatus.ARCHIVED)
+        }
+    }
+
+    @Test
     fun loadUsers() = runBlocking {
         taskDao.insertUsers(SeedData.Users)
         val users = taskDao.loadUsers()
@@ -273,6 +288,109 @@ class TaskDaoTest {
         assertThat(updatedDetail.owner).isEqualTo(user2)
     }
 
+    @Test
+    fun bulkUpdateOrderInCategory_withSameStatus_updatesOrder() = runBlocking {
+        val first = Task(
+            id = 1L,
+            title = "First",
+            status = TaskStatus.IN_PROGRESS,
+            ownerId = 1L,
+            creatorId = 1L,
+            dueAt = dueAt1,
+            orderInCategory = 0
+        )
+
+        val second = Task(
+            id = 2L,
+            title = "Second",
+            status = TaskStatus.IN_PROGRESS,
+            ownerId = 1L,
+            creatorId = 1L,
+            orderInCategory = 1
+        )
+
+        val third = Task(
+            id = 3L,
+            title = "Third",
+            status = TaskStatus.IN_PROGRESS,
+            ownerId = 1L,
+            creatorId = 1L,
+            orderInCategory = 2
+        )
+
+        insertData(
+            taskDao = taskDao,
+            users = listOf(user1, user2),
+            tasks = listOf(first, second, third),
+            tags = emptyList(),
+            taskTags = emptyList()
+        )
+
+        taskDao.getTasks().valueBlocking.let { results ->
+            assertThat(results.map { it.id }).isEqualTo(listOf(1L, 2L, 3L))
+            assertThat(results.map { it.orderInCategory }).isEqualTo(listOf(0, 1, 2))
+        }
+
+        taskDao.bulkUpdateOrderInCategory(TaskStatus.IN_PROGRESS, listOf(second, first, third))
+
+        taskDao.getTasks().valueBlocking.let { results ->
+            assertThat(results.map { it.id }).isEqualTo(listOf(1L, 2L, 3L))
+            assertThat(results.map { it.orderInCategory }).isEqualTo(listOf(1, 0, 2))
+        }
+    }
+
+    @Test
+    fun bulkUpdateOrderInCategory_withDifferentStatus_doesNothing() = runBlocking {
+
+        val first = Task(
+            id = 1L,
+            title = "First",
+            status = TaskStatus.IN_PROGRESS,
+            ownerId = 1L,
+            creatorId = 1L,
+            dueAt = dueAt1,
+            orderInCategory = 0
+        )
+
+        val second = Task(
+            id = 2L,
+            title = "Second",
+            status = TaskStatus.NOT_STARTED,
+            ownerId = 1L,
+            creatorId = 1L,
+            orderInCategory = 1
+        )
+
+        val third = Task(
+            id = 3L,
+            title = "Third",
+            status = TaskStatus.NOT_STARTED,
+            ownerId = 1L,
+            creatorId = 1L,
+            orderInCategory = 2
+        )
+
+        insertData(
+            taskDao = taskDao,
+            users = listOf(user1, user2),
+            tasks = listOf(first, second, third),
+            tags = emptyList(),
+            taskTags = emptyList()
+        )
+
+        taskDao.getTasks().valueBlocking.let { results ->
+            assertThat(results.map { it.id }).isEqualTo(listOf(1L, 2L, 3L))
+            assertThat(results.map { it.orderInCategory }).isEqualTo(listOf(0, 1, 2))
+        }
+
+        taskDao.bulkUpdateOrderInCategory(TaskStatus.IN_PROGRESS, listOf(second, first).toList())
+
+        taskDao.getTasks().valueBlocking.let { results ->
+            assertThat(results.map { it.id }).isEqualTo(listOf(1L, 2L, 3L))
+            assertThat(results.map { it.orderInCategory }).isEqualTo(listOf(0, 1, 2))
+        }
+    }
+
     companion object {
         fun insertData(
             taskDao: TaskDao,
@@ -295,9 +413,21 @@ class TaskDaoTest {
         val user1 = User(id = 1L, username = "user1", Avatar.DEFAULT_USER)
         val user2 = User(id = 2L, username = "user2", Avatar.DEFAULT_USER)
 
-        val task1 = Task(id = 1L, title = "Task 1", ownerId = 1L, creatorId = 1L, dueAt = dueAt1)
+        val task1 = Task(
+            id = 1L,
+            title = "Task 1",
+            ownerId = 1L,
+            creatorId = 1L,
+            dueAt = dueAt1,
+            orderInCategory = 1
+        )
         val task2 = Task(
-            id = 2L, title = "Task 2", status = TaskStatus.ARCHIVED, ownerId = 1L, creatorId = 1L
+            id = 2L,
+            title = "Task 2",
+            status = TaskStatus.ARCHIVED,
+            ownerId = 1L,
+            creatorId = 1L,
+            orderInCategory = 2
         )
 
         val tag1 = Tag(id = 1L, label = "tag1", color = TagColor.RED)

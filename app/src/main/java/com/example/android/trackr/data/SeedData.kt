@@ -34,8 +34,8 @@ object SeedData {
 
     // TODO(b/163065333): add descriptive task titles.
     val Tasks = arrayListOf(
-        Task(id = 1L, title = "Task 1", ownerId = 1L, creatorId = 2L),
-        Task(id = 2L, title = "Task 2", ownerId = 1L, creatorId = 1L),
+        Task(id = 1L, title = "Task 1", ownerId = 1L, creatorId = 2L, orderInCategory = 1),
+        Task(id = 2L, title = "Task 2", ownerId = 1L, creatorId = 1L, orderInCategory = 2),
         Task(
             id = 3L,
             title = "Task 3",
@@ -43,12 +43,27 @@ object SeedData {
             ownerId = 2L,
             creatorId = 1L,
             createdAt = Instant.now() - Duration.ofDays(1),
-            dueAt = Instant.now() + Duration.ofDays(2)
+            dueAt = Instant.now() + Duration.ofDays(2),
+            orderInCategory = 3
         ),
-        Task(id = 4L, title = "Task 4", status = TaskStatus.COMPLETED, ownerId = 2L, creatorId = 2L),
-        Task(id = 5L, title = "Task 5", ownerId = 1L, creatorId = 2L),
-        Task(id = 6L, title = "Task 6", ownerId = 1L, creatorId = 2L),
-        Task(id = 7L, title = "Task 7", status = TaskStatus.ARCHIVED, ownerId = 2L, creatorId = 2L)
+        Task(
+            id = 4L,
+            title = "Task 4",
+            status = TaskStatus.COMPLETED,
+            ownerId = 2L,
+            creatorId = 2L,
+            orderInCategory = 4
+        ),
+        Task(id = 5L, title = "Task 5", ownerId = 1L, creatorId = 2L, orderInCategory = 5),
+        Task(id = 6L, title = "Task 6", ownerId = 1L, creatorId = 2L, orderInCategory = 6),
+        Task(
+            id = 7L,
+            title = "Task 7",
+            status = TaskStatus.ARCHIVED,
+            ownerId = 2L,
+            creatorId = 2L,
+            orderInCategory = 7
+        )
     )
 
     val TaskTags = listOf(

@@ -350,7 +350,8 @@ class TasksAdapterTest {
             owner = user,
             status = TaskStatus.IN_PROGRESS,
             starUsers = emptyList(),
-            tags = emptyList()
+            tags = emptyList(),
+            orderInCategory = 1
         )
 
         val starredTaskListItem = TaskListItem(
@@ -360,7 +361,8 @@ class TasksAdapterTest {
             owner = user2,
             status = TaskStatus.IN_PROGRESS,
             starUsers = listOf(user2),
-            tags = emptyList()
+            tags = emptyList(),
+            orderInCategory = 2
         )
 
         val notStartedTaskListItem = TaskListItem(
@@ -370,7 +372,8 @@ class TasksAdapterTest {
             owner = user,
             status = TaskStatus.NOT_STARTED,
             starUsers = emptyList(),
-            tags = emptyList()
+            tags = emptyList(),
+            orderInCategory = 3
         )
         
         val inProgressHeader = DataItem.HeaderItem(

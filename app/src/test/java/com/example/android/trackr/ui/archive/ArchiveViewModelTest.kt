@@ -86,7 +86,8 @@ class ArchiveViewModelTest {
                             creatorId = 2L,
                             ownerId = 1L,
                             createdAt = Instant.parse("2020-09-01T00:00:00.00Z"),
-                            dueAt = Instant.parse("2020-11-01T00:00:00.00Z")
+                            dueAt = Instant.parse("2020-11-01T00:00:00.00Z"),
+                            orderInCategory = 1
                         ),
                         Task(
                             id = 2L,
@@ -96,7 +97,8 @@ class ArchiveViewModelTest {
                             creatorId = 2L,
                             ownerId = 1L,
                             createdAt = Instant.parse("2020-09-01T00:00:00.00Z"),
-                            dueAt = Instant.parse("2020-11-01T00:00:00.00Z")
+                            dueAt = Instant.parse("2020-11-01T00:00:00.00Z"),
+                            orderInCategory = 2
                         )
                     )
                 )

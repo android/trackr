@@ -77,7 +77,12 @@ data class Task(
     /**
      * When this task is due.
      */
-    val dueAt: Instant = Instant.now() + Duration.ofDays(7)
+    val dueAt: Instant = Instant.now() + Duration.ofDays(7),
+
+    /**
+     * Tracks the order in which tasks are presented within a category.
+     */
+    val orderInCategory: Int
 )
 
 const val ARCHIVED_KEY = 4 // This is referenced in a query.

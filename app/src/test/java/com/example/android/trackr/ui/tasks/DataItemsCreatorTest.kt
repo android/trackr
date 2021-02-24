@@ -31,7 +31,7 @@ import org.threeten.bp.Instant
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestApplication::class)
-class DataItemCreatorTest {
+class DataItemsCreatorTest {
     @Test
     fun execute_whenArgsAreNull() {
         val subject = DataItemsCreator(null, null)
@@ -40,7 +40,7 @@ class DataItemCreatorTest {
 
     @Test
     fun execute_withNullExpandedStatesMap() {
-        val subject = DataItemsCreator(listOf(inProgressTaskListItem), null)
+        val subject = DataItemsCreator(listOf(item1), null)
         assertThat(subject.execute()).isNull()
     }
 
@@ -64,7 +64,7 @@ class DataItemCreatorTest {
     @Test
     fun execute_whenExpandedState_returnsHeaderAndTaskListItem() {
         val subject = DataItemsCreator(
-            listOf(inProgressTaskListItem),
+            listOf(item1),
             mutableMapOf(TaskStatus.IN_PROGRESS to true)
         )
         val dataItems = subject.execute()
@@ -76,7 +76,7 @@ class DataItemCreatorTest {
     @Test
     fun execute_whenCollapsedState_savesCountInHeader() {
         val subject = DataItemsCreator(
-            listOf(inProgressTaskListItem),
+            listOf(item1),
             mutableMapOf(TaskStatus.IN_PROGRESS to false)
         )
         val dataItems = subject.execute()
@@ -84,16 +84,53 @@ class DataItemCreatorTest {
         assertThat(header.headerData.count).isEqualTo(1)
     }
 
+    @Test
+    fun execute_returnsTasksInOrder() {
+        val subject = DataItemsCreator(
+            listOf(item1, item2, item3),
+            mutableMapOf(TaskStatus.IN_PROGRESS to true)
+        )
+
+        val dataItems = subject.execute()
+        assertThat((dataItems!![1] as DataItem.TaskItem).taskListItem).isEqualTo(item1)
+        assertThat((dataItems[2] as DataItem.TaskItem).taskListItem).isEqualTo(item3)
+        assertThat((dataItems[3] as DataItem.TaskItem).taskListItem).isEqualTo(item2)
+    }
+
     companion object {
         private val user = User(1, "user", Avatar.DEFAULT_USER)
-        val inProgressTaskListItem = TaskListItem(
+        val item1 = TaskListItem(
             id = 1,
             title = "task list item 1",
             dueAt = Instant.now(),
             owner = user,
             status = TaskStatus.IN_PROGRESS,
             starUsers = emptyList(),
-            tags = emptyList()
+            tags = emptyList(),
+            orderInCategory = 1
+        )
+
+        val item2 = TaskListItem(
+            id = 2,
+            title = "task list item 2",
+            dueAt = Instant.now(),
+            owner = user,
+            status = TaskStatus.IN_PROGRESS,
+            starUsers = emptyList(),
+            tags = emptyList(),
+            orderInCategory = 3 // Note: out of order
+        )
+
+
+        val item3 = TaskListItem(
+            id = 3,
+            title = "task list item 3",
+            dueAt = Instant.now(),
+            owner = user,
+            status = TaskStatus.IN_PROGRESS,
+            starUsers = emptyList(),
+            tags = emptyList(),
+            orderInCategory = 2 // Note: out of order
         )
     }
 }
