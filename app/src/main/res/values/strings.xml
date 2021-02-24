@@ -76,6 +76,7 @@
     <string name="due_at">Due date</string>
     <string name="created_at">Creation date</string>
     <string name="tags">Tags</string>
+    <string name="add_tags">Add tags</string>
 
     <string name="back">Back</string>
     <string name="save">Save</string>

@@ -196,15 +196,31 @@
                         android:text="@string/tags"
                         app:drawableStartCompat="@drawable/ic_tags" />
 
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/tags"
+                    <FrameLayout
+                        android:id="@+id/tag_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
                         android:layout_marginBottom="@dimen/spacing_large"
-                        android:foreground="?attr/selectableItemBackground"
-                        app:showAllTags="@{true}"
-                        app:tags="@{viewModel.tags}" />
+                        android:foreground="?attr/selectableItemBackground">
+
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/tags"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:showAllTags="@{true}"
+                            app:tags="@{viewModel.tags}" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:minHeight="@dimen/min_touch_target"
+                            android:text="@string/add_tags"
+                            android:textAppearance="?textAppearanceBody1"
+                            app:isGone="@{viewModel.tags.size() > 0}" />
+
+                    </FrameLayout>
 
                 </LinearLayout>
 

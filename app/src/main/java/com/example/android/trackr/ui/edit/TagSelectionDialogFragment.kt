@@ -39,7 +39,7 @@ class TagSelectionDialogFragment : DialogFragment() {
             .setMultiChoiceItems(
                 allTags.map { it.label }.toTypedArray(),
                 checked.toBooleanArray()
-            ) { dialog, which, isChecked ->
+            ) { _, which, isChecked ->
                 if (isChecked) {
                     viewModel.addTag(allTags[which])
                 } else {
