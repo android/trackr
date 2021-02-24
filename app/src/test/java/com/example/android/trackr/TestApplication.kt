@@ -17,11 +17,13 @@
 package com.example.android.trackr
 
 import android.app.Application
+import com.jakewharton.threetenabp.AndroidThreeTen
 
 
 class TestApplication : Application() {
     override fun onCreate() {
         super.onCreate()
+        AndroidThreeTen.init(this)
         setTheme(R.style.Theme_MaterialComponents)
     }
 }
