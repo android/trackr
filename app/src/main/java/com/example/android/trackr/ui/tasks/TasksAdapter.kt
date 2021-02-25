@@ -50,6 +50,18 @@ class TasksAdapter(
     // drag and drop operation, this list can be submitted to the adapter.
     private var cachedList: List<DataItem>? = null
 
+    private var headerPositions = mutableListOf<Int>()
+
+    private lateinit var dragAndDropActionsHelper: DragAndDropActionsHelper
+
+    override fun onCurrentListChanged(
+        previousList: MutableList<DataItem>,
+        currentList: MutableList<DataItem>
+    ) {
+        super.onCurrentListChanged(previousList, currentList)
+        dragAndDropActionsHelper = DragAndDropActionsHelper(currentList)
+    }
+
     interface ItemListener {
         fun onHeaderClicked(headerData: HeaderData)
         fun onStarClicked(taskListItem: TaskListItem)
@@ -57,7 +69,11 @@ class TasksAdapter(
         fun onTaskArchived(taskListItem: TaskListItem)
         fun onTaskDragged(fromPosition: Int, toPosition: Int)
         fun onDragStarted()
-        fun onDragCompleted(position: Int)
+        fun onDragCompleted(
+            fromPosition: Int,
+            toPosition: Int,
+            usingDragAndDropCustomActions: Boolean = false
+        )
         fun onAvatarClicked(taskListItem: TaskListItem)
     }
 
@@ -79,7 +95,8 @@ class TasksAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is TaskViewHolder -> {
-                holder.bind((getItem(position) as DataItem.TaskItem).taskListItem)
+                holder.bind(
+                    (getItem(position) as DataItem.TaskItem).taskListItem, dragAndDropActionsHelper)
             }
 
             is HeaderViewHolder -> {
@@ -155,7 +172,7 @@ class TasksAdapter(
 
         val accessibilityActionIds = arrayListOf<Int>()
 
-        fun bind(taskListItem: TaskListItem) {
+        fun bind(taskListItem: TaskListItem, dragAndDraopActionsHelper: DragAndDropActionsHelper)  {
             val resources = binding.root.resources
             binding.taskListItem = taskListItem
             binding.card.setOnClickListener { itemListener.onTaskClicked(taskListItem) }
@@ -183,8 +200,13 @@ class TasksAdapter(
 
             addArchiveAccessibilityAction(taskListItem)
             addStarAccessibilityAction(taskListItem)
-            addSeeProfileDialogAccessibilityAction(taskListItem)
 
+            val actionParams = dragAndDraopActionsHelper.execute(adapterPosition)
+            for (actionParam in actionParams) {
+                addDragAndDropAction(actionParam)
+            }
+
+            addSeeProfileDialogAccessibilityAction(taskListItem)
             binding.executePendingBindings()
         }
 
@@ -202,8 +224,8 @@ class TasksAdapter(
             itemListener.onDragStarted()
         }
 
-        override fun onItemMoveCompleted(position: Int) {
-            itemListener.onDragCompleted(position)
+        override fun onItemMoveCompleted(fromPosition: Int, toPosition: Int) {
+            itemListener.onDragCompleted(fromPosition, toPosition)
         }
 
         /**
@@ -223,6 +245,32 @@ class TasksAdapter(
                     itemListener.onTaskArchived(taskListItem)
                     true
                 })
+        }
+
+        /**
+         * Adds a custom accessibility action representing the dragging and dropping of an item.
+         */
+        private fun addDragAndDropAction(
+            actionParamAnd: DragAndDropActionsHelper.DragAndDropActionInfo
+        ) {
+            accessibilityActionIds.add(
+                ViewCompat.addAccessibilityAction(
+                    binding.root,
+                    binding.root.context.resources.getString(actionParamAnd.label)
+                ) { _, _ ->
+                    doDrag(actionParamAnd.fromPosition, actionParamAnd.toPosition)
+                    true
+                })
+        }
+
+        private fun doDrag(fromPosition: Int, toPosition: Int) {
+            itemListener.onDragStarted()
+            itemListener.onTaskDragged(fromPosition, toPosition)
+            itemListener.onDragCompleted(
+                fromPosition,
+                toPosition,
+                usingDragAndDropCustomActions = true
+            )
         }
 
         private fun removeAccessibilityActions(view: View) {

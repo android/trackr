@@ -35,6 +35,7 @@ import com.example.android.trackr.ui.profile.ProfileDialogFragmentArgs
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import org.threeten.bp.Clock
+import java.util.Collections
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -141,15 +142,23 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
     }
 
     override fun onDragStarted() {
-        viewModel.cacheCurrentList(currentListToTaskListItems())
+        viewModel.cacheCurrentList(listToTaskListItems(tasksAdapter.currentList))
     }
 
-    override fun onDragCompleted(position: Int) {
-        val draggedItem = tasksAdapter.currentList[position]
+    override fun onDragCompleted(fromPosition: Int, toPosition: Int, customAction: Boolean) {
+        val draggedItem = tasksAdapter.currentList[fromPosition]
+
+        val list = tasksAdapter.currentList.toMutableList()
+
+        // If using a custom action for drag and drop, the current list tasksAdapter.currentList
+        // will return the original list. In that case, swap the items in the returned list.
+        if (customAction) {
+            Collections.swap(list, fromPosition, toPosition)
+        }
 
         viewModel.persistUpdatedList(
             (draggedItem as DataItem.TaskItem).taskListItem.status,
-            currentListToTaskListItems()
+            listToTaskListItems(list)
         )
 
         Snackbar.make (
@@ -170,10 +179,9 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
         )
     }
 
-    private fun currentListToTaskListItems() : List<TaskListItem> {
-        return tasksAdapter.currentList.filterIsInstance<DataItem.TaskItem>().map { it.taskListItem }
+    private fun listToTaskListItems(list: List<DataItem>) : List<TaskListItem> {
+        return list.filterIsInstance<DataItem.TaskItem>().map { it.taskListItem }
     }
-
 }
 
 private inline fun RecyclerView.doOnScroll(crossinline action: (dx: Int, dy: Int) -> Unit) {

@@ -52,7 +52,7 @@ class TasksAdapterTest {
         override fun onTaskArchived(taskListItem: TaskListItem) {}
         override fun onTaskDragged(fromPosition: Int, toPosition: Int) {}
         override fun onDragStarted() {}
-        override fun onDragCompleted(position: Int) {}
+        override fun onDragCompleted(fromPosition: Int, toPosition: Int, customAction: Boolean) {}
         override fun onAvatarClicked(taskListItem: TaskListItem) {}
     }
 
@@ -149,9 +149,7 @@ class TasksAdapterTest {
         assertThat(holder.binding.chipGroup.isImportantForAccessibility).isTrue()
         assertThat(holder.binding.root.contentDescription).isNull()
 
-        holder.bind(inProgressTaskListItem)
-
-        assertThat(holder.accessibilityActionIds.size).isEqualTo(3)
+        holder.bind(inProgressTaskListItem, DragAndDropActionsHelper(headerAndTask()))
         assertThat(holder.binding.taskListItem).isEqualTo(inProgressTaskListItem)
         assertThat(ViewCompat.getStateDescription(holder.binding.root)).isEqualTo(
             context.getString(
@@ -171,7 +169,7 @@ class TasksAdapterTest {
         assertFalse(holder.binding.star.isChecked)
 
 
-        holder.bind(starredTaskListItem)
+        holder.bind(starredTaskListItem, DragAndDropActionsHelper(headerAndTask()))
 
         assertTrue(holder.binding.star.isChecked)
         assertThat(ViewCompat.getStateDescription(holder.binding.root)).isEqualTo(
@@ -187,7 +185,7 @@ class TasksAdapterTest {
         val holder =
             TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, currentUser, fakeClock)
 
-        holder.bind(starredTaskListItem)
+        holder.bind(starredTaskListItem, DragAndDropActionsHelper(headerAndTask()))
 
         assertFalse(holder.binding.star.isChecked)
     }
@@ -197,7 +195,7 @@ class TasksAdapterTest {
         val holder =
             TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, user, fakeClock)
 
-        holder.bind(inProgressTaskListItem)
+        holder.bind(inProgressTaskListItem, DragAndDropActionsHelper(headerAndTask()))
 
         assertFalse(holder.binding.star.isChecked)
 
@@ -211,7 +209,7 @@ class TasksAdapterTest {
         val holder =
             TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, user2, fakeClock)
 
-        holder.bind(starredTaskListItem)
+        holder.bind(starredTaskListItem, DragAndDropActionsHelper(headerAndTask()))
 
         assertTrue(holder.binding.star.isChecked)
 
@@ -229,7 +227,7 @@ class TasksAdapterTest {
             fakeClock
         )
 
-        holder.bind(inProgressTaskListItem)
+        holder.bind(inProgressTaskListItem, DragAndDropActionsHelper(headerAndTask()))
 
         val nodeInfo = holder.binding.root.createAccessibilityNodeInfo()
         val actionClick = nodeInfo.actionList.filter {
@@ -252,8 +250,10 @@ class TasksAdapterTest {
     fun accessibilityAction_seeProfile() {
         val mockListener = Mockito.mock(TasksAdapter.ItemListener::class.java)
         val holder = setUpAndBindTaskViewHolder(mockListener)
+        val nodeInfo = holder.binding.root.createAccessibilityNodeInfo()
+        val action = nodeInfo.actionList.first {it.label == context.getString(R.string.see_profile)}
 
-        holder.binding.root.performAccessibilityAction(holder.accessibilityActionIds[2], null)
+        holder.binding.root.performAccessibilityAction(action.id, null)
 
         Mockito.verify(mockListener).onAvatarClicked(inProgressTaskListItem)
     }
@@ -262,13 +262,13 @@ class TasksAdapterTest {
     fun bindTaskViewHolder_addingAccessibilityAction_isIdempotent() {
         val holder =
             TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, user, fakeClock)
-        holder.bind(inProgressTaskListItem)
-        assertThat(holder.accessibilityActionIds.size).isEqualTo(3)
+        holder.bind(inProgressTaskListItem, DragAndDropActionsHelper(headerAndTask()))
+        val size = holder.accessibilityActionIds.size
 
-        holder.bind(inProgressTaskListItem)
+        holder.bind(inProgressTaskListItem, DragAndDropActionsHelper(headerAndTask()))
         // If previously added accessibility actions are not cleared, when the holder is rebound,
         // the actions will get added again. This check guards against that.
-        assertThat(holder.accessibilityActionIds.size).isEqualTo(3)
+        assertThat(holder.accessibilityActionIds.size).isEqualTo(size)
     }
 
     @Test
@@ -327,15 +327,15 @@ class TasksAdapterTest {
         holder.onItemMoveStarted()
         Mockito.verify(mockListener).onDragStarted()
 
-        holder.onItemMoveCompleted(1)
-        Mockito.verify(mockListener).onDragCompleted(1)
+        holder.onItemMoveCompleted(0, 1)
+        Mockito.verify(mockListener).onDragCompleted(0, 1)
     }
-
+    
     private fun setUpAndBindTaskViewHolder(
         listener: TasksAdapter.ItemListener
     ): TasksAdapter.TaskViewHolder {
         val holder = TasksAdapter.TaskViewHolder.from(frameLayout, listener, user, fakeClock)
-        holder.bind(inProgressTaskListItem)
+        holder.bind(inProgressTaskListItem, DragAndDropActionsHelper(headerAndTask()))
         return holder
     }
 
@@ -383,5 +383,12 @@ class TasksAdapterTest {
                 expanded = true
             )
         )
+
+        fun headerAndTask() : List<DataItem> {
+            return mutableListOf<DataItem>().apply {
+                add(inProgressHeader)
+                add(DataItem.TaskItem(inProgressTaskListItem))
+            }
+        }
     }
 }
