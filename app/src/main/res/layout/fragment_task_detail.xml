@@ -91,6 +91,26 @@
                         android:textAppearance="?textAppearanceBody1"
                         tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
 
+                    <!-- Status -->
+
+                    <TextView
+                        style="@style/Widget.Trackr.TextView.Label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_large"
+                        android:importantForAccessibility="no"
+                        android:text="@string/status"
+                        app:drawableStartCompat="@drawable/ic_status" />
+
+                    <TextView
+                        android:id="@+id/status"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_huge"
+                        android:text="@{viewModel.detail.status}"
+                        android:textAppearance="?textAppearanceBody1"
+                        tools:text="Not started" />
+
                     <!-- Owner -->
 
                     <TextView
