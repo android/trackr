@@ -89,7 +89,7 @@
                         android:autofillHints="title"
                         android:inputType="textCapSentences"
                         android:paddingStart="0dp"
-                        android:paddingEnd="0dp"
+                        android:paddingEnd="10dp"
                         android:text="@={viewModel.title}"
                         tools:text="Calendar design" />
 
