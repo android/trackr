@@ -70,15 +70,31 @@
 
                     <!-- Star / Title -->
 
-                    <TextView
-                        style="@style/Widget.Trackr.TextView.Label.Title"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_large"
-                        android:text="@{viewModel.detail.title}"
-                        app:drawableStartCompat="@drawable/ic_star"
-                        tools:drawableStart="@drawable/ic_star"
-                        tools:text="Calendar design" />
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/star"
+                            android:layout_width="@dimen/home_task_star_size"
+                            android:layout_height="@dimen/home_task_star_size"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginEnd="20dp"
+                            android:background="@drawable/selector_star"
+                            android:button="@null"
+                            android:checked="@{viewModel.starred}"
+                            android:gravity="center" />
+
+                        <TextView
+                            style="@style/Widget.Trackr.TextView.Label.Title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{viewModel.detail.title}"
+                            tools:text="Calendar design" />
+
+                    </LinearLayout>
 
                     <!-- Description -->
 

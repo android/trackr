@@ -92,5 +92,9 @@ class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
                 ).toBundle()
             )
         }
+
+        binding.star.setOnClickListener {
+            viewModel.toggleTaskStarState()
+        }
     }
 }

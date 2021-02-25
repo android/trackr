@@ -88,8 +88,6 @@
                         android:layout_marginStart="64dp"
                         android:autofillHints="title"
                         android:inputType="textCapSentences"
-                        android:paddingStart="0dp"
-                        android:paddingEnd="10dp"
                         android:text="@={viewModel.title}"
                         tools:text="Calendar design" />
 

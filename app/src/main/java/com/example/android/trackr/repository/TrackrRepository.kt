@@ -29,6 +29,8 @@ class TrackrRepository(
 
     private val taskDao = db.taskDao()
 
+    fun getTaskDetailById(id: Long) = taskDao.getTaskDetailById(id)
+
     fun getArchivedTaskListItems() = taskDao.getArchivedTaskListItems()
 
     /**

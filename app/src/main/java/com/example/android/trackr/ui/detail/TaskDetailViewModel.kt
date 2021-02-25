@@ -19,13 +19,16 @@ package com.example.android.trackr.ui.detail
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
-import com.example.android.trackr.data.Tag
+import androidx.lifecycle.viewModelScope
 import com.example.android.trackr.data.User
-import com.example.android.trackr.db.dao.TaskDao
+import com.example.android.trackr.repository.TrackrRepository
+import kotlinx.coroutines.launch
 
 class TaskDetailViewModel @ViewModelInject constructor(
-    private val taskDao: TaskDao
+    private val repository: TrackrRepository,
+    private val currentUser: User
 ) : ViewModel() {
 
     private val _taskId = MutableLiveData<Long>()
@@ -35,5 +38,17 @@ class TaskDetailViewModel @ViewModelInject constructor(
             _taskId.value = value!!
         }
 
-    val detail = _taskId.switchMap { id -> taskDao.getTaskDetailById(id) }
+    val detail = _taskId.switchMap { id -> repository.getTaskDetailById(id) }
+
+    val starred = detail.map { detail ->
+        detail?.starUsers?.contains(currentUser) ?: false
+    }
+
+    fun toggleTaskStarState() {
+        _taskId.value?.let { taskId ->
+            viewModelScope.launch {
+                repository.toggleTaskStarState(taskId)
+            }
+        }
+    }
 }
