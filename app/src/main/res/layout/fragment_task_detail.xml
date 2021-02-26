@@ -83,12 +83,12 @@
                     <!-- Description -->
 
                     <TextView
+                        style="@style/Widget.Trackr.TextView.Body"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
                         android:layout_marginTop="@dimen/spacing_medium"
                         android:text="@{viewModel.detail.description}"
-                        android:textAppearance="?textAppearanceBody1"
                         tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
 
                     <!-- Owner -->
@@ -104,11 +104,11 @@
 
                     <TextView
                         android:id="@+id/owner"
+                        style="@style/Widget.Trackr.TextView.Body"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
                         android:text="@{viewModel.detail.owner.username}"
-                        android:textAppearance="?textAppearanceBody1"
                         tools:text="Daring Dove" />
 
                     <!-- Creator -->
@@ -124,11 +124,11 @@
 
                     <TextView
                         android:id="@+id/creator"
+                        style="@style/Widget.Trackr.TextView.Body"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
                         android:text="@{viewModel.detail.creator.username}"
-                        android:textAppearance="?textAppearanceBody1"
                         tools:text="Peaceful Puffin" />
 
                     <!-- Due date -->
@@ -144,19 +144,19 @@
 
                     <TextView
                         android:id="@+id/due_at"
+                        style="@style/Widget.Trackr.TextView.Body"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
-                        android:textAppearance="?textAppearanceBody1"
                         app:clock="@{clock}"
                         app:formattedDate="@{viewModel.detail.dueAt}"
                         tools:text="Sept 2, 2020 (Wed)" />
 
                     <TextView
+                        style="@style/Widget.Trackr.TextView.Body"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
-                        android:textAppearance="?textAppearanceBody1"
                         app:clock="@{clock}"
                         app:dueMessageOrHide="@{viewModel.detail.dueAt}"
                         tools:text="Due in 3 days" />
@@ -174,6 +174,7 @@
 
                     <TextView
                         android:id="@+id/created_at"
+                        style="@style/Widget.Trackr.TextView.Body"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"

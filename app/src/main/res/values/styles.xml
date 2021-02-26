@@ -23,10 +23,17 @@
         <item name="android:paddingEnd">0dp</item>
         <item name="android:paddingRight">0dp</item>
         <item name="android:textAppearance">?attr/textAppearanceHeadline2</item>
+        <item name="android:textDirection">locale</item>
     </style>
 
     <style name="Widget.Trackr.TextView.Label.Title">
         <item name="android:textAppearance">?attr/textAppearanceHeadline1</item>
+        <item name="android:textDirection">locale</item>
+    </style>
+
+    <style name="Widget.Trackr.TextView.Body" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textAppearance">?attr/textAppearanceBody1</item>
+        <item name="android:textDirection">locale</item>
     </style>
 
     <style name="HomeSectionHeaderText">

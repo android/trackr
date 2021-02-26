@@ -106,6 +106,7 @@
 
                     <EditText
                         android:id="@+id/description"
+                        style="@style/Widget.Trackr.TextView.Body"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
@@ -113,7 +114,6 @@
                         android:autofillHints="description"
                         android:inputType="textMultiLine|textCapSentences"
                         android:text="@={viewModel.description}"
-                        android:textAppearance="?textAppearanceBody1"
                         tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
 
                     <!-- Status -->
@@ -144,8 +144,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_large"
-                        android:text="@string/owner"
                         android:importantForAccessibility="no"
+                        android:text="@string/owner"
                         app:drawableStartCompat="@drawable/ic_person" />
 
                     <com.google.android.material.chip.Chip
@@ -168,22 +168,22 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_large"
-                        android:text="@string/due_at"
                         android:importantForAccessibility="no"
+                        android:text="@string/due_at"
                         app:drawableStartCompat="@drawable/ic_due_at" />
 
                     <TextView
                         android:id="@+id/due_at"
+                        style="@style/Widget.Trackr.TextView.Body"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
                         android:foreground="?attr/selectableItemBackground"
                         android:gravity="center_vertical"
                         android:minHeight="@dimen/min_touch_target"
-                        android:textAppearance="?textAppearanceBody1"
+                        app:clickActionLabel="@{@string/change}"
                         app:clock="@{clock}"
                         app:formattedDate="@{viewModel.dueAt}"
-                        app:clickActionLabel="@{@string/change}"
                         tools:text="Sept 2, 2020 (Wed)" />
 
                     <!-- Creation date isn't editable, so it is not displayed on this screen -->
