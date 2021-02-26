@@ -94,7 +94,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         }
         val menuItemSave = binding.toolbar.menu.findItem(R.id.action_save)
         viewModel.modified.observe(viewLifecycleOwner) { modified ->
-            menuItemSave.isEnabled = modified
+            menuItemSave.isVisible = modified
         }
         binding.status.adapter = ArrayAdapter(
             requireContext(),
