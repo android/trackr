@@ -48,6 +48,13 @@ class TrackrRepository(
     }
 
     /**
+     * Archive tasks.
+     */
+    suspend fun archive(taskIds: List<Long>) {
+        taskDao.updateTaskStatus(taskIds, TaskStatus.ARCHIVED)
+    }
+
+    /**
      * Unarchive tasks. This sets the state to [TaskStatus.NOT_STARTED] for all the tasks.
      */
     suspend fun unarchive(taskIds: List<Long>) {

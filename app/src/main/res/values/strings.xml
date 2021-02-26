@@ -88,6 +88,10 @@
     <!-- Archive strings -->
     <string name="unarchive">Unarchive</string>
     <string name="close">Close</string>
+    <plurals name="tasks_unarchived">
+        <item quantity="one">1 task unarchived</item>
+        <item quantity="other">%s tasks unarchived</item>
+    </plurals>
 
     <!-- Profile strings -->
     <string name="avatar_of">Avatar of %s</string>

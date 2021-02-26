@@ -17,7 +17,6 @@
 package com.example.android.trackr.ui.archives
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,6 +24,7 @@ import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.example.android.trackr.data.TaskListItem
 import com.example.android.trackr.repository.TrackrRepository
+import com.example.android.trackr.ui.utils.timeout
 import kotlinx.coroutines.launch
 
 class ArchiveViewModel @ViewModelInject constructor(
@@ -33,6 +33,17 @@ class ArchiveViewModel @ViewModelInject constructor(
 
     private val archivedTaskListItems = repository.getArchivedTaskListItems()
     private val selectedTaskIds = MutableLiveData(emptySet<Long>())
+
+    /** A set of taskIds that were most recently unarchived. */
+    private val undoableTaskIds = MutableLiveData(emptySet<Long>())
+
+    /**
+     * The number of recently unarchived tasks that can be archived back with the "undo" feature.
+     * Undo is available during 5 seconds after unarchiving tasks.
+     */
+    val undoableCount = undoableTaskIds
+        .map { it.size }
+        .timeout(viewModelScope, 5000L, 0)
 
     val archivedTasks = MediatorLiveData<List<ArchivedTask>>().apply {
         fun update() {
@@ -71,7 +82,16 @@ class ArchiveViewModel @ViewModelInject constructor(
         val ids = selectedTaskIds.value ?: return
         viewModelScope.launch {
             repository.unarchive(ids.toList())
+            undoableTaskIds.value = ids
             selectedTaskIds.value = emptySet()
+        }
+    }
+
+    fun undoUnarchiving() {
+        val ids = undoableTaskIds.value ?: return
+        viewModelScope.launch {
+            repository.archive(ids.toList())
+            undoableTaskIds.value = emptySet()
         }
     }
 }

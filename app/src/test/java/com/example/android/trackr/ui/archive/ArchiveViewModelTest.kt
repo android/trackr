@@ -75,12 +75,26 @@ class ArchiveViewModelTest {
     fun unarchive() {
         val viewModel = createViewModel()
         assertThat(viewModel.selectedCount.valueBlocking).isEqualTo(0)
+        assertThat(viewModel.undoableCount.valueBlocking).isEqualTo(0)
+        assertThat(viewModel.archivedTasks.valueBlocking).hasSize(2)
+
+        // Select
         viewModel.toggleTaskSelection(1L)
         assertThat(viewModel.selectedCount.valueBlocking).isEqualTo(1)
+        assertThat(viewModel.undoableCount.valueBlocking).isEqualTo(0)
+        assertThat(viewModel.archivedTasks.valueBlocking).hasSize(2)
+
+        // Unarchive
         viewModel.unarchiveSelectedTasks()
-        viewModel.archivedTasks.valueBlocking.let { tasks ->
-            assertThat(tasks).hasSize(1)
-        }
+        assertThat(viewModel.selectedCount.valueBlocking).isEqualTo(0)
+        assertThat(viewModel.undoableCount.valueBlocking).isEqualTo(1)
+        assertThat(viewModel.archivedTasks.valueBlocking).hasSize(1)
+
+        // Undo
+        viewModel.undoUnarchiving()
+        assertThat(viewModel.selectedCount.valueBlocking).isEqualTo(0)
+        assertThat(viewModel.undoableCount.valueBlocking).isEqualTo(0)
+        assertThat(viewModel.archivedTasks.valueBlocking).hasSize(2)
     }
 
     private fun populate(db: AppDatabase) {
