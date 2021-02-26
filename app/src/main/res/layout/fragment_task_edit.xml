@@ -47,7 +47,7 @@
                 android:layout_height="?attr/actionBarSize"
                 app:menu="@menu/task_edit"
                 app:navigationContentDescription="@string/back"
-                app:navigationIcon="@drawable/ic_chevron_left" />
+                app:navigationIcon="@drawable/ic_chevron_start" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
