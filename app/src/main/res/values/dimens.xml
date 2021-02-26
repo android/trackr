@@ -20,6 +20,7 @@
     <dimen name="text_size_header_2">23sp</dimen>
     <dimen name="text_size_body_1">19sp</dimen>
 
+    <dimen name="spacing_tiny">4dp</dimen>
     <dimen name="spacing_small">8dp</dimen>
     <dimen name="spacing_medium">16dp</dimen>
     <dimen name="spacing_large">32dp</dimen>
@@ -30,8 +31,8 @@
     <dimen name="card_radius">8dp</dimen>
 
     <!-- Home Screen -->
-    <dimen name="home_task_star_detail_margin">30dp</dimen>
     <dimen name="home_task_star_size">24dp</dimen>
+    <dimen name="home_task_star_margin">24dp</dimen>
 
     <dimen name="text_size_home_section_header">20sp</dimen>
 </resources>
