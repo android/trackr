@@ -21,10 +21,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
+    style="@style/Widget.Trackr.TextView.Body"
     android:minHeight="?attr/listPreferredItemHeight"
     android:paddingStart="@dimen/spacing_medium"
     android:paddingTop="@dimen/spacing_small"
     android:paddingEnd="@dimen/spacing_medium"
     android:paddingBottom="@dimen/spacing_small"
-    android:textAppearance="?textAppearanceBody1"
     tools:text="In progress" />
