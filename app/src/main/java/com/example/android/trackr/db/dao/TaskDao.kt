@@ -94,7 +94,7 @@ interface TaskDao {
     suspend fun loadTags(): List<Tag>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTask(task: Task)
+    suspend fun insertTask(task: Task): Long
 
     @Query("SELECT tagId FROM task_tags WHERE taskId = :taskId")
     suspend fun loadTaskTagIds(taskId: Long): List<Long>
@@ -118,13 +118,13 @@ interface TaskDao {
             dueAt = detail.dueAt,
             orderInCategory = 1
         )
-        insertTask(task)
+        val taskId = insertTask(task)
         val updatedTagIds = detail.tags.map { tag -> tag.id }
-        val currentTagIds = loadTaskTagIds(detail.id)
+        val currentTagIds = loadTaskTagIds(taskId)
         val removedTagIds = currentTagIds.filter { id -> id !in updatedTagIds }
-        deleteTaskTags(detail.id, removedTagIds)
+        deleteTaskTags(taskId, removedTagIds)
         val newTagIds = updatedTagIds.filter { id -> id !in currentTagIds }
-        insertTaskTags(newTagIds.map { id -> TaskTag(taskId = detail.id, tagId = id) })
+        insertTaskTags(newTagIds.map { id -> TaskTag(taskId = taskId, tagId = id) })
     }
 
     @Transaction

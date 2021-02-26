@@ -45,18 +45,24 @@ class TaskEditViewModelTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    private fun createViewModel(): TaskEditViewModel {
+        val db = createDatabase()
+        populate(db)
+        return TaskEditViewModel(db.taskDao(), user1)
+    }
+
     @Test
     fun createNewTask() {
-        val db = createDatabase()
-        val viewModel = TaskEditViewModel(db.taskDao())
+        val viewModel = createViewModel()
         viewModel.taskId = 0L
 
         assertThat(viewModel.taskId).isEqualTo(0L)
         assertThat(viewModel.modified.valueBlocking).isFalse()
         assertThat(viewModel.title.valueBlocking).isEmpty()
         assertThat(viewModel.description.valueBlocking).isEmpty()
-        assertThat(viewModel.owner.valueBlocking).isNull()
-        assertThat(viewModel.creator.valueBlocking).isNull()
+        assertThat(viewModel.owner.valueBlocking).isEqualTo(user1)
+        assertThat(viewModel.creator.valueBlocking).isEqualTo(user1)
+        assertThat(viewModel.tags.valueBlocking).isEmpty()
 
         viewModel.title.value = "a"
 
@@ -66,9 +72,7 @@ class TaskEditViewModelTest {
 
     @Test
     fun editExistingTask() {
-        val db = createDatabase()
-        populate(db)
-        val viewModel = TaskEditViewModel(db.taskDao())
+        val viewModel = createViewModel()
         viewModel.taskId = 1L
 
         assertThat(viewModel.taskId).isEqualTo(1L)
@@ -97,9 +101,7 @@ class TaskEditViewModelTest {
 
     @Test
     fun editOwner() {
-        val db = createDatabase()
-        populate(db)
-        val viewModel = TaskEditViewModel(db.taskDao())
+        val viewModel = createViewModel()
         viewModel.taskId = 1L
 
         assertThat(viewModel.owner.valueBlocking).isEqualTo(User(1L, "owner", Avatar.DEFAULT_USER))
@@ -113,9 +115,7 @@ class TaskEditViewModelTest {
 
     @Test
     fun editStatus() {
-        val db = createDatabase()
-        populate(db)
-        val viewModel = TaskEditViewModel(db.taskDao())
+        val viewModel = createViewModel()
         viewModel.taskId = 1L
 
         assertThat(viewModel.status.valueBlocking).isEqualTo(TaskStatus.IN_PROGRESS)
@@ -129,9 +129,7 @@ class TaskEditViewModelTest {
 
     @Test
     fun editDueAt() {
-        val db = createDatabase()
-        populate(db)
-        val viewModel = TaskEditViewModel(db.taskDao())
+        val viewModel = createViewModel()
         viewModel.taskId = 1L
 
         assertThat(viewModel.dueAt.valueBlocking)
@@ -147,9 +145,7 @@ class TaskEditViewModelTest {
 
     @Test
     fun addTag() {
-        val db = createDatabase()
-        populate(db)
-        val viewModel = TaskEditViewModel(db.taskDao())
+        val viewModel = createViewModel()
         viewModel.taskId = 1L
 
         assertThat(viewModel.tags.valueBlocking).containsExactly(Tag(1L, "tag1", TagColor.RED))
@@ -166,9 +162,7 @@ class TaskEditViewModelTest {
 
     @Test
     fun removeTag() {
-        val db = createDatabase()
-        populate(db)
-        val viewModel = TaskEditViewModel(db.taskDao())
+        val viewModel = createViewModel()
         viewModel.taskId = 1L
 
         assertThat(viewModel.tags.valueBlocking).containsExactly(Tag(1L, "tag1", TagColor.RED))
@@ -182,15 +176,15 @@ class TaskEditViewModelTest {
 
     @Test
     fun discardChanges() {
-        val db = createDatabase()
-        populate(db)
-        val viewModel = TaskEditViewModel(db.taskDao())
+        val viewModel = createViewModel()
         viewModel.taskId = 1L
 
         assertThat(viewModel.discarded.valueBlocking).isFalse()
         viewModel.discardChanges()
         assertThat(viewModel.discarded.valueBlocking).isTrue()
     }
+
+    private val user1 = User(1L, "owner", Avatar.DEFAULT_USER)
 
     private fun populate(db: AppDatabase) {
         runBlocking {
@@ -203,7 +197,7 @@ class TaskEditViewModelTest {
                 )
                 insertUsers(
                     listOf(
-                        User(1L, "owner", Avatar.DEFAULT_USER),
+                        user1,
                         User(2L, "creator", Avatar.DEFAULT_USER),
                         User(3L, "another", Avatar.DEFAULT_USER)
                     )

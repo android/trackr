@@ -135,7 +135,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
             }
         }
 
-        binding.tags.setOnClickListener {
+        binding.tagContainer.setOnClickListener {
             findNavController().navigate(R.id.nav_tag_selection)
         }
 

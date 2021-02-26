@@ -24,7 +24,6 @@ import com.example.android.trackr.R
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 
-
 @Entity(
     tableName = "tasks",
     foreignKeys = [
@@ -41,7 +40,7 @@ import org.threeten.bp.Instant
     ]
 )
 data class Task(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val id: Long,
 
     /**

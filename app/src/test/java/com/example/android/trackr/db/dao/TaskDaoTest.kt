@@ -40,7 +40,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.threeten.bp.Instant
-import java.lang.RuntimeException
 import java.util.concurrent.Executors
 
 @RunWith(AndroidJUnit4::class)
@@ -226,7 +225,7 @@ class TaskDaoTest {
         )
 
         val newDetail = TaskDetail(
-            id = 1L,
+            id = 0L,
             title = "title",
             description = "description",
             status = TaskStatus.IN_PROGRESS,
@@ -432,6 +431,32 @@ class TaskDaoTest {
         assertThat(newTask).isNull()
     }
 
+    @Test
+    fun insertTask_create() = runBlocking {
+        insertData(
+            taskDao = taskDao,
+            users = listOf(user1, user2),
+            tags = listOf(tag1, tag2, tag3)
+        )
+        assertThat(taskDao.getTasks().valueBlocking).isEmpty()
+        val id = taskDao.insertTask(
+            Task(
+                id = 0L,
+                title = "title",
+                description = "description",
+                status = TaskStatus.NOT_STARTED,
+                creatorId = 1L,
+                ownerId = 2L,
+                dueAt = dueAt1,
+                orderInCategory = 1
+            )
+        )
+        assertThat(id).isNotEqualTo(0L)
+        taskDao.getTaskDetailById(id).valueBlocking!!.let { detail ->
+            assertThat(detail.title).isEqualTo("title")
+        }
+    }
+
     companion object {
         fun insertData(
             taskDao: TaskDao,
@@ -451,7 +476,7 @@ class TaskDaoTest {
         val dueAt1: Instant = Instant.parse("2020-12-01T00:00:00.00Z")
         val dueAt2: Instant = Instant.parse("2020-12-11T00:00:00.00Z")
 
-        val user1 = User(id = 1L, username = "user1", avatar =  Avatar.DEFAULT_USER)
+        val user1 = User(id = 1L, username = "user1", avatar = Avatar.DEFAULT_USER)
         val user2 = User(id = 2L, username = "user2", avatar = Avatar.DEFAULT_USER)
 
         val task1 = Task(

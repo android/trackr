@@ -33,7 +33,8 @@ import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 
 class TaskEditViewModel @ViewModelInject constructor(
-    private val taskDao: TaskDao
+    private val taskDao: TaskDao,
+    private val currentUser: User
 ) : ViewModel() {
 
     var taskId: Long = 0L
@@ -49,19 +50,19 @@ class TaskEditViewModel @ViewModelInject constructor(
     private val _status = MutableLiveData(TaskStatus.NOT_STARTED)
     val status: LiveData<TaskStatus> = _status
 
-    private val _owner = MutableLiveData<User>()
+    private val _owner = MutableLiveData(currentUser)
     val owner: LiveData<User> = _owner
 
-    private val _creator = MutableLiveData<User>()
+    private val _creator = MutableLiveData(currentUser)
     val creator: LiveData<User> = _creator
 
-    private val _dueAt = MutableLiveData<Instant>()
+    private val _dueAt = MutableLiveData(Instant.now() + Duration.ofDays(7))
     val dueAt: LiveData<Instant> = _dueAt
 
     private val _createdAt = MutableLiveData(Instant.now())
     val createdAt: LiveData<Instant> = _createdAt
 
-    private val _tags = MutableLiveData<List<Tag>>()
+    private val _tags = MutableLiveData<List<Tag>>(emptyList())
     val tags: LiveData<List<Tag>> = _tags
 
     private var starUsers = mutableListOf<User>()
@@ -167,8 +168,8 @@ class TaskEditViewModel @ViewModelInject constructor(
                         status = _status.value ?: TaskStatus.NOT_STARTED,
                         createdAt = _createdAt.value ?: Instant.now(),
                         dueAt = _dueAt.value ?: Instant.now() + Duration.ofDays(7),
-                        owner = _owner.value ?: users[0],
-                        creator = _creator.value ?: users[0],
+                        owner = _owner.value ?: currentUser,
+                        creator = _creator.value ?: currentUser,
                         tags = _tags.value ?: emptyList(),
                         starUsers = starUsers
                     )
