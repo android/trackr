@@ -26,6 +26,7 @@ import com.example.android.trackr.data.User
 import com.example.android.trackr.databinding.FragmentArchiveBinding
 import com.example.android.trackr.ui.detail.TaskDetailFragmentArgs
 import com.example.android.trackr.ui.utils.configureEdgeToEdge
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import org.threeten.bp.Clock
 import javax.inject.Inject
@@ -80,6 +81,31 @@ class ArchivesFragment : Fragment(R.layout.fragment_archive) {
                     true
                 }
                 else -> false
+            }
+        }
+
+        // Undo unarchiving tasks
+        var snackbar: Snackbar? = null
+        viewModel.undoableCount.observe(viewLifecycleOwner) { undoableCount ->
+            snackbar = if (undoableCount > 0) {
+                println("Showing ${System.currentTimeMillis()}")
+                Snackbar
+                    .make(
+                        binding.coordinator,
+                        resources.getQuantityString(
+                            R.plurals.tasks_unarchived,
+                            undoableCount,
+                            undoableCount
+                        ),
+                        Snackbar.LENGTH_INDEFINITE
+                    )
+                    .setAction(R.string.undo) { viewModel.undoUnarchiving() }.also {
+                        it.show()
+                    }
+            } else {
+                println("Dismissing ${System.currentTimeMillis()}")
+                snackbar?.dismiss()
+                null
             }
         }
     }
