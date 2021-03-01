@@ -59,7 +59,6 @@
     <!-- Custom accessibility action strings -->
     <string name="archive">Archive</string>
     <string name="explore_details">Explore details</string>
-    <string name="see_profile">See profile</string>
     <string name="move_to_top">Move to top</string>
     <string name="move_to_bottom">Move to bottom</string>
     <string name="move_up_one">Move up one</string>
@@ -97,9 +96,6 @@
         <item quantity="one">1 task unarchived</item>
         <item quantity="other">%s tasks unarchived</item>
     </plurals>
-
-    <!-- Profile strings -->
-    <string name="avatar_of">Avatar of %s</string>
 
     <!-- Settings -->
     <string name="dark_mode_title">Dark Mode</string>

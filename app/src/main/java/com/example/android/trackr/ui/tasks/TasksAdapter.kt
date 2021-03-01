@@ -74,7 +74,6 @@ class TasksAdapter(
             toPosition: Int,
             usingDragAndDropCustomActions: Boolean = false
         )
-        fun onAvatarClicked(taskListItem: TaskListItem)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -187,7 +186,6 @@ class TasksAdapter(
                     if (taskListItem.starUsers.isEmpty()) R.string.unstarred else R.string.starred
                 )
             )
-            binding.ownerAvatar.setOnClickListener { itemListener.onAvatarClicked(taskListItem) }
 
             // TODO(b/176934848): include chip/tag information in contentDescription of each task in list.
             binding.chipGroup.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
@@ -206,7 +204,6 @@ class TasksAdapter(
                 addDragAndDropAction(actionParam)
             }
 
-            addSeeProfileDialogAccessibilityAction(taskListItem)
             binding.executePendingBindings()
         }
 
@@ -294,21 +291,6 @@ class TasksAdapter(
                 ) { _, _ ->
                     // The functionality associated with the label.
                     itemListener.onStarClicked(taskListItem)
-                    true
-                })
-        }
-
-        /**
-         * Creates a custom accessibility action for showing the user profile dialog.
-         */
-        private fun addSeeProfileDialogAccessibilityAction(taskListItem: TaskListItem) {
-            accessibilityActionIds.add(
-                ViewCompat.addAccessibilityAction(
-                    binding.root,
-                    binding.root.context.getString(R.string.see_profile)
-                ) { _, _ ->
-                    // The functionality associated with the label.
-                    itemListener.onAvatarClicked(taskListItem)
                     true
                 })
         }

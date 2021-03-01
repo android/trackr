@@ -31,7 +31,6 @@ import com.example.android.trackr.databinding.FragmentTasksBinding
 import com.example.android.trackr.ui.detail.TaskDetailFragmentArgs
 
 import com.example.android.trackr.ui.utils.configureEdgeToEdge
-import com.example.android.trackr.ui.profile.ProfileDialogFragmentArgs
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import org.threeten.bp.Clock
@@ -170,13 +169,6 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
                 viewModel.restoreListFromCache()
             }
             .show()
-    }
-
-    override fun onAvatarClicked(taskListItem: TaskListItem) {
-        findNavController().navigate(
-            R.id.nav_profile,
-            ProfileDialogFragmentArgs(taskListItem.owner.id).toBundle()
-        )
     }
 
     private fun listToTaskListItems(list: List<DataItem>) : List<TaskListItem> {

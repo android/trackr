@@ -53,7 +53,6 @@ class TasksAdapterTest {
         override fun onTaskDragged(fromPosition: Int, toPosition: Int) {}
         override fun onDragStarted() {}
         override fun onDragCompleted(fromPosition: Int, toPosition: Int, customAction: Boolean) {}
-        override fun onAvatarClicked(taskListItem: TaskListItem) {}
     }
 
     private val dateInEpochSecond = 1584310694L // March 15, 2020
@@ -247,18 +246,6 @@ class TasksAdapterTest {
     }
 
     @Test
-    fun accessibilityAction_seeProfile() {
-        val mockListener = Mockito.mock(TasksAdapter.ItemListener::class.java)
-        val holder = setUpAndBindTaskViewHolder(mockListener)
-        val nodeInfo = holder.binding.root.createAccessibilityNodeInfo()
-        val action = nodeInfo.actionList.first {it.label == context.getString(R.string.see_profile)}
-
-        holder.binding.root.performAccessibilityAction(action.id, null)
-
-        Mockito.verify(mockListener).onAvatarClicked(inProgressTaskListItem)
-    }
-
-    @Test
     fun bindTaskViewHolder_addingAccessibilityAction_isIdempotent() {
         val holder =
             TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, user, fakeClock)
@@ -330,7 +317,7 @@ class TasksAdapterTest {
         holder.onItemMoveCompleted(0, 1)
         Mockito.verify(mockListener).onDragCompleted(0, 1)
     }
-    
+
     private fun setUpAndBindTaskViewHolder(
         listener: TasksAdapter.ItemListener
     ): TasksAdapter.TaskViewHolder {
@@ -375,7 +362,7 @@ class TasksAdapterTest {
             tags = emptyList(),
             orderInCategory = 3
         )
-        
+
         val inProgressHeader = DataItem.HeaderItem(
             HeaderData(
                 count = 3,

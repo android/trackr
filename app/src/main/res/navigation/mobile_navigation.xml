@@ -25,16 +25,6 @@
         android:label="Tasks"
         tools:layout="@layout/fragment_tasks" />
 
-    <dialog
-        android:id="@+id/nav_profile"
-        android:name="com.example.android.trackr.ui.profile.ProfileDialogFragment"
-        android:label="Profile"
-        android:layout="@layout/fragment_profile">
-        <argument
-            android:name="userId"
-            app:argType="long" />
-    </dialog>
-
     <fragment
         android:id="@+id/nav_task_detail"
         android:name="com.example.android.trackr.ui.detail.TaskDetailFragment"
