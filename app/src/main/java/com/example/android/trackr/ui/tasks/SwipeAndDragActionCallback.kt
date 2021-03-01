@@ -32,11 +32,14 @@ class SwipeAndDragCallback :
 
     private var initialPosition = NO_POSITION
 
+    private var fromPosition: Int = NO_POSITION
+    private var toPosition: Int = NO_POSITION
+
     interface ItemTouchListener {
         fun onItemSwiped()
         fun onItemMoved(fromPosition: Int, toPosition: Int)
         fun onItemMoveStarted()
-        fun onItemMoveCompleted(position: Int)
+        fun onItemMoveCompleted(fromPosition: Int, toPosition: Int)
     }
 
     override fun getMovementFlags(
@@ -89,6 +92,8 @@ class SwipeAndDragCallback :
         x: Int,
         y: Int
     ) {
+        fromPosition = fromPos
+        toPosition = toPos
         // Store the initial position. This helps check if the item was actually dragged to a new
         // position.
         if (initialPosition == NO_POSITION) {
@@ -114,9 +119,10 @@ class SwipeAndDragCallback :
     override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
         super.clearView(recyclerView, viewHolder)
         if (viewHolder is ItemTouchListener) {
-            if (initialPosition != NO_POSITION /* drag was initiated but abandoned */ &&
-                viewHolder.adapterPosition != initialPosition /* item was dragged back to the */) {
-                    viewHolder.onItemMoveCompleted(viewHolder.adapterPosition)
+            // If the drag was abandoned, or if the item was dragged back to the original position,
+            // do nothing.
+            if (initialPosition != NO_POSITION && viewHolder.adapterPosition != initialPosition) {
+                viewHolder.onItemMoveCompleted(fromPosition, toPosition)
             }
         }
         initialPosition = NO_POSITION
