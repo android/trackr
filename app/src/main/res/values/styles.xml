@@ -39,7 +39,7 @@
     </style>
 
     <style name="HomeSectionHeaderText">
-        <item name="fontFamily">@font/raleway</item>
+        <item name="fontFamily">@font/raleway_extrabold</item>
         <item name="android:textColor">@color/trackr_blue_100</item>
         <item name="android:textSize">@dimen/text_size_home_section_header</item>
     </style>
