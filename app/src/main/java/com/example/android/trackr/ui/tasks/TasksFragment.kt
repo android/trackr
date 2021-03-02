@@ -92,10 +92,6 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
                 else -> false
             }
         }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
 
         viewModel.dataItems.observe(viewLifecycleOwner) {
             tasksAdapter.submitList(it)
@@ -104,17 +100,17 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
         // Logic for presenting user with the option to unarchive a previously archived task.
         viewModel.archivedItem.observe(viewLifecycleOwner) { item ->
             if (item != null) {
-                view?.let {
-                    Snackbar.make(
-                        it,
+                Snackbar
+                    .make(
+                        binding.coordinator,
                         getString(R.string.task_archived),
                         Snackbar.LENGTH_LONG
                     )
-                        .setAction(getString(R.string.undo)) {
-                            viewModel.unarchiveTask()
-                        }
-                        .show()
-                }
+                    .setAction(getString(R.string.undo)) {
+                        viewModel.unarchiveTask()
+                    }
+                    .setAnchorView(binding.add)
+                    .show()
             }
         }
     }
@@ -160,7 +156,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
             listToTaskListItems(list)
         )
 
-        Snackbar.make (
+        Snackbar.make(
             binding.root,
             R.string.task_position_changed,
             Snackbar.LENGTH_LONG
@@ -171,7 +167,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
             .show()
     }
 
-    private fun listToTaskListItems(list: List<DataItem>) : List<TaskListItem> {
+    private fun listToTaskListItems(list: List<DataItem>): List<TaskListItem> {
         return list.filterIsInstance<DataItem.TaskItem>().map { it.taskListItem }
     }
 }
