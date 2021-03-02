@@ -16,7 +16,7 @@
 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:color="@color/trackr_green_800"
+        android:color="@color/trackr_green_900"
         android:state_selected="true" />
     <item
         android:color="@color/cardview_dark_background" />
