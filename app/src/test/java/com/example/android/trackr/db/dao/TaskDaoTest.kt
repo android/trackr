@@ -45,6 +45,8 @@ import java.util.concurrent.Executors
 @RunWith(AndroidJUnit4::class)
 class TaskDaoTest {
 
+    // TODO (b/181686374): don't use SeedData in tests.
+
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
@@ -97,16 +99,17 @@ class TaskDaoTest {
         taskDao.insertTasks(SeedData.Tasks)
         taskDao.insertTaskTags(SeedData.TaskTags)
         taskDao.insertUserTasks(SeedData.UserTasks)
+        val task = SeedData.Tasks[0]
         taskDao.getTaskDetailById(1L).valueBlocking!!.let { detail ->
             assertThat(detail.id).isEqualTo(1L)
-            assertThat(detail.title).isEqualTo("Task 1")
-            assertThat(detail.owner.username).isEqualTo("You")
-            assertThat(detail.creator.username).isEqualTo("John")
+            assertThat(detail.title).isEqualTo(task.title)
+            assertThat(detail.owner.username).isEqualTo("Daring Dove")
+            assertThat(detail.creator.username).isEqualTo("Likeable Lark")
             assertThat(detail.tags).hasSize(2)
-            assertThat(detail.tags[0].label).isEqualTo("Home")
-            assertThat(detail.tags[1].label).isEqualTo("Hobby")
+            assertThat(detail.tags[0].label).isEqualTo("2.4 release")
+            assertThat(detail.tags[1].label).isEqualTo("UI/UX")
             assertThat(detail.starUsers).hasSize(1)
-            assertThat(detail.starUsers[0].username).isEqualTo("You")
+            assertThat(detail.starUsers[0].username).isEqualTo("Daring Dove")
         }
     }
 
@@ -204,14 +207,14 @@ class TaskDaoTest {
     fun loadUsers() = runBlocking {
         taskDao.insertUsers(SeedData.Users)
         val users = taskDao.loadUsers()
-        assertThat(users).hasSize(2)
+        assertThat(users).hasSize(3)
     }
 
     @Test
     fun loadTags() = runBlocking {
         taskDao.insertTags(SeedData.Tags)
         val tags = taskDao.loadTags()
-        assertThat(tags).hasSize(3)
+        assertThat(tags).hasSize(6)
     }
 
     @Test
