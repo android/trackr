@@ -122,7 +122,9 @@ enum class TagColor(val textColor: Int, val backgroundColor: Int) {
     BLUE(R.attr.blueTagTextColor, R.attr.blueTagBackgroundColor),
     GREEN(R.attr.greenTagTextColor, R.attr.greenTagBackgroundColor),
     PURPLE(R.attr.purpleTagTextColor, R.attr.purpleTagBackgroundColor),
-    RED(R.attr.redTagTextColor, R.attr.redTagBackgroundColor)
+    RED(R.attr.redTagTextColor, R.attr.redTagBackgroundColor),
+    TEAL(R.attr.tealTagTextColor, R.attr.tealTagBackgroundColor),
+    YELLOW(R.attr.yellowTagTextColor, R.attr.yellowTagBackgroundColor),
 }
 
 enum class Avatar(val drawableResId: Int) {
