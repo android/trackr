@@ -61,9 +61,11 @@ interface TaskDao {
     @Query("SELECT * FROM USERS WHERE id = :id")
     fun getUserById(id: Long): LiveData<User?>
 
+    @Transaction
     @Query("SELECT * FROM TaskDetail WHERE id = :id")
     fun getTaskDetailById(id: Long): LiveData<TaskDetail?>
 
+    @Transaction
     @Query("SELECT * FROM TaskDetail WHERE id = :id")
     suspend fun loadTaskDetailById(id: Long): TaskDetail?
 
