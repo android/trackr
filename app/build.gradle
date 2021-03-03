@@ -23,7 +23,7 @@ apply plugin: 'androidx.navigation.safeargs.kotlin'
 android {
     compileSdkVersion 30
     // Also update 'kokoro/build.sh' when updating this.
-    buildToolsVersion "30.0.2"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.example.android.trackr"
@@ -31,14 +31,16 @@ android {
         targetSdkVersion 30
         multiDexEnabled true
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0-alpha01"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        // Enable incremental building with Room and Hilt's annotation processors
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments["room.incremental"] = "true"
+                arguments += [
+                        // Enable Room's incremental annotation processor
+                        "room.incremental": "true"
+                ]
             }
         }
 
@@ -83,8 +85,6 @@ configurations.all {
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
-
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "androidx.cardview:cardview:$cardview_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
@@ -125,7 +125,7 @@ dependencies {
     testImplementation "io.mockk:mockk:$mockk_version"
     testImplementation "junit:junit:$junit_version"
     testImplementation "org.robolectric:robolectric:$robolectric_version"
-    testImplementation ("org.threeten:threetenbp:$threetenbp_version"){
-        exclude group:"com.jakewharton.threetenabp", module:"threetenabp"
+    testImplementation("org.threeten:threetenbp:$threetenbp_version") {
+        exclude group: "com.jakewharton.threetenabp", module: "threetenabp"
     }
 }
