@@ -156,14 +156,16 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
             listToTaskListItems(list)
         )
 
-        Snackbar.make(
-            binding.root,
-            R.string.task_position_changed,
-            Snackbar.LENGTH_LONG
-        )
+        Snackbar
+            .make(
+                binding.coordinator,
+                R.string.task_position_changed,
+                Snackbar.LENGTH_LONG
+            )
             .setAction(getString(R.string.undo)) {
                 viewModel.restoreListFromCache()
             }
+            .setAnchorView(binding.add)
             .show()
     }
 
