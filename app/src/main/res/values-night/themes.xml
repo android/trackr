@@ -21,6 +21,10 @@
         <item name="colorPrimary">@color/trackr_blue_700</item>
         <item name="colorPrimaryDark">@color/trackr_pink_500</item>
 
+        <item name="colorSecondary">@color/trackr_pink_400</item>
+
+        <item name="colorOnSecondary">@color/trackr_blue_700</item>
+
         <item name="android:textColorSecondary">@color/trackr_blue_100</item>
 
         <item name="android:windowBackground">@color/trackr_blue_700</item>

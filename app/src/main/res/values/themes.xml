@@ -21,7 +21,7 @@
 
     <style name="Theme.Trackr" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/trackr_blue_500</item>
-        <item name="colorSecondary">@color/trackr_pink_400</item>
+        <item name="colorSecondary">@color/trackr_pink_600</item>
 
         <item name="android:windowBackground">?attr/colorPrimary</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
