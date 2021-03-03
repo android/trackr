@@ -85,9 +85,10 @@
                         style="@style/Widget.Trackr.TextView.Label.Title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="64dp"
+                        android:layout_marginStart="@dimen/spacing_huge"
+                        android:layout_marginEnd="@dimen/spacing_medium"
                         android:autofillHints="title"
-                        android:inputType="textCapSentences"
+                        android:inputType="textMultiLine|textCapSentences"
                         android:text="@={viewModel.title}"
                         tools:text="Calendar design" />
 
@@ -109,6 +110,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
                         android:layout_marginTop="@dimen/spacing_medium"
+                        android:layout_marginEnd="@dimen/spacing_medium"
                         android:autofillHints="description"
                         android:inputType="textMultiLine|textCapSentences"
                         android:text="@={viewModel.description}"
