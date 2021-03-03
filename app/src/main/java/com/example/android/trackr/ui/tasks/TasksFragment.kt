@@ -140,14 +140,18 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
         viewModel.cacheCurrentList(listToTaskListItems(tasksAdapter.currentList))
     }
 
-    override fun onDragCompleted(fromPosition: Int, toPosition: Int, customAction: Boolean) {
+    override fun onDragCompleted(
+        fromPosition: Int,
+        toPosition: Int,
+        usingDragAndDropCustomActions: Boolean
+    ) {
         val draggedItem = tasksAdapter.currentList[fromPosition]
 
         val list = tasksAdapter.currentList.toMutableList()
 
         // If using a custom action for drag and drop, the current list tasksAdapter.currentList
         // will return the original list. In that case, swap the items in the returned list.
-        if (customAction) {
+        if (usingDragAndDropCustomActions) {
             Collections.swap(list, fromPosition, toPosition)
         }
 

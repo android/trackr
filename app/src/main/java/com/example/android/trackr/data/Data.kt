@@ -37,6 +37,10 @@ import org.threeten.bp.Instant
             entity = User::class,
             parentColumns = ["id"]
         )
+    ],
+    indices = [
+        Index("creatorId"),
+        Index("ownerId")
     ]
 )
 data class Task(
@@ -46,12 +50,12 @@ data class Task(
     /**
      * The task title. TODO: consider adding char limit which may help showcase a11y validation issues.
      */
-    var title: String,
+    val title: String,
 
     /**
      * The task description, which can be verbose.
      */
-    var description: String = "",
+    val description: String = "",
 
     /**
      * The state of the task.
@@ -107,14 +111,14 @@ data class Tag(
     /**
      * A short label for the tag.
      */
-    var label: String,
+    val label: String,
 
     // TODO: consider making the label optional and adding an icon/pattern for color-only tags.
 
     /**
      * A color associated with the tag.
      */
-    var color: TagColor
+    val color: TagColor
 )
 
 // Denotes the tag text and background color to be displayed
@@ -149,7 +153,9 @@ enum class Avatar(val drawableResId: Int) {
         )
     ],
     indices = [
-        Index(value = ["taskId", "tagId"], unique = true)
+        Index(value = ["taskId", "tagId"], unique = true),
+        Index("taskId"),
+        Index("tagId")
     ]
 )
 data class TaskTag(
@@ -190,7 +196,9 @@ data class User(
         )
     ],
     indices = [
-        Index(value = ["userId", "taskId"], unique = true)
+        Index(value = ["userId", "taskId"], unique = true),
+        Index("userId"),
+        Index("taskId")
     ]
 )
 data class UserTask(
