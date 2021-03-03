@@ -21,7 +21,7 @@ set -e
 set -x
 
 # Download the build tools and accept its license before gradle tries to do it.
-echo y | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;30.0.2" > /dev/null
+echo y | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;30.0.3" > /dev/null
 
 GRADLE_FLAGS=()
 if [[ -n "$GRADLE_DEBUG" ]]; then
