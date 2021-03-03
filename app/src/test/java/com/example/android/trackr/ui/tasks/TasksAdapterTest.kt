@@ -151,9 +151,7 @@ class TasksAdapterTest {
         holder.bind(inProgressTaskListItem, DragAndDropActionsHelper(headerAndTask()))
         assertThat(holder.binding.taskListItem).isEqualTo(inProgressTaskListItem)
         assertThat(ViewCompat.getStateDescription(holder.binding.root)).isEqualTo(
-            context.getString(
-                R.string.unstarred
-            )
+            context.getString(R.string.in_progress) + ", " + context.getString(R.string.unstarred)
         )
         assertThat(holder.binding.chipGroup.isImportantForAccessibility).isFalse()
         assertThat(holder.binding.root.contentDescription).isNotNull()
@@ -172,9 +170,7 @@ class TasksAdapterTest {
 
         assertTrue(holder.binding.star.isChecked)
         assertThat(ViewCompat.getStateDescription(holder.binding.root)).isEqualTo(
-            context.getString(
-                R.string.starred
-            )
+            context.getString(R.string.in_progress) + ", " + context.getString(R.string.starred)
         )
     }
 

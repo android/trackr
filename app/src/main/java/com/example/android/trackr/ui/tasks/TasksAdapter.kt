@@ -180,10 +180,14 @@ class TasksAdapter(
             binding.currentUser = currentUser
             binding.root.contentDescription =
                 AccessibilityUtils.taskListItemLabel(binding.root.context, taskListItem, clock)
+            
+            val starredStateResId =
+                if (taskListItem.starUsers.isEmpty()) R.string.unstarred else R.string.starred
+
             ViewCompat.setStateDescription(
                 binding.root,
-                resources.getString(
-                    if (taskListItem.starUsers.isEmpty()) R.string.unstarred else R.string.starred
+                resources.getString(taskListItem.status.stringResId) + ", " + resources.getString(
+                    starredStateResId
                 )
             )
 
