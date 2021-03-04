@@ -21,8 +21,11 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
+import androidx.annotation.DrawableRes
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
+import androidx.core.widget.TextViewCompat
 import androidx.databinding.BindingAdapter
 import com.example.android.trackr.R
 import com.example.android.trackr.data.Tag
@@ -165,4 +168,18 @@ fun TextView.setText(status: TaskStatus?) {
     } else {
         text = null
     }
+}
+
+@BindingAdapter("drawableStartCompat")
+fun TextView.setDrawableStartCompat(
+    @DrawableRes
+    drawableResId: Int
+) {
+    if (drawableResId == 0) return
+    val drawable = ResourcesCompat.getDrawable(resources, drawableResId, context.theme) ?: return
+    val size = resources.getDimensionPixelSize(R.dimen.home_task_star_size)
+    drawable.setBounds(0, 0, size, size)
+    TextViewCompat.setCompoundDrawablesRelative(
+        this, drawable, null, null, null
+    )
 }

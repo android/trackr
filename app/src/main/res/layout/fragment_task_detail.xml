@@ -139,7 +139,8 @@
                         android:layout_marginTop="@dimen/spacing_large"
                         android:importantForAccessibility="no"
                         android:text="@string/owner"
-                        app:drawableStartCompat="@drawable/ic_user" />
+                        app:drawableStartCompat="@{viewModel.detail.owner.avatar.drawableResId}"
+                        tools:drawableStartCompat="@drawable/ic_user" />
 
                     <TextView
                         android:id="@+id/owner"
@@ -159,7 +160,8 @@
                         android:layout_marginTop="@dimen/spacing_large"
                         android:importantForAccessibility="no"
                         android:text="@string/creator"
-                        app:drawableStartCompat="@drawable/ic_user" />
+                        app:drawableStartCompat="@{viewModel.detail.creator.avatar.drawableResId}"
+                        tools:drawableStartCompat="@drawable/ic_user" />
 
                     <TextView
                         android:id="@+id/creator"
