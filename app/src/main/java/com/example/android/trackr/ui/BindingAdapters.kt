@@ -17,8 +17,10 @@
 package com.example.android.trackr.ui
 
 import android.content.res.ColorStateList
+import android.graphics.Rect
 import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.TouchDelegate
 import android.view.View
 import android.widget.TextView
 import androidx.annotation.DrawableRes
@@ -35,6 +37,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import org.threeten.bp.Clock
 import org.threeten.bp.Instant
+import kotlin.math.ceil
 
 /**
  * Sets the visibility of this view to either [View.GONE] or [View.VISIBLE].
@@ -182,4 +185,49 @@ fun TextView.setDrawableStartCompat(
     TextViewCompat.setCompoundDrawablesRelative(
         this, drawable, null, null, null
     )
+}
+
+/**
+ * Ensures that the touchable area of [view] equal [minTouchTarget] by expanding the touch area
+ * of a view beyond its actual view bounds. This adapter can be used expand the touchable area of a
+ * view when other options (adding padding, for example) may not be available.
+ *
+ * Usage:
+ * <ImageView
+ *     ...
+ *     app:ensureMinTouchArea="@{@dimen/min_touch_target}"
+ *
+ * @param view The view whose touch area may be expanded
+ * @param minTouchTarget The minimum touch area expressed dimen resource
+ */
+@BindingAdapter("ensureMinTouchArea")
+fun addTouchDelegate(view: View, minTouchTarget: Float) {
+    val parent = view.parent as View
+    parent.post {
+        val delegate = Rect()
+        view.getHitRect(delegate)
+
+        val metrics = view.context.resources.displayMetrics
+        val height = ceil(delegate.height() / metrics.density)
+        val width = ceil(delegate.width() / metrics.density)
+        val minTarget = minTouchTarget / metrics.density
+        var extraSpace = 0
+        if (height < minTarget) {
+            extraSpace = (minTarget.toInt() - height.toInt()) / 2
+            delegate.apply {
+                top -= extraSpace
+                bottom += extraSpace
+            }
+        }
+
+        if (width < minTarget) {
+            extraSpace = (minTarget.toInt() - width.toInt()) / 2
+            delegate.apply {
+                left -= extraSpace
+                right += extraSpace
+            }
+        }
+
+        parent.touchDelegate = TouchDelegate(delegate, view)
+    }
 }
