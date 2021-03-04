@@ -61,21 +61,25 @@
                 android:checked="@{taskListItem.starUsers.contains(currentUser)}"
                 android:gravity="center"
                 android:importantForAccessibility="no"
-                app:layout_constraintBottom_toBottomOf="@id/title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/title" />
 
             <TextView
                 android:id="@+id/title"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/home_task_star_margin"
                 android:layout_marginTop="@dimen/spacing_medium"
+                android:layout_marginEnd="@dimen/spacing_medium"
+                android:ellipsize="end"
+                android:maxLines="2"
                 android:text="@{taskListItem.title}"
                 android:textAppearance="?attr/textAppearanceHeadline2"
+                android:textDirection="locale"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/star"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Task 1" />
+                tools:text="@tools:sample/lorem/random" />
 
             <ImageView
                 android:id="@+id/owner_avatar"

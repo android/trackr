@@ -89,8 +89,10 @@
 
                         <TextView
                             style="@style/Widget.Trackr.TextView.Label.Title"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/spacing_medium"
+                            android:layout_weight="1"
                             android:text="@{viewModel.detail.title}"
                             tools:text="Calendar design" />
 
@@ -104,6 +106,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_huge"
                         android:layout_marginTop="@dimen/spacing_medium"
+                        android:layout_marginEnd="@dimen/spacing_medium"
                         android:text="@{viewModel.detail.description}"
                         tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
 
