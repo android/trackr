@@ -76,16 +76,16 @@
                         android:layout_marginTop="@dimen/spacing_large"
                         android:orientation="horizontal">
 
-                        <CheckBox
+                        <com.example.android.trackr.ui.widget.StarButton
                             android:id="@+id/star"
                             android:layout_width="@dimen/home_task_star_size"
                             android:layout_height="@dimen/home_task_star_size"
                             android:layout_marginStart="20dp"
                             android:layout_marginEnd="20dp"
-                            android:background="@drawable/selector_star"
-                            android:button="@null"
                             android:checked="@{viewModel.starred}"
-                            android:gravity="center" />
+                            android:gravity="center"
+                            app:ensureMinTouchArea="@{@dimen/min_touch_target}"
+                            app:clickActionLabel="@{@string/toggle}" />
 
                         <TextView
                             style="@style/Widget.Trackr.TextView.Label.Title"

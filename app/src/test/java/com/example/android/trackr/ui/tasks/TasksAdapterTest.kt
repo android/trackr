@@ -163,7 +163,7 @@ class TasksAdapterTest {
         val holder =
             TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, currentUser, fakeClock)
 
-        assertFalse(holder.binding.star.isChecked)
+        assertThat(holder.binding.star.isChecked).isFalse()
 
 
         holder.bind(starredTaskListItem, DragAndDropActionsHelper(headerAndTask()))
@@ -184,35 +184,7 @@ class TasksAdapterTest {
 
         assertFalse(holder.binding.star.isChecked)
     }
-
-    @Test
-    fun starTask() {
-        val holder =
-            TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, user, fakeClock)
-
-        holder.bind(inProgressTaskListItem, DragAndDropActionsHelper(headerAndTask()))
-
-        assertFalse(holder.binding.star.isChecked)
-
-        holder.binding.star.performClick()
-
-        assertTrue(holder.binding.star.isChecked)
-    }
-
-    @Test
-    fun unstarTask() {
-        val holder =
-            TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, user2, fakeClock)
-
-        holder.bind(starredTaskListItem, DragAndDropActionsHelper(headerAndTask()))
-
-        assertTrue(holder.binding.star.isChecked)
-
-        holder.binding.star.performClick()
-
-        assertFalse(holder.binding.star.isChecked)
-    }
-
+    
     @Test
     fun replaceAccessibilityAction_ActionClickLabel() {
         val holder = TasksAdapter.TaskViewHolder.from(
