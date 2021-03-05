@@ -24,7 +24,7 @@ object SeedData {
     val Users = listOf(
         User(id = 1L, username = "Daring Dove", avatar = Avatar.DARING_DOVE),
         User(id = 2L, username = "Likeable Lark", avatar = Avatar.LIKEABLE_LARK),
-        User(id = 3L, username = "Peaceful Puffin", avatar = Avatar.LIKEABLE_LARK)
+        User(id = 3L, username = "Peaceful Puffin", avatar = Avatar.PEACEFUL_PUFFIN)
     )
 
     val Tags = listOf(
