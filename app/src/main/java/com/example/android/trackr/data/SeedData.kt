@@ -56,6 +56,7 @@ object SeedData {
             status = TaskStatus.NOT_STARTED,
             ownerId = 1L,
             creatorId = 3L,
+            dueAt = Instant.now() - Duration.ofDays(1),
             orderInCategory = 2
         ),
         Task(
@@ -73,7 +74,7 @@ object SeedData {
             ownerId = 2L,
             creatorId = 1L,
             createdAt = Instant.now() - Duration.ofDays(1),
-            dueAt = Instant.now() + Duration.ofDays(2),
+            dueAt = Instant.now() - Duration.ofDays(2),
             orderInCategory = 3
         ),
         Task(
@@ -86,6 +87,7 @@ object SeedData {
             status = TaskStatus.NOT_STARTED,
             ownerId = 3L,
             creatorId = 2L,
+            dueAt = Instant.now() + Duration.ofDays(5),
             orderInCategory = 4
         ),
         Task(
@@ -96,6 +98,7 @@ object SeedData {
             status = TaskStatus.NOT_STARTED,
             ownerId = 1L,
             creatorId = 3L,
+            dueAt = Instant.now() - Duration.ofDays(10),
             orderInCategory = 5
         ),
 
@@ -107,6 +110,7 @@ object SeedData {
             status = TaskStatus.IN_PROGRESS,
             ownerId = 2L,
             creatorId = 2L,
+            dueAt = Instant.now() + Duration.ofDays(2),
             orderInCategory = 1
         ),
         Task(
@@ -118,6 +122,7 @@ object SeedData {
             status = TaskStatus.IN_PROGRESS,
             ownerId = 1L,
             creatorId = 2L,
+            dueAt = Instant.now() + Duration.ofDays(12),
             orderInCategory = 2
         ),
         Task(
@@ -126,6 +131,7 @@ object SeedData {
             status = TaskStatus.COMPLETED,
             ownerId = 1L,
             creatorId = 1L,
+            dueAt = Instant.now() + Duration.ofDays(22),
             orderInCategory = 1
         ),
         Task(
@@ -134,6 +140,7 @@ object SeedData {
             status = TaskStatus.COMPLETED,
             ownerId = 3L,
             creatorId = 3L,
+            dueAt = Instant.now() + Duration.ofDays(14),
             orderInCategory = 1
         ),
         Task(
@@ -144,6 +151,7 @@ object SeedData {
             status = TaskStatus.COMPLETED,
             ownerId = 3L,
             creatorId = 2L,
+            dueAt = Instant.now() - Duration.ofDays(9),
             orderInCategory = 2
         ),
         Task(
@@ -154,6 +162,7 @@ object SeedData {
             status = TaskStatus.COMPLETED,
             ownerId = 1L,
             creatorId = 3L,
+            dueAt = Instant.now() + Duration.ofDays(6),
             orderInCategory = 3
         ),
         Task(
@@ -164,6 +173,7 @@ object SeedData {
             status = TaskStatus.COMPLETED,
             ownerId = 2L,
             creatorId = 3L,
+            dueAt = Instant.now() - Duration.ofDays(3),
             orderInCategory = 4
         ),
         Task(
@@ -174,6 +184,7 @@ object SeedData {
             status = TaskStatus.ARCHIVED,
             ownerId = 1L,
             creatorId = 1L,
+            dueAt = Instant.now() + Duration.ofDays(1),
             orderInCategory = 1
         ),
         Task(
@@ -185,6 +196,7 @@ object SeedData {
             status = TaskStatus.ARCHIVED,
             ownerId = 2L,
             creatorId = 3L,
+            dueAt = Instant.now() + Duration.ofDays(8),
             orderInCategory = 2
         ),
         Task(
