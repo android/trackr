@@ -155,8 +155,9 @@
                         android:layout_marginStart="@dimen/spacing_huge"
                         android:text="@{viewModel.owner.username}"
                         android:textAppearance="?textAppearanceBody1"
-                        app:chipIcon="@drawable/ic_user"
+                        app:chipIconResource="@{viewModel.owner.avatar.drawableResId}"
                         app:clickActionLabel="@{@string/change}"
+                        tools:chipIcon="@drawable/ic_user"
                         tools:text="Daring Dove" />
 
                     <!-- Creator is not editable, so it is not displayed on this screen -->
