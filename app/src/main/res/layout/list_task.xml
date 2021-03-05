@@ -56,6 +56,7 @@
                 android:layout_height="@dimen/home_task_star_size"
                 android:layout_marginStart="@dimen/home_task_star_margin"
                 android:layout_marginEnd="@dimen/home_task_star_margin"
+                android:importantForAccessibility="no"
                 android:checked="@{taskListItem.starUsers.contains(currentUser)}"
                 android:gravity="center"
                 app:layout_constraintBottom_toBottomOf="@id/title"
