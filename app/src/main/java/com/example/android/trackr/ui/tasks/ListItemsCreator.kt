@@ -16,32 +16,32 @@
 
 package com.example.android.trackr.ui.tasks
 
-import com.example.android.trackr.data.TaskListItem
+import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.TaskStatus
 
 
 /**
- * Combines the results of [expandedStatesMap] and [taskListItems] and returns a list of
- * [DataItem]s.
- * @param taskListItems List of TaskListItems, which could be null
+ * Combines the results of [expandedStatesMap] and [taskSummaries] and returns a list of
+ * [ListItem]s.
+ * @param taskSummaries List of [TaskSummary]s, which could be null
  * @param  expandedStatesMap A [TaskStatus] to [Boolean] map, which determines the
- * collapsed/expanded state of a category of [TaskListItem]s
+ * collapsed/expanded state of a category of [TaskSummary]s
  * TODO: refactor into a UseCase.
  */
-class DataItemsCreator(
-    private val taskListItems: List<TaskListItem>?,
+class ListItemsCreator(
+    private val taskSummaries: List<TaskSummary>?,
     private val expandedStatesMap: MutableMap<TaskStatus, Boolean>?
 ) {
-    fun execute(): List<DataItem>? {
-        taskListItems?.let { items ->
+    fun execute(): List<ListItem>? {
+        taskSummaries?.let { items ->
             expandedStatesMap?.let { statesMap ->
-                val itemsToSubmit = mutableListOf<DataItem>()
-                val statusToItemsMap: Map<TaskStatus, List<TaskListItem>>? =
+                val itemsToSubmit = mutableListOf<ListItem>()
+                val statusToItemsMap: Map<TaskStatus, List<TaskSummary>>? =
                     items.groupBy { it.status }
                 for (entry in statesMap) {
-                    val sublist: List<TaskListItem>? = statusToItemsMap?.get(entry.key)
+                    val sublist: List<TaskSummary>? = statusToItemsMap?.get(entry.key)
                     itemsToSubmit.add(
-                        DataItem.HeaderItem(
+                        ListItem.TypeHeader(
                             HeaderData(
                                 count = sublist?.size ?: 0,
                                 taskStatus = entry.key,
@@ -51,7 +51,7 @@ class DataItemsCreator(
                     )
                     if (statesMap[entry.key] == true) {
                         sublist?.sortedBy { it.orderInCategory }
-                            ?.forEach { itemsToSubmit.add(DataItem.TaskItem(it)) }
+                            ?.forEach { itemsToSubmit.add(ListItem.TypeTask(it)) }
                     }
                 }
                 return itemsToSubmit

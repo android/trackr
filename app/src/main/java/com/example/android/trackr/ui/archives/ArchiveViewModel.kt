@@ -22,7 +22,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.example.android.trackr.data.TaskListItem
+import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.repository.TrackrRepository
 import com.example.android.trackr.ui.utils.timeout
 import kotlinx.coroutines.launch
@@ -31,7 +31,7 @@ class ArchiveViewModel @ViewModelInject constructor(
     private val repository: TrackrRepository
 ) : ViewModel() {
 
-    private val archivedTaskListItems = repository.getArchivedTaskListItems()
+    private val archivedTaskSummaries = repository.getArchivedTaskSummaries()
     private val selectedTaskIds = MutableLiveData(emptySet<Long>())
 
     /** A set of taskIds that were most recently unarchived. */
@@ -48,12 +48,12 @@ class ArchiveViewModel @ViewModelInject constructor(
     val archivedTasks = MediatorLiveData<List<ArchivedTask>>().apply {
         fun update() {
             val selected = selectedTaskIds.value ?: return
-            val tasks = archivedTaskListItems.value ?: return
+            val tasks = archivedTaskSummaries.value ?: return
             value = tasks.map { task ->
                 ArchivedTask(task, task.id in selected)
             }
         }
-        addSource(archivedTaskListItems) { update() }
+        addSource(archivedTaskSummaries) { update() }
         addSource(selectedTaskIds) { update() }
     }
 
@@ -97,6 +97,6 @@ class ArchiveViewModel @ViewModelInject constructor(
 }
 
 data class ArchivedTask(
-    val taskListItem: TaskListItem,
+    val taskSummary: TaskSummary,
     val selected: Boolean
 )

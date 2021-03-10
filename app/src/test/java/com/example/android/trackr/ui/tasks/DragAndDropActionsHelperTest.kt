@@ -19,7 +19,7 @@ package com.example.android.trackr.ui.tasks
 import com.example.android.trackr.R
 import com.example.android.trackr.TestApplication
 import com.example.android.trackr.data.Avatar
-import com.example.android.trackr.data.TaskListItem
+import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.data.User
 import com.google.common.truth.Truth
@@ -35,7 +35,7 @@ class DragAndDropActionsHelperTest {
 
     @Test
     fun execute_whenOnlyOneTask() {
-        val items = mutableListOf<DataItem>().apply {
+        val items = mutableListOf<ListItem>().apply {
             add(headerItem)
             addAll(getTasks(1))
         }
@@ -47,7 +47,7 @@ class DragAndDropActionsHelperTest {
 
     @Test
     fun execute_whenTwoTasks() {
-        val items = mutableListOf<DataItem>().apply {
+        val items = mutableListOf<ListItem>().apply {
             add(headerItem)
             addAll(getTasks(2))
         }
@@ -69,7 +69,7 @@ class DragAndDropActionsHelperTest {
 
     @Test
     fun execute_whenManyItems_firstItem() {
-        val items = mutableListOf<DataItem>().apply {
+        val items = mutableListOf<ListItem>().apply {
             add(headerItem)
             addAll(getTasks(5))
         }
@@ -90,7 +90,7 @@ class DragAndDropActionsHelperTest {
 
     @Test
     fun execute_whenManyItems_secondItem() {
-        val items = mutableListOf<DataItem>().apply {
+        val items = mutableListOf<ListItem>().apply {
             add(headerItem)
             addAll(getTasks(5))
         }
@@ -116,7 +116,7 @@ class DragAndDropActionsHelperTest {
 
     @Test
     fun execute_whenManyItems_thirdItem() {
-        val items = mutableListOf<DataItem>().apply {
+        val items = mutableListOf<ListItem>().apply {
             add(headerItem)
             addAll(getTasks(5))
         }
@@ -148,14 +148,14 @@ class DragAndDropActionsHelperTest {
         private val user = User(1, "user", Avatar.DEFAULT_USER)
         private val status = TaskStatus.NOT_STARTED
 
-        val headerItem = DataItem.HeaderItem(HeaderData(1, status, true))
+        val headerItem = ListItem.TypeHeader(HeaderData(1, status, true))
 
-        fun getTasks(count: Int) : List<DataItem.TaskItem> {
-            val items = mutableListOf<DataItem.TaskItem>()
+        fun getTasks(count: Int) : List<ListItem.TypeTask> {
+            val items = mutableListOf<ListItem.TypeTask>()
             for (i in 0 until count) {
                 items.add(
-                    DataItem.TaskItem(
-                        TaskListItem(
+                    ListItem.TypeTask(
+                        TaskSummary(
                             id = i.toLong(),
                             title = i.toString(),
                             dueAt = Instant.now(),

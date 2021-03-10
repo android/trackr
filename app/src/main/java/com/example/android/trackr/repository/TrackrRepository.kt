@@ -31,7 +31,7 @@ class TrackrRepository(
 
     fun getTaskDetailById(id: Long) = taskDao.getTaskDetailById(id)
 
-    fun getArchivedTaskListItems() = taskDao.getArchivedTaskListItems()
+    fun getArchivedTaskSummaries() = taskDao.getArchivedTaskSummaries()
 
     /**
      * Toggles the star state for the task.

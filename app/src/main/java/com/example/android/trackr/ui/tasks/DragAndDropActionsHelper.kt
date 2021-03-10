@@ -18,7 +18,7 @@ package com.example.android.trackr.ui.tasks
 
 import com.example.android.trackr.R
 
-class DragAndDropActionsHelper(private val items: List<DataItem>) {
+class DragAndDropActionsHelper(private val items: List<ListItem>) {
 
     var headerPositions: List<Int> = mutableListOf()
     var previousHeaderPosition = NO_POSITION
@@ -26,7 +26,7 @@ class DragAndDropActionsHelper(private val items: List<DataItem>) {
 
     init {
         items.forEachIndexed { index, item ->
-            if (item is DataItem.HeaderItem) {
+            if (item is ListItem.TypeHeader) {
                 (headerPositions as MutableList).add(index)
             }
         }

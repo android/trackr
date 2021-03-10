@@ -23,7 +23,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.android.trackr.data.Avatar
 import com.example.android.trackr.data.Tag
 import com.example.android.trackr.data.TagColor
-import com.example.android.trackr.data.TaskListItem
+import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.data.User
 import io.mockk.every
@@ -61,22 +61,22 @@ class AccessibilityUtilsTest {
     }
 
     @Test
-    fun taskListItemLabel_noTags() {
+    fun taskSummaryLabel_noTags() {
         assertThat(
-            AccessibilityUtils.taskListItemLabel(
+            AccessibilityUtils.taskSummaryLabel(
                 application,
-                taskListItem,
+                taskSummary,
                 fakeClock
             )
         ).isEqualTo("task 1. Owner: user. $dateTimeValue.")
     }
 
     @Test
-    fun taskListItemLabel_withTags() {
+    fun taskSummaryLabel_withTags() {
         assertThat(
-            AccessibilityUtils.taskListItemLabel(
+            AccessibilityUtils.taskSummaryLabel(
                 application,
-                taskListItemWithTags,
+                taskSummaryWithTags,
                 fakeClock
             )
         ).isEqualTo("task 2. Owner: user. $dateTimeValue. Tag: tag1. Tag: tag2")
@@ -89,7 +89,7 @@ class AccessibilityUtilsTest {
         private val tag2 = Tag(2, "tag2", TagColor.RED)
         private val dateTimeValue = "Due today"
 
-        var taskListItem = TaskListItem(
+        var taskSummary = TaskSummary(
             id = 1,
             title = "task 1",
             dueAt = Instant.now(),
@@ -100,7 +100,7 @@ class AccessibilityUtilsTest {
             orderInCategory = 1
         )
 
-        var taskListItemWithTags = TaskListItem(
+        var taskSummaryWithTags = TaskSummary(
             id = 2,
             title = "task 2",
             dueAt = Instant.now(),

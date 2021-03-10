@@ -27,7 +27,7 @@ import com.example.android.trackr.data.ARCHIVED_KEY
 import com.example.android.trackr.data.Tag
 import com.example.android.trackr.data.Task
 import com.example.android.trackr.data.TaskDetail
-import com.example.android.trackr.data.TaskListItem
+import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.data.TaskTag
 import com.example.android.trackr.data.User
@@ -70,12 +70,12 @@ interface TaskDao {
     suspend fun loadTaskDetailById(id: Long): TaskDetail?
 
     @Transaction
-    @Query("SELECT * FROM TaskListItem WHERE status != $ARCHIVED_KEY")
-    fun getOngoingTaskListItems(): LiveData<List<TaskListItem>>
+    @Query("SELECT * FROM TaskSummary WHERE status != $ARCHIVED_KEY")
+    fun getOngoingTaskSummaries(): LiveData<List<TaskSummary>>
 
     @Transaction
-    @Query("SELECT * FROM TaskListItem WHERE status = $ARCHIVED_KEY")
-    fun getArchivedTaskListItems(): LiveData<List<TaskListItem>>
+    @Query("SELECT * FROM TaskSummary WHERE status = $ARCHIVED_KEY")
+    fun getArchivedTaskSummaries(): LiveData<List<TaskSummary>>
 
     @Query("UPDATE tasks SET status = :status WHERE id = :id")
     suspend fun updateTaskStatus(id: Long, status: TaskStatus)
@@ -130,9 +130,9 @@ interface TaskDao {
     }
 
     @Transaction
-    suspend fun reorderList(status: TaskStatus, taskListItems: List<TaskListItem>) {
-        taskListItems.filter {it.status == status}.forEachIndexed{ index, taskListItem ->
-            updateOrderInCategory(taskListItem.id, index)
+    suspend fun reorderList(status: TaskStatus, taskSummaries: List<TaskSummary>) {
+        taskSummaries.filter {it.status == status}.forEachIndexed{ index, taskSummary ->
+            updateOrderInCategory(taskSummary.id, index)
         }
     }
 }

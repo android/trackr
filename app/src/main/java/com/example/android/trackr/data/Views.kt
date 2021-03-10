@@ -28,7 +28,7 @@ import org.threeten.bp.Instant
         INNER JOIN users AS o ON o.id = t.ownerId
     """
 )
-data class TaskListItem(
+data class TaskSummary(
     val id: Long,
 
     val title: String,

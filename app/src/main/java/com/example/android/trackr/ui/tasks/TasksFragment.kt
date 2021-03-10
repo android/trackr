@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.trackr.R
-import com.example.android.trackr.data.TaskListItem
+import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.User
 import com.example.android.trackr.databinding.FragmentTasksBinding
 import com.example.android.trackr.ui.detail.TaskDetailFragmentArgs
@@ -93,7 +93,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
             }
         }
 
-        viewModel.dataItems.observe(viewLifecycleOwner) {
+        viewModel.listItems.observe(viewLifecycleOwner) {
             tasksAdapter.submitList(it)
         }
 
@@ -115,21 +115,21 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
         }
     }
 
-    override fun onStarClicked(taskListItem: TaskListItem) {
-        viewModel.toggleTaskStarState(taskListItem)
+    override fun onStarClicked(taskSummary: TaskSummary) {
+        viewModel.toggleTaskStarState(taskSummary)
     }
 
     override fun onHeaderClicked(headerData: HeaderData) {
         viewModel.toggleExpandedState(headerData)
     }
 
-    override fun onTaskClicked(taskListItem: TaskListItem) {
+    override fun onTaskClicked(taskSummary: TaskSummary) {
         findNavController()
-            .navigate(R.id.nav_task_detail, TaskDetailFragmentArgs(taskListItem.id).toBundle())
+            .navigate(R.id.nav_task_detail, TaskDetailFragmentArgs(taskSummary.id).toBundle())
     }
 
-    override fun onTaskArchived(taskListItem: TaskListItem) {
-        viewModel.archiveTask(taskListItem)
+    override fun onTaskArchived(taskSummary: TaskSummary) {
+        viewModel.archiveTask(taskSummary)
     }
 
     override fun onTaskDragged(fromPosition: Int, toPosition: Int) {
@@ -137,7 +137,7 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
     }
 
     override fun onDragStarted() {
-        viewModel.cacheCurrentList(listToTaskListItems(tasksAdapter.currentList))
+        viewModel.cacheCurrentList(listToTaskSummaries(tasksAdapter.currentList))
     }
 
     override fun onDragCompleted(
@@ -156,8 +156,8 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
         }
 
         viewModel.persistUpdatedList(
-            (draggedItem as DataItem.TaskItem).taskListItem.status,
-            listToTaskListItems(list)
+            (draggedItem as ListItem.TypeTask).taskSummary.status,
+            listToTaskSummaries(list)
         )
 
         Snackbar
@@ -173,8 +173,8 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
             .show()
     }
 
-    private fun listToTaskListItems(list: List<DataItem>): List<TaskListItem> {
-        return list.filterIsInstance<DataItem.TaskItem>().map { it.taskListItem }
+    private fun listToTaskSummaries(list: List<ListItem>): List<TaskSummary> {
+        return list.filterIsInstance<ListItem.TypeTask>().map { it.taskSummary }
     }
 }
 

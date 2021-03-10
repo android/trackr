@@ -22,7 +22,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.android.trackr.data.TaskListItem
+import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.db.dao.TaskDao
 import com.example.android.trackr.repository.TrackrRepository
@@ -39,8 +39,8 @@ class TasksViewModel @ViewModelInject constructor(
     private val _archivedItem: MutableLiveData<ArchivedItem?> = MutableLiveData()
     val archivedItem: LiveData<ArchivedItem?> = _archivedItem
 
-    private val taskListItems: LiveData<List<TaskListItem>>
-        get() = taskDao.getOngoingTaskListItems()
+    private val taskSummaries: LiveData<List<TaskSummary>>
+        get() = taskDao.getOngoingTaskSummaries()
 
     // TODO: don't hardcode TaskStatus values; instead, read from the db
     private val _expandedStatesMap: MutableLiveData<MutableMap<TaskStatus, Boolean>> =
@@ -53,20 +53,20 @@ class TasksViewModel @ViewModelInject constructor(
         )
     private val expandedStatesMap: LiveData<MutableMap<TaskStatus, Boolean>> = _expandedStatesMap
 
-    var dataItems: LiveData<List<DataItem>> = MediatorLiveData<List<DataItem>>().apply {
-        var cachedTaskListItems: List<TaskListItem>? = null
+    var listItems: LiveData<List<ListItem>> = MediatorLiveData<List<ListItem>>().apply {
+        var cachedTaskSummaries: List<TaskSummary>? = null
 
-        addSource(taskListItems) {
+        addSource(taskSummaries) {
             // In case the user changes the expanded/collapsed state, avoid a new db write by
             // providing cached data.
-            cachedTaskListItems = it
-            DataItemsCreator(it, expandedStatesMap.value).execute()?.let { result ->
+            cachedTaskSummaries = it
+            ListItemsCreator(it, expandedStatesMap.value).execute()?.let { result ->
                 value = result
             }
         }
 
         addSource(expandedStatesMap) {
-            DataItemsCreator(cachedTaskListItems, it).execute()?.let { result ->
+            ListItemsCreator(cachedTaskSummaries, it).execute()?.let { result ->
                 value = result
             }
         }
@@ -78,17 +78,17 @@ class TasksViewModel @ViewModelInject constructor(
         }
     }
 
-    fun toggleTaskStarState(taskListItem: TaskListItem) {
+    fun toggleTaskStarState(taskSummary: TaskSummary) {
         viewModelScope.launch {
-            repository.toggleTaskStarState(taskListItem.id)
+            repository.toggleTaskStarState(taskSummary.id)
         }
     }
 
-    fun archiveTask(taskListItem: TaskListItem) {
-        _archivedItem.value = ArchivedItem(taskListItem.id, taskListItem.status)
+    fun archiveTask(taskSummary: TaskSummary) {
+        _archivedItem.value = ArchivedItem(taskSummary.id, taskSummary.status)
 
         viewModelScope.launch {
-            taskDao.updateTaskStatus(taskListItem.id, TaskStatus.ARCHIVED)
+            taskDao.updateTaskStatus(taskSummary.id, TaskStatus.ARCHIVED)
         }
     }
 
@@ -101,10 +101,10 @@ class TasksViewModel @ViewModelInject constructor(
         }
     }
 
-    private var cachedList: List<TaskListItem> = emptyList()
+    private var cachedList: List<TaskSummary> = emptyList()
     private var dragAndDropCategory: TaskStatus? = null
 
-    fun cacheCurrentList(items: List<TaskListItem>) {
+    fun cacheCurrentList(items: List<TaskSummary>) {
         cachedList = items
     }
 
@@ -116,7 +116,7 @@ class TasksViewModel @ViewModelInject constructor(
         }
     }
 
-    fun persistUpdatedList(status: TaskStatus, items: List<TaskListItem>) {
+    fun persistUpdatedList(status: TaskStatus, items: List<TaskSummary>) {
         dragAndDropCategory = status
         viewModelScope.launch {
             taskDao.reorderList(status, items)

@@ -26,7 +26,7 @@ import com.example.android.trackr.data.Tag
 import com.example.android.trackr.data.TagColor
 import com.example.android.trackr.data.Task
 import com.example.android.trackr.data.TaskDetail
-import com.example.android.trackr.data.TaskListItem
+import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.data.TaskTag
 import com.example.android.trackr.data.User
@@ -122,7 +122,7 @@ class TaskDaoTest {
     }
 
     @Test
-    fun getTaskListItem() {
+    fun getTaskSummary() {
         val users = listOf(user1)
         val tasks = listOf(task1)
         val tags = listOf(tag1, tag2)
@@ -131,8 +131,8 @@ class TaskDaoTest {
 
         insertData(taskDao, users, tasks, tags, taskTags, userTasks)
 
-        taskDao.getOngoingTaskListItems().valueBlocking.let { taskListItems ->
-            val item = taskListItems[0]
+        taskDao.getOngoingTaskSummaries().valueBlocking.let { taskSummaries ->
+            val item = taskSummaries[0]
             assertThat(item.id).isEqualTo(tasks[0].id)
             assertThat(item.title).isEqualTo(tasks[0].title)
             assertThat(item.owner).isEqualTo(users[0])
@@ -144,7 +144,7 @@ class TaskDaoTest {
     }
 
     @Test
-    fun getOngoingTaskListItems() {
+    fun getOngoingTaskSummaries() {
         val users = listOf(user1)
         val tasks = listOf(task1, task2)
         val tags = listOf(tag1, tag2)
@@ -153,13 +153,13 @@ class TaskDaoTest {
 
         insertData(taskDao, users, tasks, tags, taskTags, userTasks)
         assertThat(taskDao.getTasks().valueBlocking).hasSize(2)
-        val ongoingTasks = taskDao.getOngoingTaskListItems().valueBlocking
+        val ongoingTasks = taskDao.getOngoingTaskSummaries().valueBlocking
         assertThat(ongoingTasks).hasSize(1)
         assertThat(ongoingTasks[0].id).isEqualTo(task1.id)
     }
 
     @Test
-    fun getArchivedTaskListItems() {
+    fun getArchivedTaskSummaries() {
         val users = listOf(user1)
         val tasks = listOf(task1, task2)
         val tags = listOf(tag1, tag2)
@@ -168,7 +168,7 @@ class TaskDaoTest {
 
         insertData(taskDao, users, tasks, tags, taskTags, userTasks)
         assertThat(taskDao.getTasks().valueBlocking).hasSize(2)
-        val archivedTasks = taskDao.getArchivedTaskListItems().valueBlocking
+        val archivedTasks = taskDao.getArchivedTaskSummaries().valueBlocking
         assertThat(archivedTasks).hasSize(1)
         assertThat(archivedTasks[0].id).isEqualTo(task2.id)
     }
@@ -335,9 +335,9 @@ class TaskDaoTest {
             assertThat(results.map { it.orderInCategory }).isEqualTo(listOf(0, 1, 2))
         }
 
-        var items: List<TaskListItem>?
+        var items: List<TaskSummary>?
 
-        taskDao.getOngoingTaskListItems().valueBlocking.let {
+        taskDao.getOngoingTaskSummaries().valueBlocking.let {
             items = it
         }
 
@@ -396,9 +396,9 @@ class TaskDaoTest {
             assertThat(results.map { it.orderInCategory }).isEqualTo(listOf(0, 1, 2))
         }
 
-        var items: List<TaskListItem>?
+        var items: List<TaskSummary>?
 
-        taskDao.getOngoingTaskListItems().valueBlocking.let {
+        taskDao.getOngoingTaskSummaries().valueBlocking.let {
             items = it
         }
 
