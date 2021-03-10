@@ -25,7 +25,11 @@ import com.example.android.trackr.data.User
 import com.example.android.trackr.db.AppDatabase
 import com.example.android.trackr.db.dao.valueBlocking
 import com.example.android.trackr.ui.archives.ArchiveViewModel
-import com.example.android.trackr.ui.createTrackrRepository
+import com.example.android.trackr.ui.createDatabase
+import com.example.android.trackr.usecase.ArchiveUseCase
+import com.example.android.trackr.usecase.ArchivedTaskListItemsUseCase
+import com.example.android.trackr.usecase.ToggleTaskStarStateUseCase
+import com.example.android.trackr.usecase.UnarchiveUseCase
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
@@ -43,7 +47,15 @@ class ArchiveViewModelTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private fun createViewModel(): ArchiveViewModel {
-        return ArchiveViewModel(createTrackrRepository(doOnDatabase = { db -> populate(db) }))
+        val db = createDatabase()
+        populate(db)
+        return ArchiveViewModel(
+            user1,
+            ArchivedTaskListItemsUseCase(db.taskDao()),
+            ToggleTaskStarStateUseCase(db),
+            ArchiveUseCase(db.taskDao()),
+            UnarchiveUseCase(db.taskDao())
+        )
     }
 
     @Test
@@ -97,12 +109,14 @@ class ArchiveViewModelTest {
         assertThat(viewModel.archivedTasks.valueBlocking).hasSize(2)
     }
 
+    private val user1 = User(1L, "owner", Avatar.DEFAULT_USER)
+
     private fun populate(db: AppDatabase) {
         runBlocking {
             with(db.taskDao()) {
                 insertUsers(
                     listOf(
-                        User(1L, "owner", Avatar.DEFAULT_USER),
+                        user1,
                         User(2L, "creator", Avatar.DEFAULT_USER),
                         User(3L, "another", Avatar.DEFAULT_USER)
                     )

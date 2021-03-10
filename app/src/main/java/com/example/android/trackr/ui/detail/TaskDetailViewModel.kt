@@ -23,11 +23,13 @@ import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import com.example.android.trackr.data.User
-import com.example.android.trackr.repository.TrackrRepository
+import com.example.android.trackr.usecase.FindTaskDetailUseCase
+import com.example.android.trackr.usecase.ToggleTaskStarStateUseCase
 import kotlinx.coroutines.launch
 
 class TaskDetailViewModel @ViewModelInject constructor(
-    private val repository: TrackrRepository,
+    private val findTaskDetailUseCase: FindTaskDetailUseCase,
+    private val toggleTaskStarStateUseCase: ToggleTaskStarStateUseCase,
     private val currentUser: User
 ) : ViewModel() {
 
@@ -38,7 +40,7 @@ class TaskDetailViewModel @ViewModelInject constructor(
             _taskId.value = value!!
         }
 
-    val detail = _taskId.switchMap { id -> repository.getTaskDetailById(id) }
+    val detail = _taskId.switchMap { id -> findTaskDetailUseCase(id) }
 
     val starred = detail.map { detail ->
         detail?.starUsers?.contains(currentUser) ?: false
@@ -47,7 +49,7 @@ class TaskDetailViewModel @ViewModelInject constructor(
     fun toggleTaskStarState() {
         _taskId.value?.let { taskId ->
             viewModelScope.launch {
-                repository.toggleTaskStarState(taskId)
+                toggleTaskStarStateUseCase(taskId, currentUser)
             }
         }
     }

@@ -93,14 +93,14 @@ class TaskDaoTest {
     }
 
     @Test
-    fun getTaskDetailById() = runBlocking {
+    fun findTaskDetailById() = runBlocking {
         taskDao.insertUsers(SeedData.Users)
         taskDao.insertTags(SeedData.Tags)
         taskDao.insertTasks(SeedData.Tasks)
         taskDao.insertTaskTags(SeedData.TaskTags)
         taskDao.insertUserTasks(SeedData.UserTasks)
         val task = SeedData.Tasks[0]
-        taskDao.getTaskDetailById(1L).valueBlocking!!.let { detail ->
+        taskDao.findTaskDetailById(1L).valueBlocking!!.let { detail ->
             assertThat(detail.id).isEqualTo(1L)
             assertThat(detail.title).isEqualTo(task.title)
             assertThat(detail.owner.username).isEqualTo("Daring Dove")
@@ -455,7 +455,7 @@ class TaskDaoTest {
             )
         )
         assertThat(id).isNotEqualTo(0L)
-        taskDao.getTaskDetailById(id).valueBlocking!!.let { detail ->
+        taskDao.findTaskDetailById(id).valueBlocking!!.let { detail ->
             assertThat(detail.title).isEqualTo("title")
         }
     }

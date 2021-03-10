@@ -24,13 +24,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.TaskStatus
+import com.example.android.trackr.data.User
 import com.example.android.trackr.db.dao.TaskDao
-import com.example.android.trackr.repository.TrackrRepository
+import com.example.android.trackr.usecase.ToggleTaskStarStateUseCase
 import kotlinx.coroutines.launch
 
 class TasksViewModel @ViewModelInject constructor(
     private val taskDao: TaskDao,
-    private val repository: TrackrRepository
+    private val currentUser: User,
+    private val toggleTaskStarStateUseCase: ToggleTaskStarStateUseCase
 ) : ViewModel() {
 
     // This can be observed by a client interested in presenting the undo logic for the task that
@@ -80,7 +82,7 @@ class TasksViewModel @ViewModelInject constructor(
 
     fun toggleTaskStarState(taskSummary: TaskSummary) {
         viewModelScope.launch {
-            repository.toggleTaskStarState(taskSummary.id)
+            toggleTaskStarStateUseCase(taskSummary.id, currentUser)
         }
     }
 

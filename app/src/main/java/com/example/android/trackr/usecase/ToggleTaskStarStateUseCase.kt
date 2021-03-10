@@ -14,29 +14,30 @@
  * limitations under the License.
  */
 
-package com.example.android.trackr.repository
+package com.example.android.trackr.usecase
 
 import androidx.room.withTransaction
-import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.data.User
 import com.example.android.trackr.data.UserTask
 import com.example.android.trackr.db.AppDatabase
+import com.example.android.trackr.db.dao.TaskDao
+import javax.inject.Inject
 
-class TrackrRepository(
+/**
+ * Toggles the star state for the task.
+ */
+class ToggleTaskStarStateUseCase @Inject constructor(
     private val db: AppDatabase,
-    private val currentUser: User
+    private val taskDao: TaskDao = db.taskDao()
 ) {
-
-    private val taskDao = db.taskDao()
-
-    fun getTaskDetailById(id: Long) = taskDao.getTaskDetailById(id)
+    fun getTaskDetailById(id: Long) = taskDao.findTaskDetailById(id)
 
     fun getArchivedTaskSummaries() = taskDao.getArchivedTaskSummaries()
 
     /**
      * Toggles the star state for the task.
      */
-    suspend fun toggleTaskStarState(taskId: Long) {
+    suspend operator fun invoke(taskId: Long, currentUser: User) {
         db.withTransaction {
             val userTask = taskDao.getUserTask(taskId, currentUser.id)
             if (userTask != null) {
@@ -45,19 +46,5 @@ class TrackrRepository(
                 taskDao.insertUserTasks(listOf(UserTask(userId = currentUser.id, taskId = taskId)))
             }
         }
-    }
-
-    /**
-     * Archive tasks.
-     */
-    suspend fun archive(taskIds: List<Long>) {
-        taskDao.updateTaskStatus(taskIds, TaskStatus.ARCHIVED)
-    }
-
-    /**
-     * Unarchive tasks. This sets the state to [TaskStatus.NOT_STARTED] for all the tasks.
-     */
-    suspend fun unarchive(taskIds: List<Long>) {
-        taskDao.updateTaskStatus(taskIds, TaskStatus.NOT_STARTED)
     }
 }

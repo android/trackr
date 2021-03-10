@@ -23,15 +23,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.example.android.trackr.data.TaskSummary
-import com.example.android.trackr.repository.TrackrRepository
+import com.example.android.trackr.data.User
 import com.example.android.trackr.ui.utils.timeout
+import com.example.android.trackr.usecase.ArchiveUseCase
+import com.example.android.trackr.usecase.ArchivedTaskListItemsUseCase
+import com.example.android.trackr.usecase.ToggleTaskStarStateUseCase
+import com.example.android.trackr.usecase.UnarchiveUseCase
 import kotlinx.coroutines.launch
 
 class ArchiveViewModel @ViewModelInject constructor(
-    private val repository: TrackrRepository
+    private val currentUser: User,
+    archivedTaskListItemsUseCase: ArchivedTaskListItemsUseCase,
+    private val toggleTaskStarStateUseCase: ToggleTaskStarStateUseCase,
+    private val archiveUseCase: ArchiveUseCase,
+    private val unarchiveUseCase: UnarchiveUseCase
 ) : ViewModel() {
 
-    private val archivedTaskSummaries = repository.getArchivedTaskSummaries()
+    private val archivedTaskSummaries = archivedTaskListItemsUseCase()
     private val selectedTaskIds = MutableLiveData(emptySet<Long>())
 
     /** A set of taskIds that were most recently unarchived. */
@@ -70,7 +78,7 @@ class ArchiveViewModel @ViewModelInject constructor(
 
     fun toggleTaskStarState(taskId: Long) {
         viewModelScope.launch {
-            repository.toggleTaskStarState(taskId)
+            toggleTaskStarStateUseCase(taskId, currentUser)
         }
     }
 
@@ -81,7 +89,7 @@ class ArchiveViewModel @ViewModelInject constructor(
     fun unarchiveSelectedTasks() {
         val ids = selectedTaskIds.value ?: return
         viewModelScope.launch {
-            repository.unarchive(ids.toList())
+            unarchiveUseCase(ids.toList())
             undoableTaskIds.value = ids
             selectedTaskIds.value = emptySet()
         }
@@ -90,7 +98,7 @@ class ArchiveViewModel @ViewModelInject constructor(
     fun undoUnarchiving() {
         val ids = undoableTaskIds.value ?: return
         viewModelScope.launch {
-            repository.archive(ids.toList())
+            archiveUseCase(ids.toList())
             undoableTaskIds.value = emptySet()
         }
     }

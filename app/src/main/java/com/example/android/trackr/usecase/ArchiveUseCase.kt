@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package com.example.android.trackr.ui
+package com.example.android.trackr.usecase
 
-import androidx.room.Room
-import androidx.test.core.app.ApplicationProvider
-import com.example.android.trackr.db.AppDatabase
+import com.example.android.trackr.data.TaskStatus
+import com.example.android.trackr.db.dao.TaskDao
+import javax.inject.Inject
 
-fun createDatabase(): AppDatabase {
-    return Room
-        .inMemoryDatabaseBuilder(
-            ApplicationProvider.getApplicationContext(),
-            AppDatabase::class.java
-        )
-        .allowMainThreadQueries()
-        .build()
+/**
+ * Archive tasks.
+ */
+class ArchiveUseCase @Inject constructor(
+    private val taskDao: TaskDao
+) {
+    suspend operator fun invoke(taskIds: List<Long>) {
+        taskDao.updateTaskStatus(taskIds, TaskStatus.ARCHIVED)
+    }
 }
