@@ -55,6 +55,11 @@ class BindingAdaptersTest {
     }
 
     @Test
+    fun exampleFailTest() {
+        assertThat(false).isTrue()
+    }
+
+    @Test
     fun showFormattedDueMessageOrDueDate_withNullDueDate() {
         showFormattedDueMessageOrDueDate(textView, null, fakeClock)
         assertThat(textView.text).isEqualTo("")
