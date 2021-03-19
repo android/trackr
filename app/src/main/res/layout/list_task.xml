@@ -25,8 +25,8 @@
             type="com.example.android.trackr.data.User" />
 
         <variable
-            name="taskListItem"
-            type="com.example.android.trackr.data.TaskListItem" />
+            name="taskSummary"
+            type="com.example.android.trackr.data.TaskSummary" />
 
         <variable
             name="clock"
@@ -57,7 +57,7 @@
                 android:layout_marginStart="@dimen/home_task_star_margin"
                 android:layout_marginEnd="@dimen/home_task_star_margin"
                 android:importantForAccessibility="no"
-                android:checked="@{taskListItem.starUsers.contains(currentUser)}"
+                android:checked="@{taskSummary.starUsers.contains(currentUser)}"
                 android:gravity="center"
                 app:layout_constraintBottom_toBottomOf="@id/title"
                 app:layout_constraintStart_toStartOf="parent"
@@ -73,7 +73,7 @@
                 android:layout_marginEnd="@dimen/spacing_medium"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:text="@{taskListItem.title}"
+                android:text="@{taskSummary.title}"
                 android:textAppearance="?attr/textAppearanceHeadline2"
                 android:textDirection="locale"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -87,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_small"
                 android:importantForAccessibility="no"
-                app:imageResource="@{taskListItem.owner.avatar.drawableResId}"
+                app:imageResource="@{taskSummary.owner.avatar.drawableResId}"
                 app:layout_constraintStart_toStartOf="@+id/title"
                 app:layout_constraintTop_toBottomOf="@id/title"
                 tools:src="@drawable/ic_user" />
@@ -97,7 +97,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/spacing_small"
-                android:text="@{@string/user(taskListItem.owner.username)}"
+                android:text="@{@string/user(taskSummary.owner.username)}"
                 android:textAppearance="?attr/textAppearanceBody1"
                 app:layout_constraintBottom_toBottomOf="@id/owner_avatar"
                 app:layout_constraintStart_toEndOf="@+id/owner_avatar"
@@ -111,7 +111,7 @@
                 android:layout_marginTop="@dimen/spacing_tiny"
                 android:textAppearance="?attr/textAppearanceBody1"
                 app:clock="@{clock}"
-                app:dueMessageOrDueDate="@{taskListItem.dueAt}"
+                app:dueMessageOrDueDate="@{taskSummary.dueAt}"
                 app:layout_constraintStart_toStartOf="@id/title"
                 app:layout_constraintTop_toBottomOf="@id/owner"
                 tools:text="Due next Monday" />
@@ -125,7 +125,7 @@
                 app:layout_constraintStart_toStartOf="@id/title"
                 app:layout_constraintTop_toBottomOf="@id/due_date"
                 app:showAllTags="@{false}"
-                app:tags="@{taskListItem.tags}">
+                app:tags="@{taskSummary.tags}">
 
                 <include layout="@layout/tag" />
 

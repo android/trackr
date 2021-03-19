@@ -25,7 +25,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.example.android.trackr.R
 import com.example.android.trackr.TestApplication
 import com.example.android.trackr.data.Avatar
-import com.example.android.trackr.data.TaskListItem
+import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.data.User
 import com.google.common.truth.Truth.assertThat
@@ -47,9 +47,9 @@ import org.threeten.bp.ZoneId
 class TasksAdapterTest {
     class TestListener : TasksAdapter.ItemListener {
         override fun onHeaderClicked(headerData: HeaderData) {}
-        override fun onStarClicked(taskListItem: TaskListItem) {}
-        override fun onTaskClicked(taskListItem: TaskListItem) {}
-        override fun onTaskArchived(taskListItem: TaskListItem) {}
+        override fun onStarClicked(taskSummary: TaskSummary) {}
+        override fun onTaskClicked(taskSummary: TaskSummary) {}
+        override fun onTaskArchived(taskSummary: TaskSummary) {}
         override fun onTaskDragged(fromPosition: Int, toPosition: Int) {}
         override fun onDragStarted() {}
         override fun onDragCompleted(fromPosition: Int, toPosition: Int, customAction: Boolean) {}
@@ -142,14 +142,14 @@ class TasksAdapterTest {
         val holder =
             TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, user, fakeClock)
 
-        assertThat(holder.binding.taskListItem).isNull()
+        assertThat(holder.binding.taskSummary).isNull()
         assertThat(holder.accessibilityActionIds).isEmpty()
         assertThat(ViewCompat.getStateDescription(holder.binding.root)).isNull()
         assertThat(holder.binding.chipGroup.isImportantForAccessibility).isTrue()
         assertThat(holder.binding.root.contentDescription).isNull()
 
-        holder.bind(inProgressTaskListItem, DragAndDropActionsHelper(headerAndTask()))
-        assertThat(holder.binding.taskListItem).isEqualTo(inProgressTaskListItem)
+        holder.bind(inProgressTaskSummary, DragAndDropActionsHelper(headerAndTask()))
+        assertThat(holder.binding.taskSummary).isEqualTo(inProgressTaskSummary)
         assertThat(ViewCompat.getStateDescription(holder.binding.root)).isEqualTo(
             context.getString(R.string.in_progress) + ", " + context.getString(R.string.unstarred)
         )
@@ -166,7 +166,7 @@ class TasksAdapterTest {
         assertThat(holder.binding.star.isChecked).isFalse()
 
 
-        holder.bind(starredTaskListItem, DragAndDropActionsHelper(headerAndTask()))
+        holder.bind(starredTaskSummary, DragAndDropActionsHelper(headerAndTask()))
 
         assertTrue(holder.binding.star.isChecked)
         assertThat(ViewCompat.getStateDescription(holder.binding.root)).isEqualTo(
@@ -180,7 +180,7 @@ class TasksAdapterTest {
         val holder =
             TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, currentUser, fakeClock)
 
-        holder.bind(starredTaskListItem, DragAndDropActionsHelper(headerAndTask()))
+        holder.bind(starredTaskSummary, DragAndDropActionsHelper(headerAndTask()))
 
         assertFalse(holder.binding.star.isChecked)
     }
@@ -194,7 +194,7 @@ class TasksAdapterTest {
             fakeClock
         )
 
-        holder.bind(inProgressTaskListItem, DragAndDropActionsHelper(headerAndTask()))
+        holder.bind(inProgressTaskSummary, DragAndDropActionsHelper(headerAndTask()))
 
         val nodeInfo = holder.binding.root.createAccessibilityNodeInfo()
         val actionClick = nodeInfo.actionList.filter {
@@ -210,17 +210,17 @@ class TasksAdapterTest {
 
         holder.binding.root.performAccessibilityAction(holder.accessibilityActionIds[1], null)
 
-        Mockito.verify(mockListener).onStarClicked(inProgressTaskListItem)
+        Mockito.verify(mockListener).onStarClicked(inProgressTaskSummary)
     }
 
     @Test
     fun bindTaskViewHolder_addingAccessibilityAction_isIdempotent() {
         val holder =
             TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, user, fakeClock)
-        holder.bind(inProgressTaskListItem, DragAndDropActionsHelper(headerAndTask()))
+        holder.bind(inProgressTaskSummary, DragAndDropActionsHelper(headerAndTask()))
         val size = holder.accessibilityActionIds.size
 
-        holder.bind(inProgressTaskListItem, DragAndDropActionsHelper(headerAndTask()))
+        holder.bind(inProgressTaskSummary, DragAndDropActionsHelper(headerAndTask()))
         // If previously added accessibility actions are not cleared, when the holder is rebound,
         // the actions will get added again. This check guards against that.
         assertThat(holder.accessibilityActionIds.size).isEqualTo(size)
@@ -233,7 +233,7 @@ class TasksAdapterTest {
 
         holder.onItemSwiped()
 
-        Mockito.verify(mockListener).onTaskArchived(inProgressTaskListItem)
+        Mockito.verify(mockListener).onTaskArchived(inProgressTaskSummary)
     }
 
     @Test
@@ -243,14 +243,14 @@ class TasksAdapterTest {
 
         holder.binding.root.performAccessibilityAction(holder.accessibilityActionIds[0], null)
 
-        Mockito.verify(mockListener).onTaskArchived(inProgressTaskListItem)
+        Mockito.verify(mockListener).onTaskArchived(inProgressTaskSummary)
     }
 
     @Test
     fun changePosition_whenStateIsDifferent_doesNothing() {
 
-        val item1 = DataItem.TaskItem(inProgressTaskListItem)
-        val item2 = DataItem.TaskItem(notStartedTaskListItem)
+        val item1 = ListItem.TypeTask(inProgressTaskSummary)
+        val item2 = ListItem.TypeTask(notStartedTaskSummary)
 
         tasksAdapter.submitList(listOf(item1, item2))
         tasksAdapter.changeTaskPosition(0, 1)
@@ -262,7 +262,7 @@ class TasksAdapterTest {
     @Test
     fun changePosition_whenHeader_doesNothing() {
 
-        val item1 = DataItem.TaskItem(inProgressTaskListItem)
+        val item1 = ListItem.TypeTask(inProgressTaskSummary)
         val item2 = inProgressHeader
 
         tasksAdapter.submitList(listOf(item1, item2))
@@ -290,7 +290,7 @@ class TasksAdapterTest {
         listener: TasksAdapter.ItemListener
     ): TasksAdapter.TaskViewHolder {
         val holder = TasksAdapter.TaskViewHolder.from(frameLayout, listener, user, fakeClock)
-        holder.bind(inProgressTaskListItem, DragAndDropActionsHelper(headerAndTask()))
+        holder.bind(inProgressTaskSummary, DragAndDropActionsHelper(headerAndTask()))
         return holder
     }
 
@@ -298,7 +298,7 @@ class TasksAdapterTest {
         private val user = User(1, "user", Avatar.DEFAULT_USER)
         private val user2 = User(2, "user2", Avatar.DEFAULT_USER)
 
-        val inProgressTaskListItem = TaskListItem(
+        val inProgressTaskSummary = TaskSummary(
             id = 1,
             title = "task list item 1",
             dueAt = Instant.now(),
@@ -309,7 +309,7 @@ class TasksAdapterTest {
             orderInCategory = 1
         )
 
-        val starredTaskListItem = TaskListItem(
+        val starredTaskSummary = TaskSummary(
             id = 2,
             title = "task list item 2",
             dueAt = Instant.now(),
@@ -320,7 +320,7 @@ class TasksAdapterTest {
             orderInCategory = 2
         )
 
-        val notStartedTaskListItem = TaskListItem(
+        val notStartedTaskSummary = TaskSummary(
             id = 3,
             title = "task list item 3",
             dueAt = Instant.now(),
@@ -331,7 +331,7 @@ class TasksAdapterTest {
             orderInCategory = 3
         )
 
-        val inProgressHeader = DataItem.HeaderItem(
+        val inProgressHeader = ListItem.TypeHeader(
             HeaderData(
                 count = 3,
                 taskStatus = TaskStatus.IN_PROGRESS,
@@ -339,10 +339,10 @@ class TasksAdapterTest {
             )
         )
 
-        fun headerAndTask() : List<DataItem> {
-            return mutableListOf<DataItem>().apply {
+        fun headerAndTask() : List<ListItem> {
+            return mutableListOf<ListItem>().apply {
                 add(inProgressHeader)
-                add(DataItem.TaskItem(inProgressTaskListItem))
+                add(ListItem.TypeTask(inProgressTaskSummary))
             }
         }
     }

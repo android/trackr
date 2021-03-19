@@ -22,7 +22,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.android.trackr.data.TaskListItem
+import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.User
 import com.example.android.trackr.databinding.ListTaskBinding
 import org.threeten.bp.Clock
@@ -30,9 +30,9 @@ import org.threeten.bp.Clock
 internal class ArchiveAdapter(
     private val currentUser: User,
     private val clock: Clock,
-    private val onItemClick: (task: TaskListItem) -> Unit,
-    private val onItemLongClick: (task: TaskListItem) -> Unit,
-    private val onItemStarClicked: (task: TaskListItem) -> Unit
+    private val onItemClick: (task: TaskSummary) -> Unit,
+    private val onItemLongClick: (task: TaskSummary) -> Unit,
+    private val onItemStarClicked: (task: TaskSummary) -> Unit
 ) : ListAdapter<ArchivedTask, ArchiveHolder>(DiffCallback) {
 
     init {
@@ -40,7 +40,7 @@ internal class ArchiveAdapter(
     }
 
     override fun getItemId(position: Int): Long {
-        return getItem(position).taskListItem.id
+        return getItem(position).taskSummary.id
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArchiveHolder {
@@ -51,9 +51,9 @@ internal class ArchiveAdapter(
         val task = getItem(position)
         holder.bind(
             task = task,
-            cardOnClickListener = { onItemClick(task.taskListItem) },
-            cardOnLongClickListener = { onItemLongClick(task.taskListItem); true },
-            starOnClickListener = { onItemStarClicked(task.taskListItem) }
+            cardOnClickListener = { onItemClick(task.taskSummary) },
+            cardOnLongClickListener = { onItemLongClick(task.taskSummary); true },
+            starOnClickListener = { onItemStarClicked(task.taskSummary) }
         )
     }
 }
@@ -61,7 +61,7 @@ internal class ArchiveAdapter(
 private val DiffCallback = object : DiffUtil.ItemCallback<ArchivedTask>() {
 
     override fun areItemsTheSame(oldItem: ArchivedTask, newItem: ArchivedTask): Boolean {
-        return oldItem.taskListItem.id == newItem.taskListItem.id
+        return oldItem.taskSummary.id == newItem.taskSummary.id
     }
 
     override fun areContentsTheSame(oldItem: ArchivedTask, newItem: ArchivedTask): Boolean {
@@ -79,7 +79,7 @@ internal class ArchiveHolder private constructor(
         cardOnLongClickListener: View.OnLongClickListener,
         starOnClickListener: View.OnClickListener
     ) {
-        binding.taskListItem = task.taskListItem
+        binding.taskSummary = task.taskSummary
         binding.card.isSelected = task.selected
         binding.card.setOnClickListener(cardOnClickListener)
         binding.card.setOnLongClickListener(cardOnLongClickListener)

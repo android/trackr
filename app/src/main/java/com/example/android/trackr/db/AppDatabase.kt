@@ -25,7 +25,7 @@ import com.example.android.trackr.db.dao.TaskDao
 
 @Database(
     entities = [Task::class, Tag::class, User::class, TaskTag::class, UserTask::class],
-    views = [TaskListItem::class, TaskDetail::class],
+    views = [TaskSummary::class, TaskDetail::class],
     version = 1,
     exportSchema = false
 )

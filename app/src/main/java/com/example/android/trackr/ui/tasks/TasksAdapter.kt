@@ -27,7 +27,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.trackr.R
-import com.example.android.trackr.data.TaskListItem
+import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.data.User
 import com.example.android.trackr.databinding.ListHeaderBinding
@@ -42,21 +42,21 @@ class TasksAdapter(
     private val currentUser: User,
     private val clock: Clock
 ) :
-    ListAdapter<DataItem, RecyclerView.ViewHolder>(
-        DataItemDiffCallback()
+    ListAdapter<ListItem, RecyclerView.ViewHolder>(
+        ListItemDiffCallback()
     ) {
 
     // We cache the current list associated with this adapter. If the user requests to undo a
     // drag and drop operation, this list can be submitted to the adapter.
-    private var cachedList: List<DataItem>? = null
+    private var cachedList: List<ListItem>? = null
 
     private var headerPositions = mutableListOf<Int>()
 
     private lateinit var dragAndDropActionsHelper: DragAndDropActionsHelper
 
     override fun onCurrentListChanged(
-        previousList: MutableList<DataItem>,
-        currentList: MutableList<DataItem>
+        previousList: MutableList<ListItem>,
+        currentList: MutableList<ListItem>
     ) {
         super.onCurrentListChanged(previousList, currentList)
         dragAndDropActionsHelper = DragAndDropActionsHelper(currentList)
@@ -64,9 +64,9 @@ class TasksAdapter(
 
     interface ItemListener {
         fun onHeaderClicked(headerData: HeaderData)
-        fun onStarClicked(taskListItem: TaskListItem)
-        fun onTaskClicked(taskListItem: TaskListItem)
-        fun onTaskArchived(taskListItem: TaskListItem)
+        fun onStarClicked(taskSummary: TaskSummary)
+        fun onTaskClicked(taskSummary: TaskSummary)
+        fun onTaskArchived(taskSummary: TaskSummary)
         fun onTaskDragged(fromPosition: Int, toPosition: Int)
         fun onDragStarted()
         fun onDragCompleted(
@@ -86,8 +86,8 @@ class TasksAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
-            is DataItem.HeaderItem -> ITEM_VIEW_TYPE_HEADER
-            is DataItem.TaskItem -> ITEM_VIEW_TYPE_TASK
+            is ListItem.TypeHeader -> ITEM_VIEW_TYPE_HEADER
+            is ListItem.TypeTask -> ITEM_VIEW_TYPE_TASK
         }
     }
 
@@ -95,11 +95,11 @@ class TasksAdapter(
         when (holder) {
             is TaskViewHolder -> {
                 holder.bind(
-                    (getItem(position) as DataItem.TaskItem).taskListItem, dragAndDropActionsHelper)
+                    (getItem(position) as ListItem.TypeTask).taskSummary, dragAndDropActionsHelper)
             }
 
             is HeaderViewHolder -> {
-                holder.bind((getItem(position) as DataItem.HeaderItem).headerData)
+                holder.bind((getItem(position) as ListItem.TypeHeader).headerData)
             }
         }
     }
@@ -107,21 +107,21 @@ class TasksAdapter(
     /**
      * Find a header item at the specified [position] or before.
      */
-    fun findHeaderItem(position: Int): DataItem.HeaderItem {
+    fun findHeaderItem(position: Int): ListItem.TypeHeader {
         var p = position
         while (p > 0) {
             val item = getItem(p)
-            if (item is DataItem.HeaderItem) return item
+            if (item is ListItem.TypeHeader) return item
             p--
         }
-        return getItem(0) as DataItem.HeaderItem
+        return getItem(0) as ListItem.TypeHeader
     }
 
     fun changeTaskPosition(fromPosition: Int, toPosition: Int) {
         // TODO: persist new order in the db instead of calling submitList()
-        if (currentList[fromPosition] is DataItem.TaskItem && currentList[toPosition] is DataItem.TaskItem) {
-            val fromItem = (currentList[fromPosition] as DataItem.TaskItem).taskListItem
-            val toItem = (currentList[toPosition] as DataItem.TaskItem).taskListItem
+        if (currentList[fromPosition] is ListItem.TypeTask && currentList[toPosition] is ListItem.TypeTask) {
+            val fromItem = (currentList[fromPosition] as ListItem.TypeTask).taskSummary
+            val toItem = (currentList[toPosition] as ListItem.TypeTask).taskSummary
             if (fromItem.status != toItem.status) {
                 return
             }
@@ -171,22 +171,22 @@ class TasksAdapter(
 
         val accessibilityActionIds = arrayListOf<Int>()
 
-        fun bind(taskListItem: TaskListItem, dragAndDraopActionsHelper: DragAndDropActionsHelper)  {
+        fun bind(taskSummary: TaskSummary, dragAndDraopActionsHelper: DragAndDropActionsHelper)  {
             val resources = binding.root.resources
-            binding.taskListItem = taskListItem
-            binding.card.setOnClickListener { itemListener.onTaskClicked(taskListItem) }
-            binding.star.setOnClickListener { itemListener.onStarClicked(taskListItem) }
+            binding.taskSummary = taskSummary
+            binding.card.setOnClickListener { itemListener.onTaskClicked(taskSummary) }
+            binding.star.setOnClickListener { itemListener.onStarClicked(taskSummary) }
             binding.clock = clock
             binding.currentUser = currentUser
             binding.root.contentDescription =
-                AccessibilityUtils.taskListItemLabel(binding.root.context, taskListItem, clock)
+                AccessibilityUtils.taskSummaryLabel(binding.root.context, taskSummary, clock)
             
             val starredStateResId =
-                if (taskListItem.starUsers.isEmpty()) R.string.unstarred else R.string.starred
+                if (taskSummary.starUsers.isEmpty()) R.string.unstarred else R.string.starred
 
             ViewCompat.setStateDescription(
                 binding.root,
-                resources.getString(taskListItem.status.stringResId) + ", " + resources.getString(
+                resources.getString(taskSummary.status.stringResId) + ", " + resources.getString(
                     starredStateResId
                 )
             )
@@ -200,8 +200,8 @@ class TasksAdapter(
             // when a view is rebound.
             removeAccessibilityActions(binding.root)
 
-            addArchiveAccessibilityAction(taskListItem)
-            addStarAccessibilityAction(taskListItem)
+            addArchiveAccessibilityAction(taskSummary)
+            addStarAccessibilityAction(taskSummary)
 
             val actionParams = dragAndDraopActionsHelper.execute(adapterPosition)
             for (actionParam in actionParams) {
@@ -212,7 +212,7 @@ class TasksAdapter(
         }
 
         override fun onItemSwiped() {
-            binding.taskListItem?.let {
+            binding.taskSummary?.let {
                 itemListener.onTaskArchived(it)
             }
         }
@@ -235,7 +235,7 @@ class TasksAdapter(
          * This provides the swipe-to-archive functionality to users of accessibility services who
          * may not be able to perform the swipe gesture.
          */
-        private fun addArchiveAccessibilityAction(taskListItem: TaskListItem) {
+        private fun addArchiveAccessibilityAction(taskSummary: TaskSummary) {
             accessibilityActionIds.add(
                 ViewCompat.addAccessibilityAction(
                     binding.root,
@@ -243,7 +243,7 @@ class TasksAdapter(
                     binding.root.context.getString(R.string.archive)
                 ) { _, _ ->
                     // The functionality associated with the label.
-                    itemListener.onTaskArchived(taskListItem)
+                    itemListener.onTaskArchived(taskSummary)
                     true
                 })
         }
@@ -282,19 +282,19 @@ class TasksAdapter(
         /**
          * Creates a custom accessibility action for starring / unstarring tasks.
          */
-        private fun addStarAccessibilityAction(taskListItem: TaskListItem) {
+        private fun addStarAccessibilityAction(taskSummary: TaskSummary) {
             accessibilityActionIds.add(
                 ViewCompat.addAccessibilityAction(
                     binding.root,
                     // The label surfaced to end user by an accessibility service.
-                    if (taskListItem.starUsers.contains(currentUser)) {
+                    if (taskSummary.starUsers.contains(currentUser)) {
                         binding.root.context.getString(R.string.unstar)
                     } else {
                         binding.root.context.getString(R.string.star)
                     }
                 ) { _, _ ->
                     // The functionality associated with the label.
-                    itemListener.onStarClicked(taskListItem)
+                    itemListener.onStarClicked(taskSummary)
                     true
                 })
         }
@@ -325,25 +325,25 @@ class TasksAdapter(
     }
 }
 
-class DataItemDiffCallback : DiffUtil.ItemCallback<DataItem>() {
-    override fun areItemsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
+class ListItemDiffCallback : DiffUtil.ItemCallback<ListItem>() {
+    override fun areItemsTheSame(oldItem: ListItem, newItem: ListItem): Boolean {
         return oldItem.id == newItem.id
     }
 
     @SuppressLint("DiffUtilEquals")
-    override fun areContentsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
+    override fun areContentsTheSame(oldItem: ListItem, newItem: ListItem): Boolean {
         return oldItem == newItem
     }
 }
 
-sealed class DataItem {
+sealed class ListItem {
     abstract val id: Long
 
-    data class TaskItem(val taskListItem: TaskListItem) : DataItem() {
-        override val id = taskListItem.id
+    data class TypeTask(val taskSummary: TaskSummary) : ListItem() {
+        override val id = taskSummary.id
     }
 
-    data class HeaderItem(val headerData: HeaderData) : DataItem() {
+    data class TypeHeader(val headerData: HeaderData) : ListItem() {
         override val id = Long.MIN_VALUE
     }
 }
