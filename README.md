@@ -54,6 +54,13 @@ To learn more about Android accessibility, visit the
 more about developer facing aspects of Android accessibility, read the
 [accessibility developer guide](https://developer.android.com/guide/topics/ui/accessibility).
 
+Screenshots
+-----------
+
+![Home Screen TalkBack](screenshots/talkback_home.png "Task list screen with TalkBack on"){width=240px}
+![Detail](screenshots/detail_dark.png "Detail screen in dark mode"){width=240px}
+![Edit](screenshots/edit.png "Task edit screen"){width=240px}
+
 Issues
 -----------
 
