@@ -128,4 +128,12 @@ dependencies {
     testImplementation("org.threeten:threetenbp:$threetenbp_version") {
         exclude group: "com.jakewharton.threetenabp", module: "threetenabp"
     }
+
+    androidTestImplementation "androidx.test:core-ktx:$androidx_test_ext_core_version"
+    androidTestImplementation "androidx.test.espresso:espresso-accessibility:$androidx_test_espresso_version"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$androidx_test_espresso_version"
+    androidTestImplementation "androidx.test.ext:junit-ktx:$androidx_test_ext_junit_version"
+    androidTestImplementation "androidx.test:rules:$androidx_test_rules_version"
+    androidTestImplementation "androidx.test:runner:$androidx_test_runner_version"
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
