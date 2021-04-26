@@ -29,6 +29,10 @@ import com.example.android.trackr.data.UserTask
 import com.example.android.trackr.db.AppDatabase
 import com.example.android.trackr.db.dao.valueBlocking
 import com.example.android.trackr.ui.createDatabase
+import com.example.android.trackr.usecase.LoadTagsUseCase
+import com.example.android.trackr.usecase.LoadTaskDetailUseCase
+import com.example.android.trackr.usecase.LoadUsersUseCase
+import com.example.android.trackr.usecase.SaveTaskDetailUseCase
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
@@ -48,7 +52,14 @@ class TaskEditViewModelTest {
     private fun createViewModel(): TaskEditViewModel {
         val db = createDatabase()
         populate(db)
-        return TaskEditViewModel(db.taskDao(), user1)
+        val taskDao = db.taskDao()
+        return TaskEditViewModel(
+            LoadTaskDetailUseCase(taskDao),
+            LoadUsersUseCase(taskDao),
+            LoadTagsUseCase(taskDao),
+            SaveTaskDetailUseCase(taskDao),
+            user1
+        )
     }
 
     @Test
