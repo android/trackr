@@ -25,14 +25,20 @@ import androidx.lifecycle.viewModelScope
 import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.data.User
-import com.example.android.trackr.db.dao.TaskDao
+import com.example.android.trackr.usecase.ArchiveUseCase
+import com.example.android.trackr.usecase.GetOngoingTaskSummariesUseCase
+import com.example.android.trackr.usecase.ReorderListUseCase
 import com.example.android.trackr.usecase.ToggleTaskStarStateUseCase
+import com.example.android.trackr.usecase.UpdateTaskStatusUseCase
 import kotlinx.coroutines.launch
 
 class TasksViewModel @ViewModelInject constructor(
-    private val taskDao: TaskDao,
-    private val currentUser: User,
-    private val toggleTaskStarStateUseCase: ToggleTaskStarStateUseCase
+    getOngoingTaskSummariesUseCase: GetOngoingTaskSummariesUseCase,
+    private val archiveUseCase: ArchiveUseCase,
+    private val toggleTaskStarStateUseCase: ToggleTaskStarStateUseCase,
+    private val updateTaskStatusUseCase: UpdateTaskStatusUseCase,
+    private val reorderListUseCase: ReorderListUseCase,
+    private val currentUser: User
 ) : ViewModel() {
 
     // This can be observed by a client interested in presenting the undo logic for the task that
@@ -41,8 +47,7 @@ class TasksViewModel @ViewModelInject constructor(
     private val _archivedItem: MutableLiveData<ArchivedItem?> = MutableLiveData()
     val archivedItem: LiveData<ArchivedItem?> = _archivedItem
 
-    private val taskSummaries: LiveData<List<TaskSummary>>
-        get() = taskDao.getOngoingTaskSummaries()
+    private val taskSummaries = getOngoingTaskSummariesUseCase()
 
     // TODO: don't hardcode TaskStatus values; instead, read from the db
     private val _expandedStatesMap: MutableLiveData<MutableMap<TaskStatus, Boolean>> =
@@ -55,7 +60,7 @@ class TasksViewModel @ViewModelInject constructor(
         )
     private val expandedStatesMap: LiveData<MutableMap<TaskStatus, Boolean>> = _expandedStatesMap
 
-    var listItems: LiveData<List<ListItem>> = MediatorLiveData<List<ListItem>>().apply {
+    val listItems: LiveData<List<ListItem>> = MediatorLiveData<List<ListItem>>().apply {
         var cachedTaskSummaries: List<TaskSummary>? = null
 
         addSource(taskSummaries) {
@@ -90,14 +95,14 @@ class TasksViewModel @ViewModelInject constructor(
         _archivedItem.value = ArchivedItem(taskSummary.id, taskSummary.status)
 
         viewModelScope.launch {
-            taskDao.updateTaskStatus(taskSummary.id, TaskStatus.ARCHIVED)
+            archiveUseCase(listOf(taskSummary.id))
         }
     }
 
     fun unarchiveTask() {
         archivedItem.value?.let {
             viewModelScope.launch {
-                taskDao.updateTaskStatus(it.taskId, it.previousStatus)
+                updateTaskStatusUseCase(listOf(it.taskId), it.previousStatus)
             }
             _archivedItem.value = null
         }
@@ -113,7 +118,7 @@ class TasksViewModel @ViewModelInject constructor(
     fun restoreListFromCache() {
         viewModelScope.launch {
             dragAndDropCategory?.let {
-                taskDao.reorderList(it, cachedList)
+                reorderListUseCase(it, cachedList)
             }
         }
     }
@@ -121,7 +126,7 @@ class TasksViewModel @ViewModelInject constructor(
     fun persistUpdatedList(status: TaskStatus, items: List<TaskSummary>) {
         dragAndDropCategory = status
         viewModelScope.launch {
-            taskDao.reorderList(status, items)
+            reorderListUseCase(status, cachedList)
         }
     }
 
