@@ -21,15 +21,15 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commitNow
 import com.example.android.trackr.R
-import com.example.android.trackr.databinding.FragmentSettingsBinding
+import com.example.android.trackr.databinding.SettingsFragmentBinding
+import com.example.android.trackr.ui.dataBindings
 import com.example.android.trackr.ui.utils.configureEdgeToEdge
 
-class SettingsFragment : Fragment(R.layout.fragment_settings) {
+class SettingsFragment : Fragment(R.layout.settings_fragment) {
 
-    private lateinit var binding: FragmentSettingsBinding
+    private val binding by dataBindings(SettingsFragmentBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding = FragmentSettingsBinding.bind(view)
         configureEdgeToEdge(binding.root, binding.preference, binding.appBar)
         if (childFragmentManager.findFragmentById(R.id.preference) == null) {
             childFragmentManager.commitNow {

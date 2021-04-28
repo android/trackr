@@ -24,7 +24,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.android.trackr.NavTaskEditGraphArgs
 import com.example.android.trackr.R
-import com.example.android.trackr.databinding.FragmentTaskDetailBinding
+import com.example.android.trackr.databinding.TaskDetailFragmentBinding
+import com.example.android.trackr.ui.dataBindings
 import com.example.android.trackr.ui.utils.DateTimeUtils
 import com.example.android.trackr.ui.utils.configureEdgeToEdge
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,12 +33,11 @@ import org.threeten.bp.Clock
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
+class TaskDetailFragment : Fragment(R.layout.task_detail_fragment) {
 
     private val viewModel: TaskDetailViewModel by viewModels()
     private val args: TaskDetailFragmentArgs by navArgs()
-
-    private lateinit var binding: FragmentTaskDetailBinding
+    private val binding by dataBindings(TaskDetailFragmentBinding::bind)
 
     @Inject
     lateinit var clock: Clock
@@ -49,8 +49,6 @@ class TaskDetailFragment : Fragment(R.layout.fragment_task_detail) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentTaskDetailBinding.bind(view)
-        binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
         binding.clock = clock
 

@@ -23,7 +23,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.android.trackr.R
 import com.example.android.trackr.data.User
-import com.example.android.trackr.databinding.FragmentArchiveBinding
+import com.example.android.trackr.databinding.ArchiveFragmentBinding
+import com.example.android.trackr.ui.dataBindings
 import com.example.android.trackr.ui.detail.TaskDetailFragmentArgs
 import com.example.android.trackr.ui.utils.configureEdgeToEdge
 import com.google.android.material.snackbar.Snackbar
@@ -32,10 +33,10 @@ import org.threeten.bp.Clock
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ArchivesFragment : Fragment(R.layout.fragment_archive) {
+class ArchivesFragment : Fragment(R.layout.archive_fragment) {
 
     private val viewModel: ArchiveViewModel by viewModels()
-    private lateinit var binding: FragmentArchiveBinding
+    private val binding by dataBindings(ArchiveFragmentBinding::bind)
 
     @Inject
     lateinit var currentUser: User
@@ -44,8 +45,6 @@ class ArchivesFragment : Fragment(R.layout.fragment_archive) {
     lateinit var clock: Clock
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding = FragmentArchiveBinding.bind(view)
-        binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
         configureEdgeToEdge(
             root = view,

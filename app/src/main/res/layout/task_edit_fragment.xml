@@ -135,7 +135,7 @@
                         android:layout_marginTop="@dimen/spacing_small"
                         android:layout_marginEnd="@dimen/spacing_large"
                         android:background="@drawable/status_spinner_background"
-                        tools:listitem="@layout/item_status_spinner" />
+                        tools:listitem="@layout/status_spinner_item" />
 
                     <!-- Owner -->
 

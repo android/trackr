@@ -29,7 +29,8 @@ import androidx.navigation.navGraphViewModels
 import com.example.android.trackr.NavTaskEditGraphArgs
 import com.example.android.trackr.R
 import com.example.android.trackr.data.TaskStatus
-import com.example.android.trackr.databinding.FragmentTaskEditBinding
+import com.example.android.trackr.databinding.TaskEditFragmentBinding
+import com.example.android.trackr.ui.dataBindings
 import com.example.android.trackr.ui.utils.DateTimeUtils
 import com.example.android.trackr.ui.utils.configureEdgeToEdge
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -41,13 +42,13 @@ import javax.inject.Inject
 private const val FRAGMENT_DATE_PICKER = "DatePicker"
 
 @AndroidEntryPoint
-class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
+class TaskEditFragment : Fragment(R.layout.task_edit_fragment) {
 
     private val args: NavTaskEditGraphArgs by navArgs()
     private val viewModel: TaskEditViewModel by navGraphViewModels(R.id.nav_task_edit_graph) {
         defaultViewModelProviderFactory
     }
-    private lateinit var binding: FragmentTaskEditBinding
+    private val binding by dataBindings(TaskEditFragmentBinding::bind)
 
     @Inject
     lateinit var clock: Clock
@@ -61,8 +62,6 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding = FragmentTaskEditBinding.bind(view)
-        binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
         binding.clock = clock
 
@@ -98,7 +97,7 @@ class TaskEditFragment : Fragment(R.layout.fragment_task_edit) {
         }
         binding.status.adapter = ArrayAdapter(
             requireContext(),
-            R.layout.item_status_spinner,
+            R.layout.status_spinner_item,
             R.id.status_text,
             TaskStatus.values().map { getString(it.stringResId) }
         )

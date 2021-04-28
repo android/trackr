@@ -42,7 +42,7 @@
 
         <include
             android:id="@+id/sticky_header"
-            layout="@layout/list_header"
+            layout="@layout/header_item"
             app:headerData="@{headerData}"
             app:listener="@{listener}" />
 

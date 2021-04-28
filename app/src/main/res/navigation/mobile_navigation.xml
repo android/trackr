@@ -23,13 +23,13 @@
         android:id="@+id/nav_tasks"
         android:name="com.example.android.trackr.ui.tasks.TasksFragment"
         android:label="Tasks"
-        tools:layout="@layout/fragment_tasks" />
+        tools:layout="@layout/tasks_fragment" />
 
     <fragment
         android:id="@+id/nav_task_detail"
         android:name="com.example.android.trackr.ui.detail.TaskDetailFragment"
         android:label="Task Detail"
-        android:layout="@layout/fragment_task_detail">
+        android:layout="@layout/task_detail_fragment">
         <argument
             android:name="taskId"
             app:argType="long" />
@@ -39,7 +39,7 @@
         android:id="@+id/nav_archives"
         android:name="com.example.android.trackr.ui.archives.ArchivesFragment"
         android:label="Archives"
-        tools:layout="@layout/fragment_archive" />
+        tools:layout="@layout/archive_fragment" />
 
     <fragment
         android:id="@+id/nav_settings"
@@ -59,7 +59,7 @@
             android:id="@+id/nav_task_edit"
             android:name="com.example.android.trackr.ui.edit.TaskEditFragment"
             android:label="Task Edit"
-            android:layout="@layout/fragment_task_edit" />
+            android:layout="@layout/task_edit_fragment" />
 
         <dialog
             android:id="@+id/nav_user_selection"

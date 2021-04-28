@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.User
-import com.example.android.trackr.databinding.ListTaskBinding
+import com.example.android.trackr.databinding.TaskSummaryBinding
 import org.threeten.bp.Clock
 
 internal class ArchiveAdapter(
@@ -70,7 +70,7 @@ private val DiffCallback = object : DiffUtil.ItemCallback<ArchivedTask>() {
 }
 
 internal class ArchiveHolder private constructor(
-    private val binding: ListTaskBinding
+    private val binding: TaskSummaryBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(
@@ -89,7 +89,7 @@ internal class ArchiveHolder private constructor(
     companion object {
         fun from(parent: ViewGroup, currentUser: User, clock: Clock): ArchiveHolder {
             return ArchiveHolder(
-                ListTaskBinding
+                TaskSummaryBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
                     .also { binding ->
                         binding.currentUser = currentUser

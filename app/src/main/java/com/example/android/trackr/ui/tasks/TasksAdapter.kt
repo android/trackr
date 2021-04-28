@@ -30,8 +30,8 @@ import com.example.android.trackr.R
 import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.data.User
-import com.example.android.trackr.databinding.ListHeaderBinding
-import com.example.android.trackr.databinding.ListTaskBinding
+import com.example.android.trackr.databinding.HeaderItemBinding
+import com.example.android.trackr.databinding.TaskSummaryBinding
 import com.example.android.trackr.ui.utils.AccessibilityUtils
 import org.threeten.bp.Clock
 import java.util.Collections
@@ -132,7 +132,7 @@ class TasksAdapter(
     }
 
     class HeaderViewHolder private constructor(
-        val binding: ListHeaderBinding,
+        val binding: HeaderItemBinding,
         private val itemListener: ItemListener
     ) :
         RecyclerView.ViewHolder(binding.root) {
@@ -151,7 +151,7 @@ class TasksAdapter(
             fun from(parent: ViewGroup, itemListener: ItemListener): HeaderViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 return HeaderViewHolder(
-                    ListHeaderBinding.inflate(
+                    HeaderItemBinding.inflate(
                         layoutInflater,
                         parent,
                         false
@@ -162,7 +162,7 @@ class TasksAdapter(
     }
 
     class TaskViewHolder private constructor(
-        val binding: ListTaskBinding,
+        val binding: TaskSummaryBinding,
         private val itemListener: ItemListener,
         private val currentUser: User,
         private val clock: Clock
@@ -309,7 +309,7 @@ class TasksAdapter(
                     TaskViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 return TaskViewHolder(
-                    ListTaskBinding.inflate(
+                    TaskSummaryBinding.inflate(
                         layoutInflater,
                         parent,
                         false

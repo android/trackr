@@ -27,7 +27,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android.trackr.R
 import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.User
-import com.example.android.trackr.databinding.FragmentTasksBinding
+import com.example.android.trackr.databinding.TasksFragmentBinding
+import com.example.android.trackr.ui.dataBindings
 import com.example.android.trackr.ui.detail.TaskDetailFragmentArgs
 
 import com.example.android.trackr.ui.utils.configureEdgeToEdge
@@ -38,10 +39,10 @@ import java.util.Collections
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListener {
+class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListener {
 
     private val viewModel: TasksViewModel by viewModels()
-    private lateinit var binding: FragmentTasksBinding
+    private val binding by dataBindings(TasksFragmentBinding::bind)
     private lateinit var tasksAdapter: TasksAdapter
 
     @Inject
@@ -55,7 +56,6 @@ class TasksFragment : Fragment(R.layout.fragment_tasks), TasksAdapter.ItemListen
 
         tasksAdapter = TasksAdapter(this, currentUser, clock)
 
-        binding = FragmentTasksBinding.bind(view)
         binding.listener = this
         configureEdgeToEdge(
             root = view,
