@@ -27,13 +27,19 @@ import com.example.android.trackr.data.Tag
 import com.example.android.trackr.data.TaskDetail
 import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.data.User
-import com.example.android.trackr.db.dao.TaskDao
+import com.example.android.trackr.usecase.LoadTagsUseCase
+import com.example.android.trackr.usecase.LoadTaskDetailUseCase
+import com.example.android.trackr.usecase.LoadUsersUseCase
+import com.example.android.trackr.usecase.SaveTaskDetailUseCase
 import kotlinx.coroutines.launch
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 
 class TaskEditViewModel @ViewModelInject constructor(
-    private val taskDao: TaskDao,
+    private val loadTaskDetailUseCase: LoadTaskDetailUseCase,
+    private val loadUsersUseCase: LoadUsersUseCase,
+    private val loadTagsUseCase: LoadTagsUseCase,
+    private val saveTaskDetailUseCase: SaveTaskDetailUseCase,
     private val currentUser: User
 ) : ViewModel() {
 
@@ -99,10 +105,10 @@ class TaskEditViewModel @ViewModelInject constructor(
 
     private fun loadInitialData(taskId: Long) {
         viewModelScope.launch {
-            users = taskDao.loadUsers()
-            allTags = taskDao.loadTags()
+            users = loadUsersUseCase()
+            allTags = loadTagsUseCase()
             if (taskId != 0L) {
-                val detail = taskDao.loadTaskDetailById(taskId)
+                val detail = loadTaskDetailUseCase(taskId)
                 if (detail != null) {
                     title.value = detail.title
                     description.value = detail.description
@@ -160,7 +166,7 @@ class TaskEditViewModel @ViewModelInject constructor(
     fun save(onSaveFinished: (Boolean) -> Unit) {
         viewModelScope.launch {
             try {
-                taskDao.saveTaskDetail(
+                saveTaskDetailUseCase(
                     TaskDetail(
                         id = taskId,
                         title = title.value ?: "",
