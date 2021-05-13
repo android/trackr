@@ -18,10 +18,6 @@
     <string name="app_name">Trackr</string>
 
     <!-- Tasks screen -->
-    <string name="in_progress">In progress</string>
-    <string name="not_started">Not started</string>
-    <string name="completed">Completed</string>
-    <string name="archived">Archived</string>
     <string name="header_label_with_count">%1$s (%2$d)</string>
     <string name="add_task">Add a new task</string>
 

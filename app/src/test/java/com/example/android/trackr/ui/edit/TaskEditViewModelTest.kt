@@ -27,12 +27,12 @@ import com.example.android.trackr.data.TaskTag
 import com.example.android.trackr.data.User
 import com.example.android.trackr.data.UserTask
 import com.example.android.trackr.db.AppDatabase
-import com.example.android.trackr.db.dao.valueBlocking
 import com.example.android.trackr.ui.createDatabase
 import com.example.android.trackr.usecase.LoadTagsUseCase
 import com.example.android.trackr.usecase.LoadTaskDetailUseCase
 import com.example.android.trackr.usecase.LoadUsersUseCase
 import com.example.android.trackr.usecase.SaveTaskDetailUseCase
+import com.example.android.trackr.valueBlocking
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
@@ -120,7 +120,13 @@ class TaskEditViewModelTest {
 
         viewModel.updateOwner(User(3L, "another", Avatar.DEFAULT_USER))
 
-        assertThat(viewModel.owner.valueBlocking).isEqualTo(User(3L, "another", Avatar.DEFAULT_USER))
+        assertThat(viewModel.owner.valueBlocking).isEqualTo(
+            User(
+                3L,
+                "another",
+                Avatar.DEFAULT_USER
+            )
+        )
         assertThat(viewModel.modified.valueBlocking).isTrue()
     }
 

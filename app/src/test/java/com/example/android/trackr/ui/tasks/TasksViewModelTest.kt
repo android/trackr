@@ -28,13 +28,13 @@ import com.example.android.trackr.data.TaskTag
 import com.example.android.trackr.data.User
 import com.example.android.trackr.data.UserTask
 import com.example.android.trackr.db.AppDatabase
-import com.example.android.trackr.db.dao.valueBlocking
 import com.example.android.trackr.ui.createDatabase
 import com.example.android.trackr.usecase.ArchiveUseCase
 import com.example.android.trackr.usecase.GetOngoingTaskSummariesUseCase
 import com.example.android.trackr.usecase.ReorderListUseCase
 import com.example.android.trackr.usecase.ToggleTaskStarStateUseCase
 import com.example.android.trackr.usecase.UpdateTaskStatusUseCase
+import com.example.android.trackr.valueBlocking
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule

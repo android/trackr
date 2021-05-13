@@ -20,7 +20,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.example.android.trackr.R
+import com.example.android.trackr.shared.R
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 

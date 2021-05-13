@@ -18,7 +18,6 @@ package com.example.android.trackr.ui
 
 import android.app.Application
 import android.content.res.Resources
-import android.graphics.Color
 import android.view.View
 import android.widget.TextView
 import androidx.test.core.app.ApplicationProvider

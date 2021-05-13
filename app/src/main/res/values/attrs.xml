@@ -16,28 +16,5 @@
 <resources>
     <declare-styleable name="Theme">
         <attr name="starIconColor" format="reference|color" />
-
-        <!-- Defined colors for tags/chips used for task items -->
-        <attr name="blueTagBackgroundColor" format="reference|color" />
-        <attr name="blueTagTextColor" format="reference|color" />
-
-        <attr name="greenTagBackgroundColor" format="reference|color" />
-        <attr name="greenTagTextColor" format="reference|color" />
-
-        <attr name="purpleTagBackgroundColor" format="reference|color" />
-        <attr name="purpleTagTextColor" format="reference|color" />
-
-        <attr name="redTagBackgroundColor" format="reference|color" />
-        <attr name="redTagTextColor" format="reference|color" />
-
-        <attr name="pinkTagBackgroundColor" format="reference|color" />
-        <attr name="pinkTagTextColor" format="reference|color" />
-
-        <attr name="tealTagBackgroundColor" format="reference|color" />
-        <attr name="tealTagTextColor" format="reference|color" />
-
-        <attr name="yellowTagBackgroundColor" format="reference|color" />
-        <attr name="yellowTagTextColor" format="reference|color" />
-
     </declare-styleable>
 </resources>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2021 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+-->
+<resources>
+    <declare-styleable name="Theme">
+        <!-- Defined colors for tags/chips used for task items -->
+        <attr name="blueTagBackgroundColor" format="reference|color" />
+        <attr name="blueTagTextColor" format="reference|color" />
+
+        <attr name="greenTagBackgroundColor" format="reference|color" />
+        <attr name="greenTagTextColor" format="reference|color" />
+
+        <attr name="purpleTagBackgroundColor" format="reference|color" />
+        <attr name="purpleTagTextColor" format="reference|color" />
+
+        <attr name="redTagBackgroundColor" format="reference|color" />
+        <attr name="redTagTextColor" format="reference|color" />
+
+        <attr name="pinkTagBackgroundColor" format="reference|color" />
+        <attr name="pinkTagTextColor" format="reference|color" />
+
+        <attr name="tealTagBackgroundColor" format="reference|color" />
+        <attr name="tealTagTextColor" format="reference|color" />
+
+        <attr name="yellowTagBackgroundColor" format="reference|color" />
+        <attr name="yellowTagTextColor" format="reference|color" />
+
+    </declare-styleable>
+</resources>

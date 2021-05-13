@@ -30,10 +30,6 @@ class ToggleTaskStarStateUseCase @Inject constructor(
     private val db: AppDatabase,
     private val taskDao: TaskDao = db.taskDao()
 ) {
-    fun getTaskDetailById(id: Long) = taskDao.findTaskDetailById(id)
-
-    fun getArchivedTaskSummaries() = taskDao.getArchivedTaskSummaries()
-
     /**
      * Toggles the star state for the task.
      */

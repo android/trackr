@@ -23,7 +23,7 @@ import com.example.android.trackr.data.Task
 import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.data.User
 import com.example.android.trackr.db.AppDatabase
-import com.example.android.trackr.db.dao.valueBlocking
+import com.example.android.trackr.valueBlocking
 import com.example.android.trackr.ui.archives.ArchiveViewModel
 import com.example.android.trackr.ui.createDatabase
 import com.example.android.trackr.usecase.ArchiveUseCase
