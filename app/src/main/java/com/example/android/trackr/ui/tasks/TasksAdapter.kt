@@ -46,12 +46,6 @@ class TasksAdapter(
         ListItemDiffCallback()
     ) {
 
-    // We cache the current list associated with this adapter. If the user requests to undo a
-    // drag and drop operation, this list can be submitted to the adapter.
-    private var cachedList: List<ListItem>? = null
-
-    private var headerPositions = mutableListOf<Int>()
-
     private lateinit var dragAndDropActionsHelper: DragAndDropActionsHelper
 
     override fun onCurrentListChanged(

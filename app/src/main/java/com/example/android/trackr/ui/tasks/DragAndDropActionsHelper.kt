@@ -20,9 +20,9 @@ import com.example.android.trackr.R
 
 class DragAndDropActionsHelper(private val items: List<ListItem>) {
 
-    var headerPositions: List<Int> = mutableListOf()
-    var previousHeaderPosition = NO_POSITION
-    var nextHeaderPosition = NO_POSITION
+    private var headerPositions: List<Int> = mutableListOf()
+    private var previousHeaderPosition = NO_POSITION
+    private var nextHeaderPosition = NO_POSITION
 
     init {
         items.forEachIndexed { index, item ->

@@ -39,9 +39,7 @@ class SettingsPreferenceFragment : PreferenceFragmentCompat(), Preference.OnPref
         darkModePref?.onPreferenceChangeListener = this
 
         return super.onCreateView(inflater, container, savedInstanceState)?.apply {
-            val currentNightMode =
-                resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-            when (currentNightMode) {
+            when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
                 Configuration.UI_MODE_NIGHT_NO -> {
                     setBackgroundColor(resources.getColor(R.color.trackr_white_50, context.theme))
                 }
@@ -65,9 +63,7 @@ class SettingsPreferenceFragment : PreferenceFragmentCompat(), Preference.OnPref
             enabled -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             disabled -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             default -> {
-                val currentNightMode =
-                    resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-                when (currentNightMode) {
+                when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
                     Configuration.UI_MODE_NIGHT_NO -> {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                     }

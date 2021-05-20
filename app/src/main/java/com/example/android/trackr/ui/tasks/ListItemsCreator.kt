@@ -36,10 +36,10 @@ class ListItemsCreator(
         taskSummaries?.let { items ->
             expandedStatesMap?.let { statesMap ->
                 val itemsToSubmit = mutableListOf<ListItem>()
-                val statusToItemsMap: Map<TaskStatus, List<TaskSummary>>? =
+                val statusToItemsMap: Map<TaskStatus, List<TaskSummary>> =
                     items.groupBy { it.status }
                 for (entry in statesMap) {
-                    val sublist: List<TaskSummary>? = statusToItemsMap?.get(entry.key)
+                    val sublist: List<TaskSummary>? = statusToItemsMap[entry.key]
                     itemsToSubmit.add(
                         ListItem.TypeHeader(
                             HeaderData(

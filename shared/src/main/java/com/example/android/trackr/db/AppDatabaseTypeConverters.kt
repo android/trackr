@@ -53,7 +53,7 @@ class AppDatabaseTypeConverters {
     }
 
     @TypeConverter
-    fun stringToTagColor(string: String): TagColor? {
+    fun stringToTagColor(string: String): TagColor {
         return TagColor.valueOf(string)
     }
 

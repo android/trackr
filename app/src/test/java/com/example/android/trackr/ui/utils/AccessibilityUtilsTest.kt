@@ -87,7 +87,7 @@ class AccessibilityUtilsTest {
         private val user1 = User(1, "user", Avatar.DEFAULT_USER)
         private val tag1 = Tag(1, "tag1", TagColor.BLUE)
         private val tag2 = Tag(2, "tag2", TagColor.RED)
-        private val dateTimeValue = "Due today"
+        private const val dateTimeValue = "Due today"
 
         var taskSummary = TaskSummary(
             id = 1,

@@ -129,10 +129,6 @@ class TasksViewModel @ViewModelInject constructor(
             reorderListUseCase(status, cachedList)
         }
     }
-
-    companion object {
-        private const val TAG = "TasksViewModel"
-    }
 }
 
 /**
