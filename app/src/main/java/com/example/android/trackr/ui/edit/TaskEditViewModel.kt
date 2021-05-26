@@ -16,7 +16,6 @@
 
 package com.example.android.trackr.ui.edit
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -31,11 +30,14 @@ import com.example.android.trackr.usecase.LoadTagsUseCase
 import com.example.android.trackr.usecase.LoadTaskDetailUseCase
 import com.example.android.trackr.usecase.LoadUsersUseCase
 import com.example.android.trackr.usecase.SaveTaskDetailUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
+import javax.inject.Inject
 
-class TaskEditViewModel @ViewModelInject constructor(
+@HiltViewModel
+class TaskEditViewModel @Inject constructor(
     private val loadTaskDetailUseCase: LoadTaskDetailUseCase,
     private val loadUsersUseCase: LoadUsersUseCase,
     private val loadTagsUseCase: LoadTagsUseCase,

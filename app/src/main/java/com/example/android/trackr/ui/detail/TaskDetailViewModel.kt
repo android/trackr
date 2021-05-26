@@ -16,7 +16,6 @@
 
 package com.example.android.trackr.ui.detail
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
@@ -25,9 +24,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.android.trackr.data.User
 import com.example.android.trackr.usecase.FindTaskDetailUseCase
 import com.example.android.trackr.usecase.ToggleTaskStarStateUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class TaskDetailViewModel @ViewModelInject constructor(
+@HiltViewModel
+class TaskDetailViewModel @Inject constructor(
     private val findTaskDetailUseCase: FindTaskDetailUseCase,
     private val toggleTaskStarStateUseCase: ToggleTaskStarStateUseCase,
     private val currentUser: User

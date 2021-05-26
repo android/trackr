@@ -23,9 +23,9 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.navGraphViewModels
 import com.example.android.trackr.NavTaskEditGraphArgs
 import com.example.android.trackr.R
 import com.example.android.trackr.data.TaskStatus
@@ -45,9 +45,7 @@ private const val FRAGMENT_DATE_PICKER = "DatePicker"
 class TaskEditFragment : Fragment(R.layout.task_edit_fragment) {
 
     private val args: NavTaskEditGraphArgs by navArgs()
-    private val viewModel: TaskEditViewModel by navGraphViewModels(R.id.nav_task_edit_graph) {
-        defaultViewModelProviderFactory
-    }
+    private val viewModel: TaskEditViewModel by hiltNavGraphViewModels(R.id.nav_task_edit_graph)
     private val binding by dataBindings(TaskEditFragmentBinding::bind)
 
     @Inject

@@ -16,7 +16,6 @@
 
 package com.example.android.trackr.ui.archives
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -29,9 +28,12 @@ import com.example.android.trackr.usecase.ArchiveUseCase
 import com.example.android.trackr.usecase.ArchivedTaskListItemsUseCase
 import com.example.android.trackr.usecase.ToggleTaskStarStateUseCase
 import com.example.android.trackr.usecase.UnarchiveUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ArchiveViewModel @ViewModelInject constructor(
+@HiltViewModel
+class ArchiveViewModel @Inject constructor(
     private val currentUser: User,
     archivedTaskListItemsUseCase: ArchivedTaskListItemsUseCase,
     private val toggleTaskStarStateUseCase: ToggleTaskStarStateUseCase,
