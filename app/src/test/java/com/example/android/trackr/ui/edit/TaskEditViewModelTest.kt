@@ -17,7 +17,7 @@
 package com.example.android.trackr.ui.edit
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.android.trackr.TestApplication
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.android.trackr.data.Avatar
 import com.example.android.trackr.data.Tag
 import com.example.android.trackr.data.TagColor
@@ -38,12 +38,9 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 import org.threeten.bp.Instant
 
-@RunWith(RobolectricTestRunner::class)
-@Config(application = TestApplication::class)
+@RunWith(AndroidJUnit4::class)
 class TaskEditViewModelTest {
 
     @get:Rule

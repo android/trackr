@@ -17,30 +17,27 @@
 package com.example.android.trackr.ui.archive
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.android.trackr.TestApplication
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.android.trackr.data.Avatar
 import com.example.android.trackr.data.Task
 import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.data.User
 import com.example.android.trackr.db.AppDatabase
-import com.example.android.trackr.valueBlocking
 import com.example.android.trackr.ui.archives.ArchiveViewModel
 import com.example.android.trackr.ui.createDatabase
 import com.example.android.trackr.usecase.ArchiveUseCase
 import com.example.android.trackr.usecase.ArchivedTaskListItemsUseCase
 import com.example.android.trackr.usecase.ToggleTaskStarStateUseCase
 import com.example.android.trackr.usecase.UnarchiveUseCase
+import com.example.android.trackr.valueBlocking
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 import org.threeten.bp.Instant
 
-@RunWith(RobolectricTestRunner::class)
-@Config(application = TestApplication::class)
+@RunWith(AndroidJUnit4::class)
 class ArchiveViewModelTest {
 
     @get:Rule
