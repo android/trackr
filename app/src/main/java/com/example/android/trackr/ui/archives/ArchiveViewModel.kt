@@ -16,19 +16,22 @@
 
 package com.example.android.trackr.ui.archives
 
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.User
-import com.example.android.trackr.ui.utils.timeout
+import com.example.android.trackr.ui.utils.WhileViewSubscribed
 import com.example.android.trackr.usecase.ArchiveUseCase
 import com.example.android.trackr.usecase.ArchivedTaskListItemsUseCase
 import com.example.android.trackr.usecase.ToggleTaskStarStateUseCase
 import com.example.android.trackr.usecase.UnarchiveUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -42,35 +45,23 @@ class ArchiveViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val archivedTaskSummaries = archivedTaskListItemsUseCase()
-    private val selectedTaskIds = MutableLiveData(emptySet<Long>())
+    private val selectedTaskIds = MutableStateFlow(emptySet<Long>())
 
-    /** A set of taskIds that were most recently unarchived. */
-    private val undoableTaskIds = MutableLiveData(emptySet<Long>())
+    // Notify subscribers when 1 or more tasks are unarchived.
+    private val _unarchiveActions = Channel<UnarchiveAction>(capacity = Channel.CONFLATED)
+    val unarchiveActions = _unarchiveActions.receiveAsFlow()
 
-    /**
-     * The number of recently unarchived tasks that can be archived back with the "undo" feature.
-     * Undo is available during 5 seconds after unarchiving tasks.
-     */
-    val undoableCount = undoableTaskIds
-        .map { it.size }
-        .timeout(viewModelScope, 5000L, 0)
-
-    val archivedTasks = MediatorLiveData<List<ArchivedTask>>().apply {
-        fun update() {
-            val selected = selectedTaskIds.value ?: return
-            val tasks = archivedTaskSummaries.value ?: return
-            value = tasks.map { task ->
-                ArchivedTask(task, task.id in selected)
-            }
+    val archivedTasks = combine(archivedTaskSummaries, selectedTaskIds) { tasks, selectedIds ->
+        tasks.map {
+            ArchivedTask(it, it.id in selectedIds)
         }
-        addSource(archivedTaskSummaries) { update() }
-        addSource(selectedTaskIds) { update() }
-    }
+    }.stateIn(viewModelScope, WhileViewSubscribed, emptyList())
 
-    val selectedCount = selectedTaskIds.map { it.size }
+    val selectedCount =
+        selectedTaskIds.map { it.size }.stateIn(viewModelScope, WhileViewSubscribed, 0)
 
     fun toggleTaskSelection(taskId: Long) {
-        val selected = selectedTaskIds.value ?: emptySet()
+        val selected = selectedTaskIds.value
         if (taskId in selected) {
             selectedTaskIds.value = selected - taskId
         } else {
@@ -89,19 +80,17 @@ class ArchiveViewModel @Inject constructor(
     }
 
     fun unarchiveSelectedTasks() {
-        val ids = selectedTaskIds.value ?: return
+        val ids = selectedTaskIds.value
         viewModelScope.launch {
             unarchiveUseCase(ids.toList())
-            undoableTaskIds.value = ids
-            selectedTaskIds.value = emptySet()
+            _unarchiveActions.offer(UnarchiveAction(ids))
+            clearSelection()
         }
     }
 
-    fun undoUnarchiving() {
-        val ids = undoableTaskIds.value ?: return
+    fun undoUnarchiving(action: UnarchiveAction) {
         viewModelScope.launch {
-            archiveUseCase(ids.toList())
-            undoableTaskIds.value = emptySet()
+            archiveUseCase(action.taskIds.toList())
         }
     }
 }
@@ -110,3 +99,5 @@ data class ArchivedTask(
     val taskSummary: TaskSummary,
     val selected: Boolean
 )
+
+data class UnarchiveAction(val taskIds: Set<Long>)

@@ -18,16 +18,23 @@ package com.example.android.trackr.ui.archive
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.android.trackr.CoroutineTestRule
+import com.example.android.trackr.db.AppDatabase
 import com.example.android.trackr.ui.ARCHIVED_TASK_1
 import com.example.android.trackr.ui.USER_OWNER
 import com.example.android.trackr.ui.archives.ArchiveViewModel
+import com.example.android.trackr.ui.archives.UnarchiveAction
 import com.example.android.trackr.ui.createDatabase
 import com.example.android.trackr.usecase.ArchiveUseCase
 import com.example.android.trackr.usecase.ArchivedTaskListItemsUseCase
 import com.example.android.trackr.usecase.ToggleTaskStarStateUseCase
 import com.example.android.trackr.usecase.UnarchiveUseCase
-import com.example.android.trackr.valueBlocking
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -38,69 +45,100 @@ class ArchiveViewModelTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    @get:Rule
+    val coroutineRule = CoroutineTestRule()
+
+    private lateinit var appDatabase: AppDatabase
+
     private fun createViewModel(): ArchiveViewModel {
-        val db = createDatabase()
+        val taskDao = appDatabase.taskDao()
         return ArchiveViewModel(
             USER_OWNER,
-            ArchivedTaskListItemsUseCase(db.taskDao()),
-            ToggleTaskStarStateUseCase(db),
-            ArchiveUseCase(db.taskDao()),
-            UnarchiveUseCase(db.taskDao())
+            ArchivedTaskListItemsUseCase(taskDao),
+            ToggleTaskStarStateUseCase(appDatabase),
+            ArchiveUseCase(taskDao),
+            UnarchiveUseCase(taskDao)
         )
     }
 
+    @Before
+    fun setup() {
+        appDatabase = createDatabase()
+    }
+
+    @After
+    fun tearDown() {
+        appDatabase.close()
+    }
+
     @Test
-    fun select() {
+    fun select() = coroutineRule.runBlockingTest {
         val viewModel = createViewModel()
-        viewModel.archivedTasks.valueBlocking.let { tasks ->
+        viewModel.archivedTasks.first().let { tasks ->
             assertThat(tasks).hasSize(2)
             assertThat(tasks[0].selected).isFalse()
             assertThat(tasks[1].selected).isFalse()
         }
-        assertThat(viewModel.selectedCount.valueBlocking).isEqualTo(0)
+        assertThat(viewModel.selectedCount.first()).isEqualTo(0)
 
         // Select
         viewModel.toggleTaskSelection(ARCHIVED_TASK_1.id)
-        viewModel.archivedTasks.valueBlocking.let { tasks ->
+        viewModel.archivedTasks.first().let { tasks ->
             assertThat(tasks).hasSize(2)
             assertThat(tasks[0].selected).isTrue()
             assertThat(tasks[1].selected).isFalse()
         }
-        assertThat(viewModel.selectedCount.valueBlocking).isEqualTo(1)
+        assertThat(viewModel.selectedCount.first()).isEqualTo(1)
 
         // Unselect
         viewModel.toggleTaskSelection(ARCHIVED_TASK_1.id)
-        viewModel.archivedTasks.valueBlocking.let { tasks ->
+        viewModel.archivedTasks.first().let { tasks ->
             assertThat(tasks).hasSize(2)
             assertThat(tasks[0].selected).isFalse()
             assertThat(tasks[1].selected).isFalse()
         }
-        assertThat(viewModel.selectedCount.valueBlocking).isEqualTo(0)
+        assertThat(viewModel.selectedCount.first()).isEqualTo(0)
     }
 
     @Test
-    fun unarchive() {
+    fun unarchive() = coroutineRule.runBlockingTest {
         val viewModel = createViewModel()
-        assertThat(viewModel.selectedCount.valueBlocking).isEqualTo(0)
-        assertThat(viewModel.undoableCount.valueBlocking).isEqualTo(0)
-        assertThat(viewModel.archivedTasks.valueBlocking).hasSize(2)
+
+        // Collect UnarchiveActions. This is because asserting the absence of values emitted to a
+        // flow is hard to do directly.
+        val unarchiveActions = mutableListOf<UnarchiveAction>()
+        val collectingUnarchiveActionsJob = launch {
+            viewModel.unarchiveActions.collect {
+                unarchiveActions.add(it)
+            }
+        }
+
+        assertThat(viewModel.selectedCount.first()).isEqualTo(0)
+        assertThat(viewModel.archivedTasks.first()).hasSize(2)
+        assertThat(unarchiveActions).isEmpty()
 
         // Select
         viewModel.toggleTaskSelection(ARCHIVED_TASK_1.id)
-        assertThat(viewModel.selectedCount.valueBlocking).isEqualTo(1)
-        assertThat(viewModel.undoableCount.valueBlocking).isEqualTo(0)
-        assertThat(viewModel.archivedTasks.valueBlocking).hasSize(2)
+        assertThat(viewModel.selectedCount.first()).isEqualTo(1)
+        assertThat(viewModel.archivedTasks.first()).hasSize(2)
+        assertThat(unarchiveActions).isEmpty()
 
         // Unarchive
         viewModel.unarchiveSelectedTasks()
-        assertThat(viewModel.selectedCount.valueBlocking).isEqualTo(0)
-        assertThat(viewModel.undoableCount.valueBlocking).isEqualTo(1)
-        assertThat(viewModel.archivedTasks.valueBlocking).hasSize(1)
+        assertThat(viewModel.selectedCount.first()).isEqualTo(0)
+        assertThat(viewModel.archivedTasks.first()).hasSize(1)
+        assertThat(unarchiveActions).hasSize(1)
+        val action = unarchiveActions[0]
+        assertThat(action.taskIds).containsExactly(ARCHIVED_TASK_1.id)
+
+        unarchiveActions.clear()
 
         // Undo
-        viewModel.undoUnarchiving()
-        assertThat(viewModel.selectedCount.valueBlocking).isEqualTo(0)
-        assertThat(viewModel.undoableCount.valueBlocking).isEqualTo(0)
-        assertThat(viewModel.archivedTasks.valueBlocking).hasSize(2)
+        viewModel.undoUnarchiving(action)
+        assertThat(viewModel.selectedCount.first()).isEqualTo(0)
+        assertThat(viewModel.archivedTasks.first()).hasSize(2)
+        assertThat(unarchiveActions).isEmpty()
+
+        collectingUnarchiveActionsJob.cancel()
     }
 }
