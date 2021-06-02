@@ -16,7 +16,6 @@
 
 package com.example.android.trackr.ui.detail
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android.trackr.data.User
@@ -39,7 +38,6 @@ class TaskDetailViewModel @Inject constructor(
     private val currentUser: User
 ) : ViewModel() {
 
-    private val _taskId = MutableLiveData<Long>()
     val taskId = MutableStateFlow(0L)
 
     val detail = taskId.transformLatest { id ->
