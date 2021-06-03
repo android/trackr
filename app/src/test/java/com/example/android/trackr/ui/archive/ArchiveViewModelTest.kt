@@ -17,30 +17,22 @@
 package com.example.android.trackr.ui.archive
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.android.trackr.TestApplication
-import com.example.android.trackr.data.Avatar
-import com.example.android.trackr.data.Task
-import com.example.android.trackr.data.TaskStatus
-import com.example.android.trackr.data.User
-import com.example.android.trackr.db.AppDatabase
-import com.example.android.trackr.valueBlocking
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.android.trackr.ui.ARCHIVED_TASK_1
+import com.example.android.trackr.ui.USER_OWNER
 import com.example.android.trackr.ui.archives.ArchiveViewModel
 import com.example.android.trackr.ui.createDatabase
 import com.example.android.trackr.usecase.ArchiveUseCase
 import com.example.android.trackr.usecase.ArchivedTaskListItemsUseCase
 import com.example.android.trackr.usecase.ToggleTaskStarStateUseCase
 import com.example.android.trackr.usecase.UnarchiveUseCase
+import com.example.android.trackr.valueBlocking
 import com.google.common.truth.Truth.assertThat
-import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
-import org.threeten.bp.Instant
 
-@RunWith(RobolectricTestRunner::class)
-@Config(application = TestApplication::class)
+@RunWith(AndroidJUnit4::class)
 class ArchiveViewModelTest {
 
     @get:Rule
@@ -48,9 +40,8 @@ class ArchiveViewModelTest {
 
     private fun createViewModel(): ArchiveViewModel {
         val db = createDatabase()
-        populate(db)
         return ArchiveViewModel(
-            user1,
+            USER_OWNER,
             ArchivedTaskListItemsUseCase(db.taskDao()),
             ToggleTaskStarStateUseCase(db),
             ArchiveUseCase(db.taskDao()),
@@ -67,14 +58,18 @@ class ArchiveViewModelTest {
             assertThat(tasks[1].selected).isFalse()
         }
         assertThat(viewModel.selectedCount.valueBlocking).isEqualTo(0)
-        viewModel.toggleTaskSelection(1L)
+
+        // Select
+        viewModel.toggleTaskSelection(ARCHIVED_TASK_1.id)
         viewModel.archivedTasks.valueBlocking.let { tasks ->
             assertThat(tasks).hasSize(2)
             assertThat(tasks[0].selected).isTrue()
             assertThat(tasks[1].selected).isFalse()
         }
         assertThat(viewModel.selectedCount.valueBlocking).isEqualTo(1)
-        viewModel.toggleTaskSelection(1L)
+
+        // Unselect
+        viewModel.toggleTaskSelection(ARCHIVED_TASK_1.id)
         viewModel.archivedTasks.valueBlocking.let { tasks ->
             assertThat(tasks).hasSize(2)
             assertThat(tasks[0].selected).isFalse()
@@ -91,7 +86,7 @@ class ArchiveViewModelTest {
         assertThat(viewModel.archivedTasks.valueBlocking).hasSize(2)
 
         // Select
-        viewModel.toggleTaskSelection(1L)
+        viewModel.toggleTaskSelection(ARCHIVED_TASK_1.id)
         assertThat(viewModel.selectedCount.valueBlocking).isEqualTo(1)
         assertThat(viewModel.undoableCount.valueBlocking).isEqualTo(0)
         assertThat(viewModel.archivedTasks.valueBlocking).hasSize(2)
@@ -107,47 +102,5 @@ class ArchiveViewModelTest {
         assertThat(viewModel.selectedCount.valueBlocking).isEqualTo(0)
         assertThat(viewModel.undoableCount.valueBlocking).isEqualTo(0)
         assertThat(viewModel.archivedTasks.valueBlocking).hasSize(2)
-    }
-
-    private val user1 = User(1L, "owner", Avatar.DEFAULT_USER)
-
-    private fun populate(db: AppDatabase) {
-        runBlocking {
-            with(db.taskDao()) {
-                insertUsers(
-                    listOf(
-                        user1,
-                        User(2L, "creator", Avatar.DEFAULT_USER),
-                        User(3L, "another", Avatar.DEFAULT_USER)
-                    )
-                )
-                insertTasks(
-                    listOf(
-                        Task(
-                            id = 1L,
-                            title = "title",
-                            description = "description",
-                            status = TaskStatus.ARCHIVED,
-                            creatorId = 2L,
-                            ownerId = 1L,
-                            createdAt = Instant.parse("2020-09-01T00:00:00.00Z"),
-                            dueAt = Instant.parse("2020-11-01T00:00:00.00Z"),
-                            orderInCategory = 1
-                        ),
-                        Task(
-                            id = 2L,
-                            title = "title",
-                            description = "description",
-                            status = TaskStatus.ARCHIVED,
-                            creatorId = 2L,
-                            ownerId = 1L,
-                            createdAt = Instant.parse("2020-09-01T00:00:00.00Z"),
-                            dueAt = Instant.parse("2020-11-01T00:00:00.00Z"),
-                            orderInCategory = 2
-                        )
-                    )
-                )
-            }
-        }
     }
 }

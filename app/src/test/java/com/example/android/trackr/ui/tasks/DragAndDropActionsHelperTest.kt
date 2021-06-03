@@ -17,20 +17,14 @@
 package com.example.android.trackr.ui.tasks
 
 import com.example.android.trackr.R
-import com.example.android.trackr.TestApplication
 import com.example.android.trackr.data.Avatar
-import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.TaskStatus
+import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.User
 import com.google.common.truth.Truth
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 import org.threeten.bp.Instant
 
-@RunWith(RobolectricTestRunner::class)
-@Config(application = TestApplication::class)
 class DragAndDropActionsHelperTest {
 
     @Test

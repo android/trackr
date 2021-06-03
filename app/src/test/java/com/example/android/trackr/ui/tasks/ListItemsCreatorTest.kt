@@ -16,21 +16,14 @@
 
 package com.example.android.trackr.ui.tasks
 
-import com.example.android.trackr.TestApplication
 import com.example.android.trackr.data.Avatar
-import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.TaskStatus
+import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.User
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 import com.google.common.truth.Truth.assertThat
+import org.junit.Test
 import org.threeten.bp.Instant
 
-
-@RunWith(RobolectricTestRunner::class)
-@Config(application = TestApplication::class)
 class ListItemsCreatorTest {
     @Test
     fun execute_whenArgsAreNull() {
