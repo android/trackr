@@ -128,7 +128,7 @@ class TasksViewModel @Inject constructor(
     fun persistUpdatedList(status: TaskStatus, items: List<TaskSummary>) {
         dragAndDropCategory = status
         viewModelScope.launch {
-            reorderListUseCase(status, cachedList)
+            reorderListUseCase(status, items)
         }
     }
 }
