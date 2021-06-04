@@ -28,7 +28,9 @@ import com.example.android.trackr.databinding.TaskDetailFragmentBinding
 import com.example.android.trackr.ui.dataBindings
 import com.example.android.trackr.ui.utils.DateTimeUtils
 import com.example.android.trackr.ui.utils.configureEdgeToEdge
+import com.example.android.trackr.ui.utils.repeatWithViewLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import org.threeten.bp.Clock
 import javax.inject.Inject
 
@@ -44,7 +46,7 @@ class TaskDetailFragment : Fragment(R.layout.task_detail_fragment) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.taskId = args.taskId
+        viewModel.taskId.value = args.taskId
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -63,22 +65,24 @@ class TaskDetailFragment : Fragment(R.layout.task_detail_fragment) {
             findNavController().popBackStack()
         }
 
-        viewModel.detail.observe(viewLifecycleOwner) { value ->
-            value?.let {
-                binding.dueAt.contentDescription = resources.getString(
-                    R.string.due_date_with_value,
-                    DateTimeUtils.formattedDate(resources, it.dueAt, clock)
-                )
+        repeatWithViewLifecycle {
+            viewModel.detail.collect { value ->
+                value?.let {
+                    binding.dueAt.contentDescription = resources.getString(
+                        R.string.due_date_with_value,
+                        DateTimeUtils.formattedDate(resources, it.dueAt, clock)
+                    )
 
-                binding.createdAt.contentDescription = resources.getString(
-                    R.string.creation_date_with_value,
-                    DateTimeUtils.formattedDate(resources, it.createdAt, clock)
-                )
+                    binding.createdAt.contentDescription = resources.getString(
+                        R.string.creation_date_with_value,
+                        DateTimeUtils.formattedDate(resources, it.createdAt, clock)
+                    )
 
-                binding.owner.contentDescription =
-                    resources.getString(R.string.owner_with_value, value.owner.username)
-                binding.creator.contentDescription =
-                    resources.getString(R.string.creator_with_value, value.creator.username)
+                    binding.owner.contentDescription =
+                        resources.getString(R.string.owner_with_value, value.owner.username)
+                    binding.creator.contentDescription =
+                        resources.getString(R.string.creator_with_value, value.creator.username)
+                }
             }
         }
 

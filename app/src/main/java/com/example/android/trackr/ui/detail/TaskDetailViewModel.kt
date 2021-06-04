@@ -18,13 +18,17 @@ package com.example.android.trackr.ui.detail
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
-import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import com.example.android.trackr.data.User
+import com.example.android.trackr.ui.utils.WhileViewSubscribed
 import com.example.android.trackr.usecase.FindTaskDetailUseCase
 import com.example.android.trackr.usecase.ToggleTaskStarStateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -36,23 +40,21 @@ class TaskDetailViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _taskId = MutableLiveData<Long>()
-    var taskId: Long?
-        get() = _taskId.value
-        set(value) {
-            _taskId.value = value!!
-        }
+    val taskId = MutableStateFlow(0L)
 
-    val detail = _taskId.switchMap { id -> findTaskDetailUseCase(id) }
+    val detail = taskId.transformLatest { id ->
+        emitAll(findTaskDetailUseCase(id))
+    }.stateIn(viewModelScope, WhileViewSubscribed, null)
 
-    val starred = detail.map { detail ->
+    val starred = detail.mapLatest { detail ->
         detail?.starUsers?.contains(currentUser) ?: false
-    }
+    }.stateIn(viewModelScope, WhileViewSubscribed, false)
 
     fun toggleTaskStarState() {
-        _taskId.value?.let { taskId ->
-            viewModelScope.launch {
-                toggleTaskStarStateUseCase(taskId, currentUser)
-            }
+        val id = taskId.value
+        if (id <= 0L) return
+        viewModelScope.launch {
+            toggleTaskStarStateUseCase(id, currentUser)
         }
     }
 }
