@@ -18,6 +18,7 @@ package com.example.android.trackr.ui.tasks
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.android.trackr.CoroutineTestRule
 import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.ui.TASK_1
@@ -28,8 +29,10 @@ import com.example.android.trackr.usecase.GetOngoingTaskSummariesUseCase
 import com.example.android.trackr.usecase.ReorderListUseCase
 import com.example.android.trackr.usecase.ToggleTaskStarStateUseCase
 import com.example.android.trackr.usecase.UpdateTaskStatusUseCase
-import com.example.android.trackr.valueBlocking
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -40,6 +43,9 @@ class TasksViewModelTest {
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    @get:Rule
+    val coroutineRule = CoroutineTestRule()
 
     private fun createViewModel(): TasksViewModel {
         val db = createDatabase()
@@ -55,9 +61,9 @@ class TasksViewModelTest {
     }
 
     @Test
-    fun listItems() {
+    fun listItems() = coroutineRule.runBlockingTest {
         val viewModel = createViewModel()
-        viewModel.listItems.valueBlocking.let { listItems ->
+        viewModel.listItems.first().let { listItems ->
             assertThat(listItems).hasSize(4)
             val task = listItems.find { it is ListItem.TypeTask } as ListItem.TypeTask
             assertThat(task.taskSummary.id).isEqualTo(TASK_1.id)
@@ -65,9 +71,9 @@ class TasksViewModelTest {
     }
 
     @Test
-    fun toggleExpandedState() {
+    fun toggleExpandedState() = coroutineRule.runBlockingTest {
         val viewModel = createViewModel()
-        viewModel.listItems.valueBlocking.let { listItems ->
+        viewModel.listItems.first().let { listItems ->
             val header = listItems.find {
                 it is ListItem.TypeHeader && it.headerData.taskStatus == TaskStatus.IN_PROGRESS
             } as ListItem.TypeHeader
@@ -75,7 +81,7 @@ class TasksViewModelTest {
             assertThat(header.headerData.expanded).isTrue()
         }
         viewModel.toggleExpandedState(createHeaderItem(TaskStatus.IN_PROGRESS))
-        viewModel.listItems.valueBlocking.let { listItems ->
+        viewModel.listItems.first().let { listItems ->
             val header = listItems.find {
                 it is ListItem.TypeHeader && it.headerData.taskStatus == TaskStatus.IN_PROGRESS
             } as ListItem.TypeHeader
@@ -84,13 +90,31 @@ class TasksViewModelTest {
     }
 
     @Test
-    fun archiveTask() {
+    fun archiveTask() = coroutineRule.runBlockingTest {
         val viewModel = createViewModel()
-        assertThat(viewModel.archivedItem.valueBlocking).isNull()
+
+        // Collect ArchivedItems. This is because asserting the absence of values emitted to a
+        // flow is hard to do directly.
+        val archivedItems = mutableListOf<ArchivedItem>()
+        val collectingArchivedItemJob = launch {
+            viewModel.archivedItem.collect {
+                archivedItems.add(it)
+            }
+        }
+
+        assertThat(archivedItems).isEmpty()
+
         viewModel.archiveTask(createTaskSummary(TASK_1.id))
-        assertThat(viewModel.archivedItem.valueBlocking).isNotNull()
-        viewModel.unarchiveTask()
-        assertThat(viewModel.archivedItem.valueBlocking).isNull()
+        assertThat(archivedItems).hasSize(1)
+        val item = archivedItems[0]
+        assertThat(item.taskId).isEqualTo(TASK_1.id)
+
+        archivedItems.clear()
+
+        viewModel.unarchiveTask(item)
+        assertThat(archivedItems).isEmpty()
+
+        collectingArchivedItemJob.cancel()
     }
 
     private fun createHeaderItem(status: TaskStatus): HeaderData {

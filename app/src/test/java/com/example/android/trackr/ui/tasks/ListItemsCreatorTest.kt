@@ -25,29 +25,12 @@ import org.junit.Test
 import org.threeten.bp.Instant
 
 class ListItemsCreatorTest {
-    @Test
-    fun execute_whenArgsAreNull() {
-        val subject = ListItemsCreator(null, null)
-        assertThat(subject.execute()).isNull()
-    }
-
-    @Test
-    fun execute_withNullExpandedStatesMap() {
-        val subject = ListItemsCreator(listOf(item1), null)
-        assertThat(subject.execute()).isNull()
-    }
-
-    @Test
-    fun execute_withNullTaskSummaries() {
-        val subject = ListItemsCreator(null, mutableMapOf(TaskStatus.IN_PROGRESS to true))
-        assertThat(subject.execute()).isNull()
-    }
 
     @Test
     fun execute_whenNoTaskSummaries() {
         val subject = ListItemsCreator(emptyList(), mutableMapOf(TaskStatus.IN_PROGRESS to true))
         val listItems = subject.execute()
-        assertThat(listItems!!.size).isEqualTo(1)
+        assertThat(listItems).hasSize(1)
         assertThat(listItems[0]).isInstanceOf(ListItem.TypeHeader::class.java)
         val header = (listItems[0] as ListItem.TypeHeader)
         assertThat(header.headerData.count).isEqualTo(0)
@@ -61,7 +44,7 @@ class ListItemsCreatorTest {
             mutableMapOf(TaskStatus.IN_PROGRESS to true)
         )
         val listItems = subject.execute()
-        assertThat(listItems!!.size).isEqualTo(2)
+        assertThat(listItems).hasSize(2)
         assertThat(listItems[0]).isInstanceOf(ListItem.TypeHeader::class.java)
         assertThat(listItems[1]).isInstanceOf(ListItem.TypeTask::class.java)
     }
@@ -73,7 +56,7 @@ class ListItemsCreatorTest {
             mutableMapOf(TaskStatus.IN_PROGRESS to false)
         )
         val listItems = subject.execute()
-        val header = (listItems!![0] as ListItem.TypeHeader)
+        val header = (listItems[0] as ListItem.TypeHeader)
         assertThat(header.headerData.count).isEqualTo(1)
     }
 
@@ -85,7 +68,7 @@ class ListItemsCreatorTest {
         )
 
         val listItems = subject.execute()
-        assertThat((listItems!![1] as ListItem.TypeTask).taskSummary).isEqualTo(item1)
+        assertThat((listItems[1] as ListItem.TypeTask).taskSummary).isEqualTo(item1)
         assertThat((listItems[2] as ListItem.TypeTask).taskSummary).isEqualTo(item3)
         assertThat((listItems[3] as ListItem.TypeTask).taskSummary).isEqualTo(item2)
     }

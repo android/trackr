@@ -21,9 +21,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle.State
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.android.trackr.R
 import com.example.android.trackr.data.User
@@ -31,6 +28,7 @@ import com.example.android.trackr.databinding.ArchiveFragmentBinding
 import com.example.android.trackr.ui.dataBindings
 import com.example.android.trackr.ui.detail.TaskDetailFragmentArgs
 import com.example.android.trackr.ui.utils.configureEdgeToEdge
+import com.example.android.trackr.ui.utils.repeatWithViewLifecycle
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -75,29 +73,27 @@ class ArchivesFragment : Fragment(R.layout.archive_fragment) {
         )
         binding.archivedTasks.adapter = adapter
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(State.STARTED) {
-                launch {
-                    viewModel.archivedTasks.collect {
-                        adapter.submitList(it)
-                    }
+        repeatWithViewLifecycle {
+            launch {
+                viewModel.archivedTasks.collect {
+                    adapter.submitList(it)
                 }
-                // Undo unarchiving tasks
-                launch {
-                    viewModel.unarchiveActions.collect { action ->
-                        val count = action.taskIds.size
-                        Snackbar.make(
-                            binding.coordinator,
-                            resources.getQuantityString(
-                                R.plurals.tasks_unarchived,
-                                count,
-                                count
-                            ),
-                            5_000 // 5 seconds
-                        )
-                            .setAction(R.string.undo) { viewModel.undoUnarchiving(action) }
-                            .show()
-                    }
+            }
+            // Undo unarchiving tasks
+            launch {
+                viewModel.unarchiveActions.collect { action ->
+                    val count = action.taskIds.size
+                    Snackbar.make(
+                        binding.coordinator,
+                        resources.getQuantityString(
+                            R.plurals.tasks_unarchived,
+                            count,
+                            count
+                        ),
+                        5_000 // 5 seconds
+                    )
+                        .setAction(R.string.undo) { viewModel.undoUnarchiving(action) }
+                        .show()
                 }
             }
         }

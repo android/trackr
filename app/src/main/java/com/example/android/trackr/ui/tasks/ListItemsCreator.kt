@@ -16,8 +16,8 @@
 
 package com.example.android.trackr.ui.tasks
 
-import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.TaskStatus
+import com.example.android.trackr.data.TaskSummary
 
 
 /**
@@ -29,34 +29,30 @@ import com.example.android.trackr.data.TaskStatus
  * TODO: refactor into a UseCase.
  */
 class ListItemsCreator(
-    private val taskSummaries: List<TaskSummary>?,
-    private val expandedStatesMap: MutableMap<TaskStatus, Boolean>?
+    private val taskSummaries: List<TaskSummary>,
+    private val expandedStatesMap: Map<TaskStatus, Boolean>
 ) {
-    fun execute(): List<ListItem>? {
-        taskSummaries?.let { items ->
-            expandedStatesMap?.let { statesMap ->
-                val itemsToSubmit = mutableListOf<ListItem>()
-                val statusToItemsMap: Map<TaskStatus, List<TaskSummary>> =
-                    items.groupBy { it.status }
-                for (entry in statesMap) {
-                    val sublist: List<TaskSummary>? = statusToItemsMap[entry.key]
-                    itemsToSubmit.add(
-                        ListItem.TypeHeader(
-                            HeaderData(
-                                count = sublist?.size ?: 0,
-                                taskStatus = entry.key,
-                                expanded = entry.value
-                            ),
-                        )
-                    )
-                    if (statesMap[entry.key] == true) {
-                        sublist?.sortedBy { it.orderInCategory }
-                            ?.forEach { itemsToSubmit.add(ListItem.TypeTask(it)) }
-                    }
-                }
-                return itemsToSubmit
+    fun execute(): List<ListItem> {
+        val itemsToSubmit = mutableListOf<ListItem>()
+        val statusToItemsMap: Map<TaskStatus, List<TaskSummary>> =
+            taskSummaries.groupBy { it.status }
+        expandedStatesMap.forEach { (status, isExpanded) ->
+            val sublist: List<TaskSummary>? = statusToItemsMap[status]
+            itemsToSubmit.add(
+                ListItem.TypeHeader(
+                    HeaderData(
+                        count = sublist?.size ?: 0,
+                        taskStatus = status,
+                        expanded = isExpanded
+                    ),
+                )
+            )
+            if (isExpanded && sublist != null) {
+                sublist.sortedBy { it.orderInCategory }
+                    .map { ListItem.TypeTask(it) }
+                    .toCollection(itemsToSubmit)
             }
         }
-        return null
+        return itemsToSubmit
     }
 }

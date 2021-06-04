@@ -31,10 +31,12 @@ import com.example.android.trackr.data.User
 import com.example.android.trackr.databinding.TasksFragmentBinding
 import com.example.android.trackr.ui.dataBindings
 import com.example.android.trackr.ui.detail.TaskDetailFragmentArgs
-
 import com.example.android.trackr.ui.utils.configureEdgeToEdge
+import com.example.android.trackr.ui.utils.repeatWithViewLifecycle
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import org.threeten.bp.Clock
 import java.util.Collections
 import javax.inject.Inject
@@ -95,24 +97,27 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
             }
         }
 
-        viewModel.listItems.observe(viewLifecycleOwner) {
-            tasksAdapter.submitList(it)
-        }
-
-        // Logic for presenting user with the option to unarchive a previously archived task.
-        viewModel.archivedItem.observe(viewLifecycleOwner) { item ->
-            if (item != null) {
-                Snackbar
-                    .make(
-                        binding.coordinator,
-                        getString(R.string.task_archived),
-                        Snackbar.LENGTH_LONG
-                    )
-                    .setAction(getString(R.string.undo)) {
-                        viewModel.unarchiveTask()
-                    }
-                    .setAnchorView(binding.add)
-                    .show()
+        repeatWithViewLifecycle {
+            launch {
+                viewModel.listItems.collect {
+                    tasksAdapter.submitList(it)
+                }
+            }
+            launch {
+                // Logic for presenting user the option to unarchive a previously archived task.
+                viewModel.archivedItem.collect { item ->
+                    Snackbar
+                        .make(
+                            binding.coordinator,
+                            getString(R.string.task_archived),
+                            Snackbar.LENGTH_LONG
+                        )
+                        .setAction(getString(R.string.undo)) {
+                            viewModel.unarchiveTask(item)
+                        }
+                        .setAnchorView(binding.add)
+                        .show()
+                }
             }
         }
     }

@@ -16,20 +16,23 @@
 
 package com.example.android.trackr.ui.tasks
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.User
+import com.example.android.trackr.ui.utils.WhileViewSubscribed
 import com.example.android.trackr.usecase.ArchiveUseCase
 import com.example.android.trackr.usecase.GetOngoingTaskSummariesUseCase
 import com.example.android.trackr.usecase.ReorderListUseCase
 import com.example.android.trackr.usecase.ToggleTaskStarStateUseCase
 import com.example.android.trackr.usecase.UpdateTaskStatusUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -46,45 +49,29 @@ class TasksViewModel @Inject constructor(
     // This can be observed by a client interested in presenting the undo logic for the task that
     // was archived.
     // TODO (b/165432948): consider a holistic approach to undoing actions.
-    private val _archivedItem: MutableLiveData<ArchivedItem?> = MutableLiveData()
-    val archivedItem: LiveData<ArchivedItem?> = _archivedItem
+    private val archivedItemChannel = Channel<ArchivedItem>(capacity = Channel.CONFLATED)
+    val archivedItem = archivedItemChannel.receiveAsFlow()
 
     private val taskSummaries = getOngoingTaskSummariesUseCase()
 
     // TODO: don't hardcode TaskStatus values; instead, read from the db
-    private val _expandedStatesMap: MutableLiveData<MutableMap<TaskStatus, Boolean>> =
-        MutableLiveData(
-            mutableMapOf(
-                TaskStatus.IN_PROGRESS to true,
-                TaskStatus.NOT_STARTED to true,
-                TaskStatus.COMPLETED to true
-            )
+    private val expandedStatesMap = MutableStateFlow(
+        mapOf(
+            TaskStatus.IN_PROGRESS to true,
+            TaskStatus.NOT_STARTED to true,
+            TaskStatus.COMPLETED to true
         )
-    private val expandedStatesMap: LiveData<MutableMap<TaskStatus, Boolean>> = _expandedStatesMap
+    )
 
-    val listItems: LiveData<List<ListItem>> = MediatorLiveData<List<ListItem>>().apply {
-        var cachedTaskSummaries: List<TaskSummary>? = null
-
-        addSource(taskSummaries) {
-            // In case the user changes the expanded/collapsed state, avoid a new db write by
-            // providing cached data.
-            cachedTaskSummaries = it
-            ListItemsCreator(it, expandedStatesMap.value).execute()?.let { result ->
-                value = result
-            }
-        }
-
-        addSource(expandedStatesMap) {
-            ListItemsCreator(cachedTaskSummaries, it).execute()?.let { result ->
-                value = result
-            }
-        }
-    }
+    val listItems = combine(taskSummaries, expandedStatesMap) { taskSummaries, statesMap ->
+        ListItemsCreator(taskSummaries, statesMap).execute()
+    }.stateIn(viewModelScope, WhileViewSubscribed, emptyList())
 
     fun toggleExpandedState(headerData: HeaderData) {
-        _expandedStatesMap.value = _expandedStatesMap.value?.also { it ->
-            it[headerData.taskStatus] = !it[headerData.taskStatus]!!
-        }
+        val map = expandedStatesMap.value.toMutableMap()
+        val previous = map[headerData.taskStatus] ?: return
+        map[headerData.taskStatus] = !previous
+        expandedStatesMap.value = map
     }
 
     fun toggleTaskStarState(taskSummary: TaskSummary) {
@@ -94,19 +81,15 @@ class TasksViewModel @Inject constructor(
     }
 
     fun archiveTask(taskSummary: TaskSummary) {
-        _archivedItem.value = ArchivedItem(taskSummary.id, taskSummary.status)
-
         viewModelScope.launch {
             archiveUseCase(listOf(taskSummary.id))
+            archivedItemChannel.offer(ArchivedItem(taskSummary.id, taskSummary.status))
         }
     }
 
-    fun unarchiveTask() {
-        archivedItem.value?.let {
-            viewModelScope.launch {
-                updateTaskStatusUseCase(listOf(it.taskId), it.previousStatus)
-            }
-            _archivedItem.value = null
+    fun unarchiveTask(item: ArchivedItem) {
+        viewModelScope.launch {
+            updateTaskStatusUseCase(listOf(item.taskId), item.previousStatus)
         }
     }
 
