@@ -16,7 +16,6 @@
 
 package com.example.android.trackr.db.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -27,11 +26,12 @@ import com.example.android.trackr.data.ARCHIVED_KEY
 import com.example.android.trackr.data.Tag
 import com.example.android.trackr.data.Task
 import com.example.android.trackr.data.TaskDetail
-import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.TaskStatus
+import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.TaskTag
 import com.example.android.trackr.data.User
 import com.example.android.trackr.data.UserTask
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TaskDao {
@@ -56,14 +56,14 @@ interface TaskDao {
     suspend fun deleteUserTasks(userTasks: List<UserTask>)
 
     @Query("SELECT * FROM tasks")
-    fun getTasks(): LiveData<List<Task>>
+    fun getTasks(): Flow<List<Task>>
 
     @Query("SELECT * FROM USERS WHERE id = :id")
-    fun getUserById(id: Long): LiveData<User?>
+    fun getUserById(id: Long): Flow<User?>
 
     @Transaction
     @Query("SELECT * FROM TaskDetail WHERE id = :id")
-    fun findTaskDetailById(id: Long): LiveData<TaskDetail?>
+    fun findTaskDetailById(id: Long): Flow<TaskDetail?>
 
     @Transaction
     @Query("SELECT * FROM TaskDetail WHERE id = :id")
@@ -71,11 +71,11 @@ interface TaskDao {
 
     @Transaction
     @Query("SELECT * FROM TaskSummary WHERE status != $ARCHIVED_KEY")
-    fun getOngoingTaskSummaries(): LiveData<List<TaskSummary>>
+    fun getOngoingTaskSummaries(): Flow<List<TaskSummary>>
 
     @Transaction
     @Query("SELECT * FROM TaskSummary WHERE status = $ARCHIVED_KEY")
-    fun getArchivedTaskSummaries(): LiveData<List<TaskSummary>>
+    fun getArchivedTaskSummaries(): Flow<List<TaskSummary>>
 
     @Query("UPDATE tasks SET status = :status WHERE id = :id")
     suspend fun updateTaskStatus(id: Long, status: TaskStatus)
