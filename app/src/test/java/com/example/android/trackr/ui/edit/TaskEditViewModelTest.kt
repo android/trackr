@@ -18,6 +18,7 @@ package com.example.android.trackr.ui.edit
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.android.trackr.CoroutineTestRule
 import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.ui.TAG_1
 import com.example.android.trackr.ui.TAG_2
@@ -30,8 +31,9 @@ import com.example.android.trackr.usecase.LoadTagsUseCase
 import com.example.android.trackr.usecase.LoadTaskDetailUseCase
 import com.example.android.trackr.usecase.LoadUsersUseCase
 import com.example.android.trackr.usecase.SaveTaskDetailUseCase
-import com.example.android.trackr.valueBlocking
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -42,6 +44,9 @@ class TaskEditViewModelTest {
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    @get:Rule
+    val coroutineRule = CoroutineTestRule()
 
     private fun createViewModel(): TaskEditViewModel {
         val db = createDatabase()
@@ -56,124 +61,132 @@ class TaskEditViewModelTest {
     }
 
     @Test
-    fun createNewTask() {
+    fun createNewTask() = coroutineRule.runBlockingTest {
         val viewModel = createViewModel()
         viewModel.taskId = 0L
 
         assertThat(viewModel.taskId).isEqualTo(0L)
-        assertThat(viewModel.modified.valueBlocking).isFalse()
-        assertThat(viewModel.title.valueBlocking).isEmpty()
-        assertThat(viewModel.description.valueBlocking).isEmpty()
-        assertThat(viewModel.owner.valueBlocking).isEqualTo(currentUser)
-        assertThat(viewModel.creator.valueBlocking).isEqualTo(currentUser)
-        assertThat(viewModel.tags.valueBlocking).isEmpty()
+        assertThat(viewModel.modified.value).isFalse()
+        assertThat(viewModel.title.value).isEmpty()
+        assertThat(viewModel.description.value).isEmpty()
+        assertThat(viewModel.owner.value).isEqualTo(currentUser)
+        assertThat(viewModel.creator.value).isEqualTo(currentUser)
+        assertThat(viewModel.tags.value).isEmpty()
 
         viewModel.title.value = "a"
 
-        assertThat(viewModel.title.valueBlocking).isEqualTo("a")
-        assertThat(viewModel.modified.valueBlocking).isTrue()
+        assertThat(viewModel.title.value).isEqualTo("a")
+        assertThat(viewModel.modified.value).isTrue()
     }
 
     @Test
-    fun editExistingTask() {
+    fun editExistingTask() = coroutineRule.runBlockingTest {
         val viewModel = createViewModel()
         viewModel.taskId = TASK_1.id
 
         assertThat(viewModel.taskId).isEqualTo(TASK_1.id)
-        assertThat(viewModel.modified.valueBlocking).isFalse()
-        assertThat(viewModel.title.valueBlocking).isEqualTo(TASK_1.title)
-        assertThat(viewModel.description.valueBlocking).isEqualTo(TASK_1.description)
-        assertThat(viewModel.owner.valueBlocking).isEqualTo(USER_OWNER)
-        assertThat(viewModel.creator.valueBlocking).isEqualTo(USER_CREATOR)
-        assertThat(viewModel.dueAt.valueBlocking).isEqualTo(TASK_1.dueAt)
-        assertThat(viewModel.createdAt.valueBlocking).isEqualTo(TASK_1.createdAt)
+        assertThat(viewModel.modified.value).isFalse()
+        assertThat(viewModel.title.value).isEqualTo(TASK_1.title)
+        assertThat(viewModel.description.value).isEqualTo(TASK_1.description)
+        assertThat(viewModel.owner.value).isEqualTo(USER_OWNER)
+        assertThat(viewModel.creator.value).isEqualTo(USER_CREATOR)
+        assertThat(viewModel.dueAt.value).isEqualTo(TASK_1.dueAt)
+        assertThat(viewModel.createdAt.value).isEqualTo(TASK_1.createdAt)
         assertThat(viewModel.users).hasSize(3)
 
         viewModel.title.value = "a"
 
-        assertThat(viewModel.title.valueBlocking).isEqualTo("a")
-        assertThat(viewModel.modified.valueBlocking).isTrue()
+        assertThat(viewModel.title.value).isEqualTo("a")
+        assertThat(viewModel.modified.value).isTrue()
     }
 
     @Test
-    fun editOwner() {
+    fun editOwner() = coroutineRule.runBlockingTest {
         val viewModel = createViewModel()
         viewModel.taskId = TASK_1.id
 
-        assertThat(viewModel.owner.valueBlocking).isEqualTo(USER_OWNER)
-        assertThat(viewModel.modified.valueBlocking).isFalse()
+        assertThat(viewModel.owner.value).isEqualTo(USER_OWNER)
+        assertThat(viewModel.modified.value).isFalse()
 
         viewModel.updateOwner(USER_OTHER)
 
-        assertThat(viewModel.owner.valueBlocking).isEqualTo(USER_OTHER)
-        assertThat(viewModel.modified.valueBlocking).isTrue()
+        assertThat(viewModel.owner.value).isEqualTo(USER_OTHER)
+        assertThat(viewModel.modified.value).isTrue()
     }
 
     @Test
-    fun editStatus() {
+    fun editStatus() = coroutineRule.runBlockingTest {
         val viewModel = createViewModel()
         viewModel.taskId = TASK_1.id
 
-        assertThat(viewModel.status.valueBlocking).isEqualTo(TaskStatus.IN_PROGRESS)
-        assertThat(viewModel.modified.valueBlocking).isFalse()
+        assertThat(viewModel.status.value).isEqualTo(TaskStatus.IN_PROGRESS)
+        assertThat(viewModel.modified.value).isFalse()
 
         viewModel.updateState(TaskStatus.COMPLETED)
 
-        assertThat(viewModel.status.valueBlocking).isEqualTo(TaskStatus.COMPLETED)
-        assertThat(viewModel.modified.valueBlocking).isTrue()
+        assertThat(viewModel.status.value).isEqualTo(TaskStatus.COMPLETED)
+        assertThat(viewModel.modified.value).isTrue()
     }
 
     @Test
-    fun editDueAt() {
+    fun editDueAt() = coroutineRule.runBlockingTest {
         val viewModel = createViewModel()
         viewModel.taskId = TASK_1.id
 
-        assertThat(viewModel.dueAt.valueBlocking).isEqualTo(TASK_1.dueAt)
-        assertThat(viewModel.modified.valueBlocking).isFalse()
+        assertThat(viewModel.dueAt.value).isEqualTo(TASK_1.dueAt)
+        assertThat(viewModel.modified.value).isFalse()
 
         viewModel.updateDueAt(Instant.parse("2020-12-01T00:00:00.00Z"))
 
-        assertThat(viewModel.dueAt.valueBlocking)
-            .isEqualTo(Instant.parse("2020-12-01T00:00:00.00Z"))
-        assertThat(viewModel.modified.valueBlocking).isTrue()
+        assertThat(viewModel.dueAt.value).isEqualTo(Instant.parse("2020-12-01T00:00:00.00Z"))
+        assertThat(viewModel.modified.value).isTrue()
     }
 
     @Test
-    fun addTag() {
+    fun addTag() = coroutineRule.runBlockingTest {
         val viewModel = createViewModel()
         viewModel.taskId = TASK_1.id
 
-        assertThat(viewModel.tags.valueBlocking).containsExactly(TAG_1)
-        assertThat(viewModel.modified.valueBlocking).isFalse()
+        assertThat(viewModel.tags.value).containsExactly(TAG_1)
+        assertThat(viewModel.modified.value).isFalse()
 
         viewModel.addTag(TAG_2)
 
-        assertThat(viewModel.tags.valueBlocking).containsExactly(TAG_1, TAG_2)
-        assertThat(viewModel.modified.valueBlocking).isTrue()
+        assertThat(viewModel.tags.value).containsExactly(TAG_1, TAG_2)
+        assertThat(viewModel.modified.value).isTrue()
     }
 
     @Test
-    fun removeTag() {
+    fun removeTag() = coroutineRule.runBlockingTest {
         val viewModel = createViewModel()
         viewModel.taskId = TASK_1.id
 
-        assertThat(viewModel.tags.valueBlocking).containsExactly(TAG_1)
-        assertThat(viewModel.modified.valueBlocking).isFalse()
+        assertThat(viewModel.tags.value).containsExactly(TAG_1)
+        assertThat(viewModel.modified.value).isFalse()
 
         viewModel.removeTag(TAG_1)
 
-        assertThat(viewModel.tags.valueBlocking).isEmpty()
-        assertThat(viewModel.modified.valueBlocking).isTrue()
+        assertThat(viewModel.tags.value).isEmpty()
+        assertThat(viewModel.modified.value).isTrue()
     }
 
     @Test
-    fun discardChanges() {
+    fun discardChanges() = coroutineRule.runBlockingTest {
         val viewModel = createViewModel()
         viewModel.taskId = TASK_1.id
 
-        assertThat(viewModel.discarded.valueBlocking).isFalse()
+        var discardEventCount = 0
+        val collectDiscardEvents = launch {
+            viewModel.discarded.collect {
+                discardEventCount++
+            }
+        }
+
+        assertThat(discardEventCount).isEqualTo(0)
         viewModel.discardChanges()
-        assertThat(viewModel.discarded.valueBlocking).isTrue()
+        assertThat(discardEventCount).isEqualTo(1)
+
+        collectDiscardEvents.cancel()
     }
 
     private val currentUser = USER_OWNER

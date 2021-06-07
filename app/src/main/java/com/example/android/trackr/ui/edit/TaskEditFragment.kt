@@ -33,8 +33,11 @@ import com.example.android.trackr.databinding.TaskEditFragmentBinding
 import com.example.android.trackr.ui.dataBindings
 import com.example.android.trackr.ui.utils.DateTimeUtils
 import com.example.android.trackr.ui.utils.configureEdgeToEdge
+import com.example.android.trackr.ui.utils.repeatWithViewLifecycle
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import org.threeten.bp.Clock
 import org.threeten.bp.Instant
 import javax.inject.Inject
@@ -90,9 +93,6 @@ class TaskEditFragment : Fragment(R.layout.task_edit_fragment) {
             }
         }
         val menuItemSave = binding.toolbar.menu.findItem(R.id.action_save)
-        viewModel.modified.observe(viewLifecycleOwner) { modified ->
-            menuItemSave.isVisible = modified
-        }
         binding.status.adapter = ArrayAdapter(
             requireContext(),
             R.layout.status_spinner_item,
@@ -102,50 +102,57 @@ class TaskEditFragment : Fragment(R.layout.task_edit_fragment) {
         binding.status.doOnItemSelected { position ->
             viewModel.updateState(TaskStatus.values()[position])
         }
-        viewModel.status.observe(viewLifecycleOwner) { status ->
-            binding.status.setSelection(status.ordinal)
+        binding.tagContainer.setOnClickListener {
+            findNavController().navigate(R.id.nav_tag_selection)
         }
-
-        viewModel.owner.observe(viewLifecycleOwner) {
-            binding.owner.contentDescription =
-                resources.getString(R.string.owner_with_value, it.username)
-        }
-
         binding.owner.setOnClickListener {
             findNavController().navigate(R.id.nav_user_selection)
         }
 
-        viewModel.dueAt.observe(viewLifecycleOwner) {
-            // Combine the label ("Due date") with the date value. This consolidates the announced text
-            // for screenreader users.
-            binding.dueAt.contentDescription =
-                resources.getString(
-                    R.string.due_date_with_value, DateTimeUtils.formattedDate(resources, it, clock)
-                )
-
-            binding.dueAt.setOnClickListener {
-                MaterialDatePicker.Builder.datePicker().build().apply {
-                    addOnPositiveButtonClickListener { time ->
-                        viewModel.updateDueAt(Instant.ofEpochMilli(time))
-                    }
-                }.show(childFragmentManager, FRAGMENT_DATE_PICKER)
+        repeatWithViewLifecycle {
+            launch {
+                viewModel.modified.collect { modified ->
+                    menuItemSave.isVisible = modified
+                 }
             }
-        }
+            launch {
+                viewModel.status.collect { status ->
+                    binding.status.setSelection(status.ordinal)
+                }
+            }
+            launch {
+                viewModel.owner.collect {
+                    binding.owner.contentDescription =
+                        resources.getString(R.string.owner_with_value, it.username)
+                }
+            }
+            launch {
+                viewModel.dueAt.collect {
+                    binding.dueAt.contentDescription = resources.getString(
+                        R.string.due_date_with_value,
+                        DateTimeUtils.formattedDate(resources, it, clock)
+                    )
 
-        binding.tagContainer.setOnClickListener {
-            findNavController().navigate(R.id.nav_tag_selection)
-        }
-
-        // TODO: Add a fragment test to verify LiveData changes result in navigation.
-        viewModel.discarded.observe(viewLifecycleOwner) { discarded ->
-            if (discarded) {
-                findNavController().popBackStack(R.id.nav_task_edit_graph, true)
+                    binding.dueAt.setOnClickListener {
+                        MaterialDatePicker.Builder.datePicker().build().apply {
+                            addOnPositiveButtonClickListener { time ->
+                                viewModel.updateDueAt(Instant.ofEpochMilli(time))
+                            }
+                        }.show(childFragmentManager, FRAGMENT_DATE_PICKER)
+                    }
+                }
+            }
+            launch {
+                // TODO: Add a fragment test to verify changes result in navigation.
+                viewModel.discarded.collect {
+                    findNavController().popBackStack(R.id.nav_task_edit_graph, true)
+                }
             }
         }
     }
 
     private fun close() {
-        if (viewModel.modified.value == true) {
+        if (viewModel.modified.value) {
             findNavController().navigate(R.id.nav_discard_confirmation)
         } else {
             findNavController().popBackStack()

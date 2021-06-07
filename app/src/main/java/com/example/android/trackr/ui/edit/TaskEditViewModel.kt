@@ -16,11 +16,7 @@
 
 package com.example.android.trackr.ui.edit
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.viewModelScope
 import com.example.android.trackr.data.Tag
 import com.example.android.trackr.data.TaskDetail
@@ -31,6 +27,13 @@ import com.example.android.trackr.usecase.LoadTaskDetailUseCase
 import com.example.android.trackr.usecase.LoadUsersUseCase
 import com.example.android.trackr.usecase.SaveTaskDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
@@ -51,27 +54,29 @@ class TaskEditViewModel @Inject constructor(
             loadInitialData(value)
         }
 
-    val title = MutableLiveData("")
+    val title = MutableStateFlow("")
+    private var initialTitle = ""
 
-    val description = MutableLiveData("")
+    val description = MutableStateFlow("")
+    private var initialDescription = ""
 
-    private val _status = MutableLiveData(TaskStatus.NOT_STARTED)
-    val status: LiveData<TaskStatus> = _status
+    private val _status = MutableStateFlow(TaskStatus.NOT_STARTED)
+    val status: StateFlow<TaskStatus> = _status
 
-    private val _owner = MutableLiveData(currentUser)
-    val owner: LiveData<User> = _owner
+    private val _owner = MutableStateFlow(currentUser)
+    val owner: StateFlow<User> = _owner
 
-    private val _creator = MutableLiveData(currentUser)
-    val creator: LiveData<User> = _creator
+    private val _creator = MutableStateFlow(currentUser)
+    val creator: StateFlow<User> = _creator
 
-    private val _dueAt = MutableLiveData(Instant.now() + Duration.ofDays(7))
-    val dueAt: LiveData<Instant> = _dueAt
+    private val _dueAt = MutableStateFlow(Instant.now() + Duration.ofDays(7))
+    val dueAt: StateFlow<Instant> = _dueAt
 
-    private val _createdAt = MutableLiveData(Instant.now())
-    val createdAt: LiveData<Instant> = _createdAt
+    private val _createdAt = MutableStateFlow(Instant.now())
+    val createdAt: StateFlow<Instant> = _createdAt
 
-    private val _tags = MutableLiveData<List<Tag>>(emptyList())
-    val tags: LiveData<List<Tag>> = _tags
+    private val _tags = MutableStateFlow<List<Tag>>(emptyList())
+    val tags: StateFlow<List<Tag>> = _tags
 
     private var starUsers = mutableListOf<User>()
 
@@ -81,29 +86,30 @@ class TaskEditViewModel @Inject constructor(
     lateinit var allTags: List<Tag>
         private set
 
-    private val _modified = MediatorLiveData<Boolean>().apply {
-        val sources = listOf(title, description)
-        var sourceCount = sources.size
-        for (source in sources) {
-            addSource(source.distinctUntilChanged()) {
-                // Ignore initial data from each of the sources.
-                if (sourceCount <= 0) {
-                    value = true
-                } else {
-                    --sourceCount
-                }
-            }
-        }
-        value = false
-    }
-
-    private val _discarded = MutableLiveData(false)
-    val discarded: LiveData<Boolean> = _discarded
+    private val _discarded = Channel<Unit>(capacity = Channel.CONFLATED)
+    val discarded = _discarded.receiveAsFlow()
 
     /**
      * Whether any of the content is modified or not.
      */
-    val modified: LiveData<Boolean> = _modified
+    private val _modified = MutableStateFlow(false)
+    val modified: StateFlow<Boolean> = _modified
+
+    private var modifiedTitleDescriptionJob: Job = viewModelScope.launch {
+        combine(title, description) { title, description ->
+            title != initialTitle || description != initialDescription
+        }.collect { modified ->
+            // Other fields affect modification, so we never go from true to false.
+            if (modified) {
+                _modified.value = true
+            }
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        modifiedTitleDescriptionJob.cancel()
+    }
 
     private fun loadInitialData(taskId: Long) {
         viewModelScope.launch {
@@ -112,8 +118,11 @@ class TaskEditViewModel @Inject constructor(
             if (taskId != 0L) {
                 val detail = loadTaskDetailUseCase(taskId)
                 if (detail != null) {
-                    title.value = detail.title
-                    description.value = detail.description
+                    initialTitle = detail.title
+                    initialDescription = detail.description
+
+                    title.value = initialTitle
+                    description.value = initialDescription
                     _status.value = detail.status
                     _owner.value = detail.owner
                     _creator.value = detail.creator
@@ -146,7 +155,7 @@ class TaskEditViewModel @Inject constructor(
     }
 
     fun addTag(tag: Tag) {
-        _tags.value?.let { currentTags ->
+        _tags.value.let { currentTags ->
             if (!currentTags.contains(tag)) {
                 _tags.value = currentTags + tag
                 _modified.value = true
@@ -155,7 +164,7 @@ class TaskEditViewModel @Inject constructor(
     }
 
     fun removeTag(tag: Tag) {
-        _tags.value?.let { currentTags ->
+        _tags.value.let { currentTags ->
             if (currentTags.contains(tag)) {
                 val tags = currentTags.toMutableList()
                 tags.remove(tag)
@@ -171,14 +180,14 @@ class TaskEditViewModel @Inject constructor(
                 saveTaskDetailUseCase(
                     TaskDetail(
                         id = taskId,
-                        title = title.value ?: "",
-                        description = description.value ?: "",
-                        status = _status.value ?: TaskStatus.NOT_STARTED,
-                        createdAt = _createdAt.value ?: Instant.now(),
-                        dueAt = _dueAt.value ?: Instant.now() + Duration.ofDays(7),
-                        owner = _owner.value ?: currentUser,
-                        creator = _creator.value ?: currentUser,
-                        tags = _tags.value ?: emptyList(),
+                        title = title.value,
+                        description = description.value,
+                        status = _status.value,
+                        createdAt = _createdAt.value,
+                        dueAt = _dueAt.value,
+                        owner = _owner.value,
+                        creator = _creator.value,
+                        tags = _tags.value,
                         starUsers = starUsers
                     )
                 )
@@ -191,6 +200,6 @@ class TaskEditViewModel @Inject constructor(
     }
 
     fun discardChanges() {
-        _discarded.value = true
+        _discarded.offer(Unit)
     }
 }
