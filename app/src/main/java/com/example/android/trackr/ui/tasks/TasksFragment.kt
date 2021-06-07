@@ -75,9 +75,7 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
             layoutManager = linearLayoutManager
             adapter = tasksAdapter
             doOnScroll { _, _ ->
-                binding.headerData = tasksAdapter
-                    .findHeaderItem(linearLayoutManager.findFirstVisibleItemPosition())
-                    .headerData
+                updateStickyHeader()
             }
         }
         binding.add.setOnClickListener {
@@ -100,7 +98,9 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
         repeatWithViewLifecycle {
             launch {
                 viewModel.listItems.collect {
-                    tasksAdapter.submitList(it)
+                    tasksAdapter.submitList(it) {
+                        updateStickyHeader()
+                    }
                 }
             }
             launch {
@@ -119,6 +119,13 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
                         .show()
                 }
             }
+        }
+    }
+
+    private fun updateStickyHeader() {
+        val linearLayoutManager = binding.tasksList.layoutManager as? LinearLayoutManager ?: return
+        tasksAdapter.findHeaderItem(linearLayoutManager.findFirstVisibleItemPosition())?.let {
+            binding.headerData = it.headerData
         }
     }
 

@@ -101,14 +101,14 @@ class TasksAdapter(
     /**
      * Find a header item at the specified [position] or before.
      */
-    fun findHeaderItem(position: Int): ListItem.TypeHeader {
+    fun findHeaderItem(position: Int): ListItem.TypeHeader? {
         var p = position
-        while (p > 0) {
+        while (p in 0 until itemCount) {
             val item = getItem(p)
             if (item is ListItem.TypeHeader) return item
             p--
         }
-        return getItem(0) as ListItem.TypeHeader
+        return null
     }
 
     fun changeTaskPosition(fromPosition: Int, toPosition: Int) {
