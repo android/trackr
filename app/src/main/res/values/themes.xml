@@ -31,10 +31,13 @@
 
         <item name="actionMenuTextColor">@color/trackr_white_50</item>
 
-        <!--Typography-->
+        <!-- Typography -->
         <item name="textAppearanceHeadline1">@style/TextAppearance.Trackr.Headline1</item>
         <item name="textAppearanceHeadline2">@style/TextAppearance.Trackr.Headline2</item>
         <item name="textAppearanceBody1">@style/TextAppearance.Trackr.Body1</item>
+
+        <!-- Widgets -->
+        <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.Primary</item>
 
         <!-- Custom theme attrs -->
         <item name="starIconColor">@color/trackr_yellow_500</item>

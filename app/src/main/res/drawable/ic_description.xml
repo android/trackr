@@ -19,13 +19,13 @@
     android:height="24dp"
     android:autoMirrored="true"
     android:viewportWidth="24"
-    android:viewportHeight="24">
+    android:viewportHeight="24"
+    android:tint="@color/icon_tint_gray">
     <group
         android:translateX="4"
         android:translateY="2">
         <path
-            android:fillColor="#5F6368"
-            android:fillType="evenOdd"
-            android:pathData="M10,0H2C0.9,0 0,0.9 0,2V18C0,19.1 0.89,20 1.99,20H14C15.1,20 16,19.1 16,18V6L10,0ZM12,10H4V12H12V10ZM12,14H4V16H12V14ZM2,18H14V7H9V2H2V18Z" />
+            android:fillColor="#000"
+            android:pathData="M10,0H2C0.9,0 0,0.9 0,2V18C0,19.1 0.89,20 1.99,20H14C15.1,20 16,19.1 16,18V6L10,0ZM2,18V2H9V7H14V18H2ZM12,10H4V12H12V10ZM12,14H4V16H12V14Z" />
     </group>
 </vector>

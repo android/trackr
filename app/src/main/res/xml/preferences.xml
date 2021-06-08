@@ -18,6 +18,7 @@
         app:defaultValue="@string/system_default_value"
         app:entries="@array/darkmode_preference_entries"
         app:entryValues="@array/darkmode_preference_entry_values"
+        app:icon="@drawable/ic_dark_mode"
         app:key="darkMode"
         app:title="@string/dark_mode_title"
         app:useSimpleSummaryProvider="true" />

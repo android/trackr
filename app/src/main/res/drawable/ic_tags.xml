@@ -19,13 +19,13 @@
     android:height="24dp"
     android:autoMirrored="true"
     android:viewportWidth="24"
-    android:viewportHeight="24">
+    android:viewportHeight="24"
+    android:tint="@color/icon_tint_teal">
     <group
         android:translateX="3"
         android:translateY="5">
         <path
-            android:fillColor="#364F6B"
-            android:fillType="evenOdd"
+            android:fillColor="#000"
             android:pathData="M13,0C13.67,0 14.27,0.33 14.63,0.84L19,7L14.63,13.16C14.27,13.67 13.67,14 13,14L2,13.99C0.9,13.99 0,13.1 0,12V2C0,0.9 0.9,0.01 2,0.01L13,0ZM2,12H13L16.55,7L13,2H2V12Z" />
     </group>
 </vector>
