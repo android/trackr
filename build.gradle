@@ -52,7 +52,7 @@ buildscript {
         robolectric_version = "4.5.1"
         room_version = "2.3.0"
         threetenabp_version = "1.2.1"
-        threetenbp_version = "1.4.0"
+        threetenbp_version = "1.5.1"
         truth_version = "1.1"
     }
 
