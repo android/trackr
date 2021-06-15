@@ -1,6 +1,8 @@
 Trackr Android App
 ==================
 
+**Note**: Trackr uses version 7 of Gradle, which currently requires Android Studio Beta or Canary.
+
 Trackr is a sample task management app used to explore common UI patterns
 from the perspective of supporting accessibility. Trackr is currently under
 development.
@@ -95,4 +97,3 @@ distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
 WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
 License for the specific language governing permissions and limitations under
 the License.
-
