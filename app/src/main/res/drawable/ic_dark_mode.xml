@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (C) 2020 The Android Open Source Project
+  ~ Copyright (C) 2021 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -13,18 +13,15 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
--->
+  -->
+
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
     android:viewportWidth="24"
     android:viewportHeight="24"
-    android:tint="@color/icon_tint_gray">
-    <group
-        android:translateX="3"
-        android:translateY="3">
-        <path
-            android:fillColor="#000"
-            android:pathData="M14,10H12V14H14V10ZM10,4H8V14H10V4ZM16,0H2C0.9,0 0,0.9 0,2V16C0,17.1 0.9,18 2,18H16C17.1,18 18,17.1 18,16V2C18,0.9 17.1,0 16,0ZM16,16H2V2H16V16ZM6,7H4V14H6V7Z" />
-    </group>
+    android:tint="?attr/colorControlNormal">
+    <path
+        android:fillColor="#000"
+        android:pathData="M12,3c-4.97,0 -9,4.03 -9,9s4.03,9 9,9s9,-4.03 9,-9c0,-0.46 -0.04,-0.92 -0.1,-1.36c-0.98,1.37 -2.58,2.26 -4.4,2.26c-2.98,0 -5.4,-2.42 -5.4,-5.4c0,-1.81 0.89,-3.42 2.26,-4.4C12.92,3.04 12.46,3 12,3L12,3z" />
 </vector>

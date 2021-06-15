@@ -48,7 +48,7 @@
 
     <color name="trackr_teal_50" tools:ignore="UnusedResources">#E9FAFE</color>
     <color name="trackr_teal_100">#CBF0F8</color>
-    <color name="trackr_teal_300" tools:ignore="UnusedResources">#72BCC0</color>
+    <color name="trackr_teal_300">#72BCC0</color>
     <color name="trackr_teal_500" tools:ignore="UnusedResources">#3FC1C9</color>
     <color name="trackr_teal_700" tools:ignore="UnusedResources">#09536B</color>
     <color name="trackr_teal_800">#09536B</color>
@@ -61,6 +61,11 @@
     <color name="trackr_yellow_500">#9B6303</color>
     <color name="trackr_yellow_700">#824A00</color>
 
+    <color name="trackr_gray_200">#B0BEC5</color>
     <color name="trackr_gray_500">#3D444B</color>
     <color name="trackr_gray_700">#5F6368</color>
+
+    <!-- tint colors -->
+    <color name="icon_tint_gray">@color/trackr_gray_700</color>
+    <color name="icon_tint_teal">@color/trackr_teal_700</color>
 </resources>
