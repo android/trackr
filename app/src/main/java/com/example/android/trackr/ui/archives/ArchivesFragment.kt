@@ -22,6 +22,7 @@ import android.view.View
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.updatePadding
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -44,6 +45,7 @@ class ArchivesFragment : Fragment(R.layout.archive_fragment) {
 
     private val viewModel: ArchiveViewModel by viewModels()
     private val binding by dataBindings(ArchiveFragmentBinding::bind)
+    private val backPressCallback = BackPressCallback()
 
     @Inject
     lateinit var currentUser: User
@@ -93,6 +95,11 @@ class ArchivesFragment : Fragment(R.layout.archive_fragment) {
                         .show()
                 }
             }
+            launch {
+                viewModel.selectedCount.collect {
+                    backPressCallback.isEnabled = it > 0
+                }
+            }
         }
 
         binding.bottomBar.setNavigationOnClickListener { viewModel.clearSelection() }
@@ -118,6 +125,8 @@ class ArchivesFragment : Fragment(R.layout.archive_fragment) {
                 )
             }
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backPressCallback)
     }
 
     private fun navigateToDetail(taskId: Long) {
@@ -125,5 +134,12 @@ class ArchivesFragment : Fragment(R.layout.archive_fragment) {
             R.id.nav_task_detail,
             TaskDetailFragmentArgs(taskId).toBundle()
         )
+    }
+
+    inner class BackPressCallback : OnBackPressedCallback(false) {
+
+        override fun handleOnBackPressed() {
+            viewModel.clearSelection()
+        }
     }
 }
