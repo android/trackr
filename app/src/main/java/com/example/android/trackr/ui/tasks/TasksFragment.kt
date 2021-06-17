@@ -19,6 +19,9 @@ package com.example.android.trackr.ui.tasks
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.doOnNextLayout
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -31,7 +34,7 @@ import com.example.android.trackr.data.User
 import com.example.android.trackr.databinding.TasksFragmentBinding
 import com.example.android.trackr.ui.dataBindings
 import com.example.android.trackr.ui.detail.TaskDetailFragmentArgs
-import com.example.android.trackr.ui.utils.configureEdgeToEdge
+import com.example.android.trackr.ui.utils.doOnApplyWindowInsets
 import com.example.android.trackr.ui.utils.repeatWithViewLifecycle
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -61,12 +64,6 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
         tasksAdapter = TasksAdapter(this, currentUser, clock)
 
         binding.listener = this
-        configureEdgeToEdge(
-            root = view,
-            scrollingContent = binding.tasksList,
-            topBar = binding.stickyHeader.headerContent,
-            bottomBar = binding.bottomAppBar
-        )
 
         binding.tasksList.apply {
             val itemTouchHelper = ItemTouchHelper(SwipeAndDragCallback())
@@ -78,6 +75,19 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
                 binding.headerData = tasksAdapter
                     .findHeaderItem(linearLayoutManager.findFirstVisibleItemPosition())
                     .headerData
+            }
+
+            doOnApplyWindowInsets { v, insets, padding, _ ->
+                val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                // BottomAppBar has its own logic to adapt to window insets, but its height isn't
+                // updated until measurement, so wait for its next layout.
+                binding.bottomAppBar.doOnNextLayout { bottomBar ->
+                    v.updatePadding(
+                        left = padding.left + systemBars.left,
+                        right = padding.right + systemBars.right,
+                        bottom = bottomBar.height
+                    )
+                }
             }
         }
         binding.add.setOnClickListener {

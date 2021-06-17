@@ -27,7 +27,6 @@ import com.example.android.trackr.R
 import com.example.android.trackr.databinding.TaskDetailFragmentBinding
 import com.example.android.trackr.ui.dataBindings
 import com.example.android.trackr.ui.utils.DateTimeUtils
-import com.example.android.trackr.ui.utils.configureEdgeToEdge
 import com.example.android.trackr.ui.utils.repeatWithViewLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -53,13 +52,6 @@ class TaskDetailFragment : Fragment(R.layout.task_detail_fragment) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
         binding.clock = clock
-
-        configureEdgeToEdge(
-            root = view,
-            scrollingContent = binding.scrollingContent,
-            topBar = binding.toolbar,
-            fab = binding.edit
-        )
 
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
@@ -89,9 +81,7 @@ class TaskDetailFragment : Fragment(R.layout.task_detail_fragment) {
         binding.edit.setOnClickListener {
             findNavController().navigate(
                 R.id.nav_task_edit_graph,
-                NavTaskEditGraphArgs(
-                    taskId = args.taskId
-                ).toBundle()
+                NavTaskEditGraphArgs(taskId = args.taskId).toBundle()
             )
         }
 

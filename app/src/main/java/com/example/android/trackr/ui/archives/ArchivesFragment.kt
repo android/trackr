@@ -19,6 +19,9 @@ package com.example.android.trackr.ui.archives
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.doOnNextLayout
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -27,7 +30,7 @@ import com.example.android.trackr.data.User
 import com.example.android.trackr.databinding.ArchiveFragmentBinding
 import com.example.android.trackr.ui.dataBindings
 import com.example.android.trackr.ui.detail.TaskDetailFragmentArgs
-import com.example.android.trackr.ui.utils.configureEdgeToEdge
+import com.example.android.trackr.ui.utils.doOnApplyWindowInsets
 import com.example.android.trackr.ui.utils.repeatWithViewLifecycle
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,12 +54,6 @@ class ArchivesFragment : Fragment(R.layout.archive_fragment) {
     @SuppressLint("ShowToast")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.viewModel = viewModel
-        configureEdgeToEdge(
-            root = view,
-            scrollingContent = binding.archivedTasks,
-            topBar = binding.toolbar,
-            bottomBar = binding.bottomBar
-        )
 
         val adapter = ArchiveAdapter(
             currentUser = currentUser,
@@ -106,6 +103,19 @@ class ArchivesFragment : Fragment(R.layout.archive_fragment) {
                     true
                 }
                 else -> false
+            }
+        }
+
+        binding.archivedTasks.doOnApplyWindowInsets { v, insets, padding, _ ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            // BottomAppBar has its own logic to adapt to window insets, but its height isn't
+            // updated until measurement, so wait for its next layout.
+            binding.bottomBar.doOnNextLayout { bottomBar ->
+                v.updatePadding(
+                    left = padding.left + systemBars.left,
+                    right = padding.right + systemBars.right,
+                    bottom = padding.bottom + bottomBar.height
+                )
             }
         }
     }
