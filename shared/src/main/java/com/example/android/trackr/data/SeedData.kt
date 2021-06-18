@@ -181,11 +181,12 @@ object SeedData {
             title = "Holiday conflict warning",
             description = "Pop up dialog warning user if they try to schedule a meeting on at " +
                     "least one of the participants’ holiday, depending on user profile location",
-            status = TaskStatus.ARCHIVED,
+            status = TaskStatus.COMPLETED,
             ownerId = 1L,
             creatorId = 1L,
             dueAt = Instant.now() + Duration.ofDays(1),
-            orderInCategory = 1
+            orderInCategory = 1,
+            isArchived = true
         ),
         Task(
             id = 14L,
@@ -193,21 +194,23 @@ object SeedData {
             description = "Show national holidays (listed at top of each day’s schedule) " +
                     "directly in calendar view based on user profile location. Let users opt out " +
                     "of this if they want",
-            status = TaskStatus.ARCHIVED,
+            status = TaskStatus.COMPLETED,
             ownerId = 2L,
             creatorId = 3L,
             dueAt = Instant.now() + Duration.ofDays(8),
-            orderInCategory = 2
+            orderInCategory = 2,
+            isArchived = true
         ),
         Task(
             id = 15L,
             title = "Holiday-specific illustrations",
             description = "Create illustrations that match each holiday. Prioritize for tier 1 " +
                     "regions first",
-            status = TaskStatus.ARCHIVED,
+            status = TaskStatus.COMPLETED,
             ownerId = 3L,
             creatorId = 3L,
-            orderInCategory = 3
+            orderInCategory = 3,
+            isArchived = true
         ),
     )
 

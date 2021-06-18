@@ -25,7 +25,7 @@ import org.threeten.bp.Instant
 @DatabaseView(
     """
         SELECT
-            t.id, t.title, t.status, t.dueAt, t.orderInCategory,
+            t.id, t.title, t.status, t.dueAt, t.orderInCategory, t.isArchived,
             o.id AS owner_id, o.username AS owner_username, o.avatar AS owner_avatar
         FROM tasks AS t
         INNER JOIN users AS o ON o.id = t.ownerId
@@ -41,6 +41,8 @@ data class TaskSummary(
     val dueAt: Instant,
 
     val orderInCategory: Int,
+
+    val isArchived: Boolean = false,
 
     @Embedded(prefix = "owner_")
     val owner: User,

@@ -22,7 +22,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.example.android.trackr.data.ARCHIVED_KEY
 import com.example.android.trackr.data.Tag
 import com.example.android.trackr.data.Task
 import com.example.android.trackr.data.TaskDetail
@@ -70,11 +69,11 @@ interface TaskDao {
     suspend fun loadTaskDetailById(id: Long): TaskDetail?
 
     @Transaction
-    @Query("SELECT * FROM TaskSummary WHERE status != $ARCHIVED_KEY")
+    @Query("SELECT * FROM TaskSummary WHERE isArchived = 0")
     fun getOngoingTaskSummaries(): Flow<List<TaskSummary>>
 
     @Transaction
-    @Query("SELECT * FROM TaskSummary WHERE status = $ARCHIVED_KEY")
+    @Query("SELECT * FROM TaskSummary WHERE isArchived != 0")
     fun getArchivedTaskSummaries(): Flow<List<TaskSummary>>
 
     @Query("UPDATE tasks SET status = :status WHERE id = :id")
@@ -85,6 +84,9 @@ interface TaskDao {
 
     @Query("UPDATE tasks SET orderInCategory = :orderInCategory WHERE id = :id")
     suspend fun updateOrderInCategory(id: Long, orderInCategory: Int)
+
+    @Query("UPDATE tasks SET isArchived = :isArchived WHERE id IN (:ids)")
+    suspend fun setIsArchived(ids: List<Long>, isArchived: Boolean)
 
     @Query("SELECT * FROM user_tasks WHERE taskId = :taskId AND userId = :userId")
     suspend fun getUserTask(taskId: Long, userId: Long): UserTask?

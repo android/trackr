@@ -16,6 +16,7 @@
 
 package com.example.android.trackr.data
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
@@ -85,16 +86,23 @@ data class Task(
     /**
      * Tracks the order in which tasks are presented within a category.
      */
-    val orderInCategory: Int
-)
+    val orderInCategory: Int,
 
-const val ARCHIVED_KEY = 4 // This is referenced in a query.
+    /**
+     * Whether this task is archived.
+     */
+    @ColumnInfo(
+        // SQLite has no boolean type, so integers 0 and 1 are used instead. Room will do the
+        // conversion automatically.
+        defaultValue = "0"
+    )
+    val isArchived: Boolean = false
+)
 
 enum class TaskStatus(val key: Int, val stringResId: Int) {
     NOT_STARTED(1, R.string.not_started),
     IN_PROGRESS(2, R.string.in_progress),
-    COMPLETED(3, R.string.completed),
-    ARCHIVED(ARCHIVED_KEY, R.string.archived);
+    COMPLETED(3, R.string.completed);
 
     companion object {
         // TODO (b/163065333): find more efficient solution, since map may be high memory.

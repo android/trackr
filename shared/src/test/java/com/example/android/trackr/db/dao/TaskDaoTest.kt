@@ -185,10 +185,10 @@ class TaskDaoTest {
             assertThat(tasks[0].status).isEqualTo(TaskStatus.NOT_STARTED)
         }
 
-        taskDao.updateTaskStatus(task1.id, TaskStatus.ARCHIVED)
+        taskDao.updateTaskStatus(task1.id, TaskStatus.COMPLETED)
 
         taskDao.getTasks().first().let { tasks ->
-            assertThat(tasks[0].status).isEqualTo(TaskStatus.ARCHIVED)
+            assertThat(tasks[0].status).isEqualTo(TaskStatus.COMPLETED)
         }
     }
 
@@ -200,10 +200,31 @@ class TaskDaoTest {
             assertThat(tasks[0].status).isEqualTo(TaskStatus.NOT_STARTED)
         }
 
-        taskDao.updateTaskStatus(task1.id, TaskStatus.ARCHIVED)
+        taskDao.updateTaskStatus(task1.id, TaskStatus.COMPLETED)
 
         taskDao.getTasks().first().let { tasks ->
-            assertThat(tasks[0].status).isEqualTo(TaskStatus.ARCHIVED)
+            assertThat(tasks[0].status).isEqualTo(TaskStatus.COMPLETED)
+        }
+    }
+
+    @Test
+    fun archiveTask() = runBlocking {
+        insertData(taskDao, listOf(user1), listOf(task1))
+        taskDao.getTasks().first().let { tasks ->
+            assertThat(tasks[0].isArchived).isFalse()
+            assertThat(tasks[0].status).isEqualTo(TaskStatus.NOT_STARTED)
+        }
+
+        taskDao.setIsArchived(listOf(task1.id), true)
+        taskDao.getTasks().first().let { tasks ->
+            assertThat(tasks[0].isArchived).isTrue()
+            assertThat(tasks[0].status).isEqualTo(TaskStatus.NOT_STARTED) // status unchanged
+        }
+
+        taskDao.setIsArchived(listOf(task1.id), false)
+        taskDao.getTasks().first().let { tasks ->
+            assertThat(tasks[0].isArchived).isFalse()
+            assertThat(tasks[0].status).isEqualTo(TaskStatus.NOT_STARTED)
         }
     }
 
@@ -440,10 +461,11 @@ class TaskDaoTest {
         val task2 = Task(
             id = 2L,
             title = "Task 2",
-            status = TaskStatus.ARCHIVED,
+            status = TaskStatus.COMPLETED,
             ownerId = 1L,
             creatorId = 1L,
-            orderInCategory = 2
+            orderInCategory = 2,
+            isArchived = true
         )
 
         val tag1 = Tag(id = 1L, label = "tag1", color = TagColor.RED)

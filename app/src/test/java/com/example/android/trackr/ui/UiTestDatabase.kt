@@ -76,21 +76,23 @@ val ARCHIVED_TASK_1 = Task(
     id = 11L,
     title = "archived task 1",
     description = "description 1",
-    status = TaskStatus.ARCHIVED,
+    status = TaskStatus.COMPLETED,
     creatorId = USER_CREATOR.id,
     ownerId = USER_OWNER.id,
     createdAt = Instant.parse("2020-09-01T00:00:00.00Z"),
     dueAt = Instant.parse("2020-11-01T00:00:00.00Z"),
-    orderInCategory = 1
+    orderInCategory = 1,
+    isArchived = true
 )
 val ARCHIVED_TASK_2 = Task(
     id = 12L,
     title = "archived task 2",
     description = "description 2",
-    status = TaskStatus.ARCHIVED,
+    status = TaskStatus.COMPLETED,
     creatorId = USER_CREATOR.id,
     ownerId = USER_OTHER.id,
     createdAt = Instant.parse("2020-09-01T00:00:00.00Z"),
     dueAt = Instant.parse("2020-11-01T00:00:00.00Z"),
-    orderInCategory = 2
+    orderInCategory = 2,
+    isArchived = true
 )

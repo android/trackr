@@ -28,7 +28,7 @@ import com.example.android.trackr.usecase.ArchiveUseCase
 import com.example.android.trackr.usecase.GetOngoingTaskSummariesUseCase
 import com.example.android.trackr.usecase.ReorderTasksUseCase
 import com.example.android.trackr.usecase.ToggleTaskStarStateUseCase
-import com.example.android.trackr.usecase.UpdateTaskStatusUseCase
+import com.example.android.trackr.usecase.UnarchiveUseCase
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
@@ -52,10 +52,10 @@ class TasksViewModelTest {
         val taskDao = db.taskDao()
         return TasksViewModel(
             GetOngoingTaskSummariesUseCase(taskDao),
-            ArchiveUseCase(taskDao),
             ToggleTaskStarStateUseCase(db, taskDao),
-            UpdateTaskStatusUseCase(taskDao),
             ReorderTasksUseCase(taskDao),
+            ArchiveUseCase(taskDao),
+            UnarchiveUseCase(taskDao),
             currentUser
         )
     }
@@ -123,14 +123,14 @@ class TasksViewModelTest {
 
     private fun createTaskSummary(id: Long): TaskSummary {
         return TaskSummary(
-            id,
-            "",
-            TaskStatus.NOT_STARTED,
-            Instant.parse("2020-09-01T00:00:00.00Z"),
-            1,
-            currentUser,
-            emptyList(),
-            emptyList()
+            id = id,
+            title = "",
+            status = TaskStatus.NOT_STARTED,
+            dueAt = Instant.parse("2020-09-01T00:00:00.00Z"),
+            orderInCategory = 1,
+            owner = currentUser,
+            tags = emptyList(),
+            starUsers = emptyList()
         )
     }
 

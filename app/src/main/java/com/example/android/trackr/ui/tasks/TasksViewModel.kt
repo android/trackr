@@ -26,7 +26,7 @@ import com.example.android.trackr.usecase.ArchiveUseCase
 import com.example.android.trackr.usecase.GetOngoingTaskSummariesUseCase
 import com.example.android.trackr.usecase.ReorderTasksUseCase
 import com.example.android.trackr.usecase.ToggleTaskStarStateUseCase
-import com.example.android.trackr.usecase.UpdateTaskStatusUseCase
+import com.example.android.trackr.usecase.UnarchiveUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,10 +39,10 @@ import javax.inject.Inject
 @HiltViewModel
 class TasksViewModel @Inject constructor(
     getOngoingTaskSummariesUseCase: GetOngoingTaskSummariesUseCase,
-    private val archiveUseCase: ArchiveUseCase,
     private val toggleTaskStarStateUseCase: ToggleTaskStarStateUseCase,
-    private val updateTaskStatusUseCase: UpdateTaskStatusUseCase,
     private val reorderTasksUseCase: ReorderTasksUseCase,
+    private val archiveUseCase: ArchiveUseCase,
+    private val unarchiveUseCase: UnarchiveUseCase,
     private val currentUser: User
 ) : ViewModel() {
 
@@ -59,11 +59,7 @@ class TasksViewModel @Inject constructor(
 
     // TODO: don't hardcode TaskStatus values; instead, read from the db
     private val expandedStatesMap = MutableStateFlow(
-        mapOf(
-            TaskStatus.IN_PROGRESS to true,
-            TaskStatus.NOT_STARTED to true,
-            TaskStatus.COMPLETED to true
-        )
+        TaskStatus.values().associateWith { true }
     )
 
     val listItems = combine(taskSummaries, expandedStatesMap) { taskSummaries, statesMap ->
@@ -86,13 +82,13 @@ class TasksViewModel @Inject constructor(
     fun archiveTask(taskSummary: TaskSummary) {
         viewModelScope.launch {
             archiveUseCase(listOf(taskSummary.id))
-            archivedItemChannel.offer(ArchivedItem(taskSummary.id, taskSummary.status))
+            archivedItemChannel.send(ArchivedItem(taskSummary.id))
         }
     }
 
     fun unarchiveTask(item: ArchivedItem) {
         viewModelScope.launch {
-            updateTaskStatusUseCase(listOf(item.taskId), item.previousStatus)
+            unarchiveUseCase(listOf(item.taskId))
         }
     }
 
@@ -130,14 +126,7 @@ class TasksViewModel @Inject constructor(
     }
 }
 
-/**
- * Contains archived task fields that can be used to unarchive that task and restore the tasks
- * previous state.
- */
-data class ArchivedItem(
-    val taskId: Long,
-    val previousStatus: TaskStatus
-)
+data class ArchivedItem(val taskId: Long)
 
 data class UndoReorderTasks(
     val taskId: Long,

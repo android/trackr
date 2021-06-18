@@ -16,17 +16,16 @@
 
 package com.example.android.trackr.usecase
 
-import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.db.dao.TaskDao
 import javax.inject.Inject
 
 /**
- * Unarchive tasks. This sets the state to [TaskStatus.NOT_STARTED] for all the tasks.
+ * Unarchive tasks.
  */
 class UnarchiveUseCase @Inject constructor(
     private val taskDao: TaskDao
 ) {
     suspend operator fun invoke(taskIds: List<Long>) {
-        taskDao.updateTaskStatus(taskIds, TaskStatus.NOT_STARTED)
+        taskDao.setIsArchived(taskIds, false)
     }
 }

@@ -48,8 +48,10 @@ object AppModule {
     fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
         appDatabase = Room.databaseBuilder(
             context,
-            AppDatabase::class.java, "trackr-db"
+            AppDatabase::class.java,
+            "trackr-db"
         )
+            .fallbackToDestructiveMigration()
             .addCallback(object : RoomDatabase.Callback() {
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)

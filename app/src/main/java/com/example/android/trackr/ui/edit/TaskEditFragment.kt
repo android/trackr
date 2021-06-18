@@ -90,7 +90,9 @@ class TaskEditFragment : Fragment(R.layout.task_edit_fragment) {
             requireContext(),
             R.layout.status_spinner_item,
             R.id.status_text,
-            TaskStatus.values().map { getString(it.stringResId) }
+            TaskStatus.values().map {
+                getString(it.stringResId)
+            }
         )
         binding.status.doOnItemSelected { position ->
             viewModel.updateState(TaskStatus.values()[position])

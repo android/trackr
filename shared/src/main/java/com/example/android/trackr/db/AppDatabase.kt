@@ -26,7 +26,6 @@ import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.TaskTag
 import com.example.android.trackr.data.User
 import com.example.android.trackr.data.UserTask
-
 import com.example.android.trackr.db.dao.TaskDao
 
 @Database(
