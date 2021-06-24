@@ -26,7 +26,7 @@ import com.example.android.trackr.ui.USER_OWNER
 import com.example.android.trackr.ui.createDatabase
 import com.example.android.trackr.usecase.ArchiveUseCase
 import com.example.android.trackr.usecase.GetOngoingTaskSummariesUseCase
-import com.example.android.trackr.usecase.ReorderListUseCase
+import com.example.android.trackr.usecase.ReorderTasksUseCase
 import com.example.android.trackr.usecase.ToggleTaskStarStateUseCase
 import com.example.android.trackr.usecase.UpdateTaskStatusUseCase
 import com.google.common.truth.Truth.assertThat
@@ -55,7 +55,7 @@ class TasksViewModelTest {
             ArchiveUseCase(taskDao),
             ToggleTaskStarStateUseCase(db, taskDao),
             UpdateTaskStatusUseCase(taskDao),
-            ReorderListUseCase(taskDao),
+            ReorderTasksUseCase(taskDao),
             currentUser
         )
     }

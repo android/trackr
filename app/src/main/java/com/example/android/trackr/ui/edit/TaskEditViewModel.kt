@@ -75,6 +75,12 @@ class TaskEditViewModel @Inject constructor(
     private val _createdAt = MutableStateFlow(Instant.now())
     val createdAt: StateFlow<Instant> = _createdAt
 
+    private var orderInCategory = 0
+
+    // Whether this task should be placed on top of the status when it is saved.
+    // Creating a new task puts it at the top of the status.
+    private var topInCategory = true
+
     private val _tags = MutableStateFlow<List<Tag>>(emptyList())
     val tags: StateFlow<List<Tag>> = _tags
 
@@ -128,6 +134,8 @@ class TaskEditViewModel @Inject constructor(
                     _creator.value = detail.creator
                     _dueAt.value = detail.dueAt
                     _createdAt.value = detail.createdAt
+                    orderInCategory = detail.orderInCategory
+                    topInCategory = false
                     _tags.value = detail.tags
                     starUsers.clear()
                     starUsers.addAll(detail.starUsers)
@@ -141,6 +149,8 @@ class TaskEditViewModel @Inject constructor(
         if (_status.value != status) {
             _status.value = status
             _modified.value = true
+            // The task is placed at the top of the target status.
+            topInCategory = true
         }
     }
 
@@ -185,11 +195,13 @@ class TaskEditViewModel @Inject constructor(
                         status = _status.value,
                         createdAt = _createdAt.value,
                         dueAt = _dueAt.value,
+                        orderInCategory = orderInCategory,
                         owner = _owner.value,
                         creator = _creator.value,
                         tags = _tags.value,
                         starUsers = starUsers
-                    )
+                    ),
+                    topInCategory
                 )
                 onSaveFinished(true)
             } catch (e: RuntimeException) {

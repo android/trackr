@@ -24,7 +24,7 @@ import com.example.android.trackr.data.User
 import com.example.android.trackr.ui.utils.WhileViewSubscribed
 import com.example.android.trackr.usecase.ArchiveUseCase
 import com.example.android.trackr.usecase.GetOngoingTaskSummariesUseCase
-import com.example.android.trackr.usecase.ReorderListUseCase
+import com.example.android.trackr.usecase.ReorderTasksUseCase
 import com.example.android.trackr.usecase.ToggleTaskStarStateUseCase
 import com.example.android.trackr.usecase.UpdateTaskStatusUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,7 +42,7 @@ class TasksViewModel @Inject constructor(
     private val archiveUseCase: ArchiveUseCase,
     private val toggleTaskStarStateUseCase: ToggleTaskStarStateUseCase,
     private val updateTaskStatusUseCase: UpdateTaskStatusUseCase,
-    private val reorderListUseCase: ReorderListUseCase,
+    private val reorderTasksUseCase: ReorderTasksUseCase,
     private val currentUser: User
 ) : ViewModel() {
 
@@ -51,6 +51,9 @@ class TasksViewModel @Inject constructor(
     // TODO (b/165432948): consider a holistic approach to undoing actions.
     private val archivedItemChannel = Channel<ArchivedItem>(capacity = Channel.CONFLATED)
     val archivedItem = archivedItemChannel.receiveAsFlow()
+
+    private val undoReorderTasksChannel = Channel<UndoReorderTasks>(capacity = Channel.CONFLATED)
+    val undoReorderTasks = undoReorderTasksChannel.receiveAsFlow()
 
     private val taskSummaries = getOngoingTaskSummariesUseCase()
 
@@ -93,25 +96,36 @@ class TasksViewModel @Inject constructor(
         }
     }
 
-    private var cachedList: List<TaskSummary> = emptyList()
-    private var dragAndDropCategory: TaskStatus? = null
-
-    fun cacheCurrentList(items: List<TaskSummary>) {
-        cachedList = items
-    }
-
-    fun restoreListFromCache() {
+    fun reorderTasks(movedTask: TaskSummary, targetTask: TaskSummary) {
+        if (movedTask.status != targetTask.status) {
+            return
+        }
         viewModelScope.launch {
-            dragAndDropCategory?.let {
-                reorderListUseCase(it, cachedList)
-            }
+            reorderTasksUseCase(
+                movedTask.id,
+                movedTask.status,
+                movedTask.orderInCategory,
+                targetTask.orderInCategory
+            )
+            undoReorderTasksChannel.offer(
+                UndoReorderTasks(
+                    movedTask.id,
+                    movedTask.status,
+                    targetTask.orderInCategory,
+                    movedTask.orderInCategory
+                )
+            )
         }
     }
 
-    fun persistUpdatedList(status: TaskStatus, items: List<TaskSummary>) {
-        dragAndDropCategory = status
+    fun undoReorderTasks(undo: UndoReorderTasks) {
         viewModelScope.launch {
-            reorderListUseCase(status, items)
+            reorderTasksUseCase(
+                undo.taskId,
+                undo.status,
+                undo.currentOrderInCategory,
+                undo.targetOrderInCategory
+            )
         }
     }
 }
@@ -123,4 +137,11 @@ class TasksViewModel @Inject constructor(
 data class ArchivedItem(
     val taskId: Long,
     val previousStatus: TaskStatus
+)
+
+data class UndoReorderTasks(
+    val taskId: Long,
+    val status: TaskStatus,
+    val currentOrderInCategory: Int,
+    val targetOrderInCategory: Int
 )

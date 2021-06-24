@@ -26,5 +26,7 @@ import javax.inject.Inject
 class SaveTaskDetailUseCase @Inject constructor(
     private val taskDao: TaskDao
 ) {
-    suspend operator fun invoke(detail: TaskDetail) = taskDao.saveTaskDetail(detail)
+    suspend operator fun invoke(detail: TaskDetail, topOrderInCategory: Boolean) {
+        taskDao.saveTaskDetail(detail, topOrderInCategory)
+    }
 }

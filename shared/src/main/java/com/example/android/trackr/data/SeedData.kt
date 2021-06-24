@@ -141,7 +141,7 @@ object SeedData {
             ownerId = 3L,
             creatorId = 3L,
             dueAt = Instant.now() + Duration.ofDays(14),
-            orderInCategory = 1
+            orderInCategory = 2
         ),
         Task(
             id = 10L,
@@ -152,7 +152,7 @@ object SeedData {
             ownerId = 3L,
             creatorId = 2L,
             dueAt = Instant.now() - Duration.ofDays(9),
-            orderInCategory = 2
+            orderInCategory = 3
         ),
         Task(
             id = 11L,
@@ -163,7 +163,7 @@ object SeedData {
             ownerId = 1L,
             creatorId = 3L,
             dueAt = Instant.now() + Duration.ofDays(6),
-            orderInCategory = 3
+            orderInCategory = 4
         ),
         Task(
             id = 12L,
@@ -174,7 +174,7 @@ object SeedData {
             ownerId = 2L,
             creatorId = 3L,
             dueAt = Instant.now() - Duration.ofDays(3),
-            orderInCategory = 4
+            orderInCategory = 5
         ),
         Task(
             id = 13L,

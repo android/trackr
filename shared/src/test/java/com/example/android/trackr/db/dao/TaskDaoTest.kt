@@ -238,18 +238,20 @@ class TaskDaoTest {
             status = TaskStatus.IN_PROGRESS,
             createdAt = Instant.now(),
             dueAt = dueAt2,
+            orderInCategory = 0,
             owner = user2,
             creator = user1,
             tags = listOf(tag1, tag3),
             starUsers = emptyList()
         )
-        taskDao.saveTaskDetail(newDetail)
+        taskDao.saveTaskDetail(newDetail, true)
 
         val updatedDetail = taskDao.loadTaskDetailById(1L)!!
         assertThat(updatedDetail.title).isEqualTo("title")
         assertThat(updatedDetail.description).isEqualTo("description")
         assertThat(updatedDetail.status).isEqualTo(TaskStatus.IN_PROGRESS)
         assertThat(updatedDetail.dueAt).isEqualTo(dueAt2)
+        assertThat(updatedDetail.orderInCategory).isEqualTo(1)
         assertThat(updatedDetail.tags).containsExactly(tag1, tag3)
         assertThat(updatedDetail.creator).isEqualTo(user1)
         assertThat(updatedDetail.owner).isEqualTo(user2)
@@ -280,18 +282,20 @@ class TaskDaoTest {
             status = TaskStatus.IN_PROGRESS,
             createdAt = initialDetail.createdAt, // The UI doesn't allow editing this.
             dueAt = dueAt2,
+            orderInCategory = initialDetail.orderInCategory,
             owner = user2,
             creator = initialDetail.creator, // The UI doesn't allow editing this.
             tags = listOf(tag1, tag3),
             starUsers = emptyList()
         )
-        taskDao.saveTaskDetail(newDetail)
+        taskDao.saveTaskDetail(newDetail, false)
 
         val updatedDetail = taskDao.loadTaskDetailById(1L)!!
         assertThat(updatedDetail.title).isEqualTo("new title")
         assertThat(updatedDetail.description).isEqualTo("new description")
         assertThat(updatedDetail.status).isEqualTo(TaskStatus.IN_PROGRESS)
         assertThat(updatedDetail.dueAt).isEqualTo(dueAt2)
+        assertThat(updatedDetail.orderInCategory).isEqualTo(1)
         assertThat(updatedDetail.tags).containsExactly(tag1, tag3)
         assertThat(updatedDetail.owner).isEqualTo(user2)
     }
@@ -339,68 +343,16 @@ class TaskDaoTest {
             assertThat(results.map { it.orderInCategory }).isEqualTo(listOf(0, 1, 2))
         }
 
-        val items = taskDao.getOngoingTaskSummaries().first()
-
-        taskDao.reorderList(
+        taskDao.reorderTasks(
+            1L,
             TaskStatus.IN_PROGRESS,
-            listOf(items[1], items[0], items[2])
+            0,
+            1
         )
 
         taskDao.getTasks().first().let { results ->
             assertThat(results.map { it.id }).isEqualTo(listOf(1L, 2L, 3L))
             assertThat(results.map { it.orderInCategory }).isEqualTo(listOf(1, 0, 2))
-        }
-    }
-
-    @Test
-    fun bulkUpdateOrderInCategory_withDifferentStatus_doesNothing() = runBlocking {
-        val first = Task(
-            id = 1L,
-            title = "First",
-            status = TaskStatus.IN_PROGRESS,
-            ownerId = 1L,
-            creatorId = 1L,
-            dueAt = dueAt1,
-            orderInCategory = 0
-        )
-
-        val second = Task(
-            id = 2L,
-            title = "Second",
-            status = TaskStatus.NOT_STARTED,
-            ownerId = 1L,
-            creatorId = 1L,
-            orderInCategory = 1
-        )
-
-        val third = Task(
-            id = 3L,
-            title = "Third",
-            status = TaskStatus.NOT_STARTED,
-            ownerId = 1L,
-            creatorId = 1L,
-            orderInCategory = 2
-        )
-
-        insertData(
-            taskDao = taskDao,
-            users = listOf(user1, user2),
-            tasks = listOf(first, second, third),
-            tags = emptyList(),
-            taskTags = emptyList()
-        )
-
-        taskDao.getTasks().first().let { results ->
-            assertThat(results.map { it.id }).isEqualTo(listOf(1L, 2L, 3L))
-            assertThat(results.map { it.orderInCategory }).isEqualTo(listOf(0, 1, 2))
-        }
-
-        val items = taskDao.getOngoingTaskSummaries().first()
-        taskDao.reorderList(TaskStatus.IN_PROGRESS, listOf(items[1], items[0]))
-
-        taskDao.getTasks().first().let { results ->
-            assertThat(results.map { it.id }).isEqualTo(listOf(1L, 2L, 3L))
-            assertThat(results.map { it.orderInCategory }).isEqualTo(listOf(0, 1, 2))
         }
     }
 
@@ -416,13 +368,14 @@ class TaskDaoTest {
             status = TaskStatus.IN_PROGRESS,
             createdAt = Instant.now(),
             dueAt = dueAt1,
+            orderInCategory = 1,
             owner = user1,
             creator = user1,
             tags = listOf(tag1),
             starUsers = emptyList()
         )
 
-        taskDao.saveTaskDetail(newTaskDetail)
+        taskDao.saveTaskDetail(newTaskDetail, false)
 
         val newTask = taskDao.loadTaskDetailById(1L)
         assertThat(newTask).isNull()

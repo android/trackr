@@ -119,6 +119,21 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
                         .show()
                 }
             }
+            launch {
+                viewModel.undoReorderTasks.collect { undo ->
+                    Snackbar
+                        .make(
+                            binding.coordinator,
+                            R.string.task_position_changed,
+                            Snackbar.LENGTH_LONG
+                        )
+                        .setAction(getString(R.string.undo)) {
+                            viewModel.undoReorderTasks(undo)
+                        }
+                        .setAnchorView(binding.add)
+                        .show()
+                }
+            }
         }
     }
 
@@ -151,7 +166,7 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
     }
 
     override fun onDragStarted() {
-        viewModel.cacheCurrentList(listToTaskSummaries(tasksAdapter.currentList))
+        // Do nothing
     }
 
     override fun onDragCompleted(
@@ -159,36 +174,24 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
         toPosition: Int,
         usingDragAndDropCustomActions: Boolean
     ) {
-        val draggedItem = tasksAdapter.currentList[fromPosition]
-
-        val list = tasksAdapter.currentList.toMutableList()
-
         // If using a custom action for drag and drop, the current list tasksAdapter.currentList
         // will return the original list. In that case, swap the items in the returned list.
+        val list = tasksAdapter.currentList.toMutableList()
         if (usingDragAndDropCustomActions) {
             Collections.swap(list, fromPosition, toPosition)
         }
 
-        viewModel.persistUpdatedList(
-            (draggedItem as ListItem.TypeTask).taskSummary.status,
-            listToTaskSummaries(list)
-        )
+        // The item dragged and moved.
+        val draggedItem = list[toPosition] as? ListItem.TypeTask ?: return
 
-        Snackbar
-            .make(
-                binding.coordinator,
-                R.string.task_position_changed,
-                Snackbar.LENGTH_LONG
-            )
-            .setAction(getString(R.string.undo)) {
-                viewModel.restoreListFromCache()
-            }
-            .setAnchorView(binding.add)
-            .show()
-    }
+        // The item on the other end of the range shifted by the movement.
+        val targetItem = if (fromPosition < toPosition) {
+            list[toPosition - 1]
+        } else {
+            list[toPosition + 1]
+        } as? ListItem.TypeTask ?: return
 
-    private fun listToTaskSummaries(list: List<ListItem>): List<TaskSummary> {
-        return list.filterIsInstance<ListItem.TypeTask>().map { it.taskSummary }
+        viewModel.reorderTasks(draggedItem.taskSummary, targetItem.taskSummary)
     }
 }
 

@@ -84,7 +84,7 @@ interface TaskDao {
     suspend fun updateTaskStatus(ids: List<Long>, status: TaskStatus)
 
     @Query("UPDATE tasks SET orderInCategory = :orderInCategory WHERE id = :id")
-    suspend fun updateOrderInCategory(id: Long,  orderInCategory: Int)
+    suspend fun updateOrderInCategory(id: Long, orderInCategory: Int)
 
     @Query("SELECT * FROM user_tasks WHERE taskId = :taskId AND userId = :userId")
     suspend fun getUserTask(taskId: Long, userId: Long): UserTask?
@@ -104,8 +104,18 @@ interface TaskDao {
     @Query("DELETE FROM task_tags WHERE taskId = :taskId AND tagId IN(:tagIds)")
     suspend fun deleteTaskTags(taskId: Long, tagIds: List<Long>)
 
+    @Query(
+        """
+        SELECT MIN(orderInCategory) FROM tasks
+        WHERE
+            status = :status
+            AND id <> :excludeTaskId
+        """
+    )
+    suspend fun loadMinOrderInCategory(status: TaskStatus, excludeTaskId: Long): Int?
+
     @Transaction
-    suspend fun saveTaskDetail(detail: TaskDetail) {
+    suspend fun saveTaskDetail(detail: TaskDetail, topOrderInCategory: Boolean) {
         if (detail.title.isEmpty()) {
             throw IllegalArgumentException("Task must include non-empty title.")
         }
@@ -118,7 +128,12 @@ interface TaskDao {
             ownerId = detail.owner.id,
             createdAt = detail.createdAt,
             dueAt = detail.dueAt,
-            orderInCategory = 1
+            orderInCategory = if (topOrderInCategory) {
+                val min = loadMinOrderInCategory(detail.status, detail.id)
+                if (min == null) 1 else min - 1
+            } else {
+                detail.orderInCategory
+            }
         )
         val taskId = insertTask(task)
         val updatedTagIds = detail.tags.map { tag -> tag.id }
@@ -129,10 +144,34 @@ interface TaskDao {
         insertTaskTags(newTagIds.map { id -> TaskTag(taskId = taskId, tagId = id) })
     }
 
+    @Query(
+        """
+        UPDATE tasks
+        SET orderInCategory = orderInCategory + :delta
+        WHERE
+            status = :status
+            AND orderInCategory BETWEEN :minOrderInCategory AND :maxOrderInCategory
+        """
+    )
+    suspend fun shiftTasks(
+        status: TaskStatus,
+        minOrderInCategory: Int,
+        maxOrderInCategory: Int,
+        delta: Int
+    )
+
     @Transaction
-    suspend fun reorderList(status: TaskStatus, taskSummaries: List<TaskSummary>) {
-        taskSummaries.filter {it.status == status}.forEachIndexed{ index, taskSummary ->
-            updateOrderInCategory(taskSummary.id, index)
+    suspend fun reorderTasks(
+        taskId: Long,
+        status: TaskStatus,
+        currentOrderInCategory: Int,
+        targetOrderInCategory: Int
+    ) {
+        if (currentOrderInCategory < targetOrderInCategory) {
+            shiftTasks(status, currentOrderInCategory + 1, targetOrderInCategory, -1)
+        } else {
+            shiftTasks(status, targetOrderInCategory, currentOrderInCategory - 1, 1)
         }
+        updateOrderInCategory(taskId, targetOrderInCategory)
     }
 }
