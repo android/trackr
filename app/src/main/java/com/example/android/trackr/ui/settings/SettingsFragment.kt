@@ -23,14 +23,14 @@ import androidx.fragment.app.commitNow
 import com.example.android.trackr.R
 import com.example.android.trackr.databinding.SettingsFragmentBinding
 import com.example.android.trackr.ui.dataBindings
-import com.example.android.trackr.ui.utils.configureEdgeToEdge
 
 class SettingsFragment : Fragment(R.layout.settings_fragment) {
 
     private val binding by dataBindings(SettingsFragmentBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        configureEdgeToEdge(binding.root, binding.preference, binding.appBar)
+        // We need to access binding once in order for Data Binding to bind the views.
+        binding.root
         if (childFragmentManager.findFragmentById(R.id.preference) == null) {
             childFragmentManager.commitNow {
                 replace(R.id.preference, SettingsPreferenceFragment())

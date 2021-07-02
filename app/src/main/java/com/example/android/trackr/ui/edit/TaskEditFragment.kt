@@ -32,7 +32,6 @@ import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.databinding.TaskEditFragmentBinding
 import com.example.android.trackr.ui.dataBindings
 import com.example.android.trackr.ui.utils.DateTimeUtils
-import com.example.android.trackr.ui.utils.configureEdgeToEdge
 import com.example.android.trackr.ui.utils.repeatWithViewLifecycle
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,12 +64,6 @@ class TaskEditFragment : Fragment(R.layout.task_edit_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.viewModel = viewModel
         binding.clock = clock
-
-        configureEdgeToEdge(
-            root = view,
-            scrollingContent = binding.scrollingContent,
-            topBar = binding.toolbar
-        )
 
         binding.toolbar.setNavigationOnClickListener {
             close()

@@ -34,13 +34,16 @@
         android:id="@+id/task_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:paddingTopSystemBars="@{true}"
         tools:context=".ui.detail.TaskDetailFragment">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">
+            android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+            app:paddingLeftSystemBars="@{true}"
+            app:paddingRightSystemBars="@{true}">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
@@ -54,13 +57,17 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:cardCornerRadius="@dimen/card_radius"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            app:marginLeftSystemBars="@{true}"
+            app:marginRightSystemBars="@{true}">
 
             <ScrollView
                 android:id="@+id/scrolling_content"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                app:paddingBottomSystemBars="@{true}">
 
                 <LinearLayout
                     android:id="@+id/content"
@@ -255,6 +262,9 @@
             android:layout_gravity="end|bottom"
             android:layout_margin="@dimen/spacing_large"
             android:contentDescription="@string/edit_task"
+            app:marginBottomSystemBars="@{true}"
+            app:marginLeftSystemBars="@{true}"
+            app:marginRightSystemBars="@{true}"
             app:srcCompat="@drawable/ic_edit" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

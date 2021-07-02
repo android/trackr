@@ -14,19 +14,23 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
 -->
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/settings"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:paddingTopSystemBars="@{true}">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">
+            android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+            app:paddingLeftSystemBars="@{true}"
+            app:paddingRightSystemBars="@{true}">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
@@ -40,7 +44,10 @@
             android:id="@+id/preference"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:paddingBottomSystemBars="@{true}"
+            app:paddingLeftSystemBars="@{true}"
+            app:paddingRightSystemBars="@{true}" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

@@ -50,6 +50,16 @@ fun View.setIsGone(
 }
 
 /**
+ * Sets the visibility of this view to either [View.INVISIBLE] or [View.VISIBLE].
+ */
+@BindingAdapter("isInvisible")
+fun View.setIsInvisible(
+    isInvisible: Boolean
+) {
+    visibility = if (isInvisible) View.INVISIBLE else View.VISIBLE
+}
+
+/**
  * Sets tags to be shown in this [ChipGroup].
  *
  * @param tags The list of tags to show.

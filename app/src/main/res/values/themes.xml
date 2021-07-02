@@ -37,7 +37,7 @@
         <item name="textAppearanceBody1">@style/TextAppearance.Trackr.Body1</item>
 
         <!-- Widgets -->
-        <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.Primary</item>
+        <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.AppBarLayout.Primary</item>
 
         <!-- Custom theme attrs -->
         <item name="starIconColor">@color/trackr_yellow_500</item>
