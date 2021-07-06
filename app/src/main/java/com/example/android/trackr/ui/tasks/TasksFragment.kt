@@ -24,7 +24,7 @@ import androidx.core.view.doOnNextLayout
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,7 +34,6 @@ import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.User
 import com.example.android.trackr.databinding.TasksFragmentBinding
 import com.example.android.trackr.ui.dataBindings
-import com.example.android.trackr.ui.detail.TaskDetailFragmentArgs
 import com.example.android.trackr.ui.utils.doOnApplyWindowInsets
 import com.example.android.trackr.ui.utils.repeatWithViewLifecycle
 import com.google.android.material.snackbar.Snackbar
@@ -48,7 +47,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListener {
 
-    private val viewModel: TasksViewModel by viewModels()
+    private val viewModel: TasksViewModel by hiltNavGraphViewModels(R.id.nav_tasks)
     private val binding by dataBindings(TasksFragmentBinding::bind)
     private lateinit var tasksAdapter: TasksAdapter
 
@@ -173,8 +172,7 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
     }
 
     override fun onTaskClicked(taskSummary: TaskSummary) {
-        findNavController()
-            .navigate(R.id.nav_task_detail, TaskDetailFragmentArgs(taskSummary.id).toBundle())
+        viewModel.showTaskDetail(taskSummary)
     }
 
     override fun onTaskArchived(taskSummary: TaskSummary) {

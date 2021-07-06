@@ -23,15 +23,22 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.doOnLayout
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.slidingpanelayout.widget.SlidingPaneLayout
 import com.example.android.trackr.R
+import com.example.android.trackr.TaskDetailGraphDirections
 import com.example.android.trackr.databinding.TasksTwoPaneFragmentBinding
 import com.example.android.trackr.ui.dataBindings
 import com.example.android.trackr.ui.utils.doOnApplyWindowInsets
+import com.example.android.trackr.ui.utils.repeatWithViewLifecycle
+import com.example.android.trackr.ui.utils.requireFragment
+import kotlinx.coroutines.flow.collect
 
 class TasksTwoPaneFragment : Fragment(R.layout.tasks_two_pane_fragment) {
 
     private val binding by dataBindings(TasksTwoPaneFragmentBinding::bind)
+    private val viewModel: TasksViewModel by hiltNavGraphViewModels(R.id.nav_tasks)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,6 +59,21 @@ class TasksTwoPaneFragment : Fragment(R.layout.tasks_two_pane_fragment) {
                             Insets.of(0, systemBars.top, 0, systemBars.bottom)
                         ).build()
                     }
+                }
+            }
+        }
+
+        val detailNavController = requireFragment(R.id.detail_pane).findNavController()
+        repeatWithViewLifecycle {
+            viewModel.showTaskDetailEvents.collect {
+                if (it.isNewSelection) {
+                    // Change the detail pane contents.
+                    detailNavController.navigate(TaskDetailGraphDirections.toTaskDetail(it.taskId))
+                }
+                if (it.isUserSelection) {
+                    // Slide the detail pane into view. If both panes are visible, this has no
+                    // visible effect.
+                    binding.slidingPaneLayout.openPane()
                 }
             }
         }

@@ -57,5 +57,9 @@ inline fun Fragment.repeatWithViewLifecycle(
     }
 }
 
+fun Fragment.requireFragment(id: Int): Fragment {
+    return childFragmentManager.findFragmentById(id) ?: throw IllegalArgumentException()
+}
+
 inline val View.isRtl: Boolean
     get() = ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_RTL

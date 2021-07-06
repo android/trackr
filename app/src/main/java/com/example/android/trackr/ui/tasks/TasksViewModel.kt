@@ -55,6 +55,10 @@ class TasksViewModel @Inject constructor(
     private val undoReorderTasksChannel = Channel<UndoReorderTasks>(capacity = Channel.CONFLATED)
     val undoReorderTasks = undoReorderTasksChannel.receiveAsFlow()
 
+    private var detailTaskId: Long? = null
+    private val showTaskDetailChannel = Channel<ShowTaskDetailEvent>(capacity = Channel.CONFLATED)
+    val showTaskDetailEvents = showTaskDetailChannel.receiveAsFlow()
+
     private val taskSummaries = getOngoingTaskSummariesUseCase()
 
     // TODO: don't hardcode TaskStatus values; instead, read from the db
@@ -63,7 +67,13 @@ class TasksViewModel @Inject constructor(
     )
 
     val listItems = combine(taskSummaries, expandedStatesMap) { taskSummaries, statesMap ->
-        ListItemsCreator(taskSummaries, statesMap).execute()
+        ListItemsCreator(taskSummaries, statesMap).execute().also { items ->
+            if (detailTaskId == null && taskSummaries.isNotEmpty()) {
+                // Show the first item. This will set the detail pane content without opening it.
+                val firstItem = items.first { it is ListItem.TypeTask } as ListItem.TypeTask
+                showTaskDetail(firstItem.taskSummary, isUserSelection = false)
+            }
+        }
     }.stateIn(viewModelScope, WhileViewSubscribed, emptyList())
 
     fun toggleExpandedState(headerData: HeaderData) {
@@ -124,6 +134,13 @@ class TasksViewModel @Inject constructor(
             )
         }
     }
+
+    fun showTaskDetail(taskSummary: TaskSummary, isUserSelection: Boolean = true) {
+        showTaskDetailChannel.trySend(
+            ShowTaskDetailEvent(taskSummary.id, taskSummary.id != detailTaskId, isUserSelection)
+        )
+        detailTaskId = taskSummary.id
+    }
 }
 
 data class ArchivedItem(val taskId: Long)
@@ -133,4 +150,10 @@ data class UndoReorderTasks(
     val status: TaskStatus,
     val currentOrderInCategory: Int,
     val targetOrderInCategory: Int
+)
+
+data class ShowTaskDetailEvent(
+    val taskId: Long,
+    val isNewSelection: Boolean = true,
+    val isUserSelection: Boolean = true
 )
