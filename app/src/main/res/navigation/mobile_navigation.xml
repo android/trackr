@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
      Copyright (C) 2020 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,19 +22,9 @@
 
     <fragment
         android:id="@+id/nav_tasks"
-        android:name="com.example.android.trackr.ui.tasks.TasksFragment"
+        android:name="com.example.android.trackr.ui.tasks.TasksTwoPaneFragment"
         android:label="Tasks"
         tools:layout="@layout/tasks_fragment" />
-
-    <fragment
-        android:id="@+id/nav_task_detail"
-        android:name="com.example.android.trackr.ui.detail.TaskDetailFragment"
-        android:label="Task Detail"
-        android:layout="@layout/task_detail_fragment">
-        <argument
-            android:name="taskId"
-            app:argType="long" />
-    </fragment>
 
     <fragment
         android:id="@+id/nav_archives"

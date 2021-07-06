@@ -92,7 +92,8 @@ fun View.requestApplyInsetsWhenAttached() {
  *   app:paddingRightSystemBars="@{true}" />
  * ```
  *
- * If you need more complicated behavior than this, use [doOnApplyWindowInsets] directly instead.
+ * Note that no insets will be consumed. If you need to consume insets, or need to apply some other
+ * behavior, use [doOnApplyWindowInsets] directly instead.
  */
 @BindingAdapter(
     "paddingLeftSystemBars",
