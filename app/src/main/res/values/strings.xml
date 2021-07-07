@@ -22,6 +22,7 @@
     <string name="add_task">Add a new task</string>
 
     <!-- Bottom app bar -->
+    <string name="tasks">Tasks</string>
     <string name="settings">Settings</string>
 
     <!--Task Item -->

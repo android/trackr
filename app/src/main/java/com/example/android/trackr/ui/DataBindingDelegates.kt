@@ -23,7 +23,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 
 /**
- * Retrieves a data binding handle in a Fragment. The field is available only after
+ * Retrieves a data binding handle in a Fragment. The property should not be accessed before
  * [Fragment.onViewCreated].
  *
  * ```

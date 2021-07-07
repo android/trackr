@@ -35,4 +35,7 @@
     <dimen name="home_task_star_margin">24dp</dimen>
 
     <dimen name="text_size_home_section_header">20sp</dimen>
+
+    <dimen name="add_task_fab_margin">0dp</dimen>
+    <integer name="add_task_fab_gravity">0</integer>
 </resources>

@@ -24,9 +24,11 @@ import android.view.TouchDelegate
 import android.view.View
 import android.widget.TextView
 import androidx.annotation.DrawableRes
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
+import androidx.core.view.updateLayoutParams
 import androidx.core.widget.TextViewCompat
 import androidx.databinding.BindingAdapter
 import com.example.android.trackr.R
@@ -239,5 +241,12 @@ fun addTouchDelegate(view: View, minTouchTarget: Float) {
         }
 
         parent.touchDelegate = TouchDelegate(delegate, view)
+    }
+}
+
+@BindingAdapter("layout_anchor")
+fun setAnchorId(view: View, id: Int) {
+    view.updateLayoutParams<CoordinatorLayout.LayoutParams> {
+        anchorId = id
     }
 }

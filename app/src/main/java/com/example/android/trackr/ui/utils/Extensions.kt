@@ -16,6 +16,8 @@
 
 package com.example.android.trackr.ui.utils
 
+import android.view.View
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -54,3 +56,6 @@ inline fun Fragment.repeatWithViewLifecycle(
         }
     }
 }
+
+inline val View.isRtl: Boolean
+    get() = ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_RTL

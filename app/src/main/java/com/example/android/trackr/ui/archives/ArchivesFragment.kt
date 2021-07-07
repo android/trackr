@@ -19,10 +19,10 @@ package com.example.android.trackr.ui.archives
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.updatePadding
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -124,6 +124,7 @@ class ArchivesFragment : Fragment(R.layout.archive_fragment) {
                     bottom = padding.bottom + bottomBar.height
                 )
             }
+            insets
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backPressCallback)

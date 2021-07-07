@@ -21,6 +21,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.doOnNextLayout
+import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -77,15 +78,24 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
 
             doOnApplyWindowInsets { v, insets, padding, _ ->
                 val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-                // BottomAppBar has its own logic to adapt to window insets, but its height isn't
-                // updated until measurement, so wait for its next layout.
-                binding.bottomAppBar.doOnNextLayout { bottomBar ->
+                if (binding.bottomAppBar.isVisible) {
+                    // BottomAppBar has its own logic to adapt to window insets, but its height isn't
+                    // updated until measurement, so wait for its next layout.
+                    binding.bottomAppBar.doOnNextLayout { bottomBar ->
+                        v.updatePadding(
+                            left = padding.left + systemBars.left,
+                            right = padding.right + systemBars.right,
+                            bottom = bottomBar.height
+                        )
+                    }
+                } else {
                     v.updatePadding(
                         left = padding.left + systemBars.left,
                         right = padding.right + systemBars.right,
-                        bottom = bottomBar.height
+                        bottom = padding.bottom + systemBars.bottom
                     )
                 }
+                insets
             }
         }
         binding.add.setOnClickListener {

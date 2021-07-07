@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
      Copyright (C) 2020 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,6 +39,7 @@
 
         <!-- Widgets -->
         <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.AppBarLayout.Primary</item>
+        <item name="navigationRailStyle">@style/Widget.MaterialComponents.NavigationRailView.Colored</item>
 
         <!-- Custom theme attrs -->
         <item name="starIconColor">@color/trackr_yellow_500</item>

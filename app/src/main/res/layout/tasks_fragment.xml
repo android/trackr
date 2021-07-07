@@ -20,6 +20,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View" />
 
         <variable
             name="headerData"
@@ -66,15 +67,22 @@
             android:layout_gravity="bottom"
             app:backgroundTint="?android:attr/windowBackground"
             app:fabAlignmentMode="end"
+            app:isGone="@{@bool/show_navigation_rail}"
             app:menu="@menu/bottom_app_bar_menu" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="@integer/add_task_fab_gravity"
+            android:layout_margin="@dimen/add_task_fab_margin"
             android:contentDescription="@string/add_task"
-            app:layout_anchor="@id/bottomAppBar"
-            app:srcCompat="@drawable/ic_add" />
+            app:layout_anchor="@{ @bool/show_navigation_rail ? View.NO_ID : @id/bottomAppBar }"
+            app:marginBottomSystemBars="@{@bool/show_navigation_rail}"
+            app:marginLeftSystemBars="@{@bool/show_navigation_rail}"
+            app:marginRightSystemBars="@{@bool/show_navigation_rail}"
+            app:srcCompat="@drawable/ic_add"
+            tools:layout_anchor="@id/bottomAppBar" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

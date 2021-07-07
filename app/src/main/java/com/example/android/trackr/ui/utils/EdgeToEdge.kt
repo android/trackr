@@ -31,7 +31,7 @@ import androidx.databinding.BindingAdapter
  * and margin values, to aid in properly updating the view based on the insets.
  */
 fun View.doOnApplyWindowInsets(
-    f: (v: View, insets: WindowInsetsCompat, padding: Insets, margins: Insets) -> Unit
+    f: (v: View, insets: WindowInsetsCompat, padding: Insets, margins: Insets) -> WindowInsetsCompat
 ) {
     // Create a snapshot of the view's padding and margins.
     val padding = recordPadding()
@@ -39,7 +39,6 @@ fun View.doOnApplyWindowInsets(
     // Set a listener which proxies to the given lambda, also passing in the recorded state.
     ViewCompat.setOnApplyWindowInsetsListener(this) { view, insets ->
         f(view, insets, padding, margins)
-        insets // Always return the insets, so that children can also use them.
     }
 
     requestApplyInsetsWhenAttached()
@@ -148,6 +147,8 @@ fun applySystemBars(
                 rightMargin = margins.right + systemRight
                 bottomMargin = margins.bottom + systemBottom
             }
+
         }
+        insets // Always return the insets, so that children can also use them.
     }
 }
