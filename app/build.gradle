@@ -24,8 +24,7 @@ plugins {
 
 android {
     compileSdkVersion 30
-    // Also update 'kokoro/build.sh' when updating this.
-    buildToolsVersion "30.0.3"
+    buildToolsVersion build_tools_version
 
     defaultConfig {
         applicationId "com.example.android.trackr"
@@ -80,7 +79,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "androidx.cardview:cardview:$cardview_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
-    implementation "androidx.core:core-ktx:$core_ktx_version"
+    implementation "androidx.core:core-ktx:$core_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_ktx_version"
     implementation "androidx.hilt:hilt-navigation-fragment:$hilt_navigation_fragment_version"
     implementation "androidx.legacy:legacy-support-v4:$legacy_support_v4_version"
@@ -112,7 +111,7 @@ dependencies {
     testImplementation "com.google.truth:truth:$truth_version"
     testImplementation "androidx.arch.core:core-testing:$core_testing_version"
     testImplementation "androidx.room:room-testing:$room_version"
-    testImplementation "androidx.test:core:$androidx_test_ext_core_version"
+    testImplementation "androidx.test:core:$androidx_test_core_version"
     testImplementation "androidx.test.ext:junit:$androidx_test_ext_junit_version"
     testImplementation "io.mockk:mockk:$mockk_version"
     testImplementation "junit:junit:$junit_version"
@@ -122,7 +121,7 @@ dependencies {
         exclude group: "com.jakewharton.threetenabp", module: "threetenabp"
     }
 
-    androidTestImplementation "androidx.test:core-ktx:$androidx_test_ext_core_version"
+    androidTestImplementation "androidx.test:core-ktx:$androidx_test_core_version"
     androidTestImplementation "androidx.test.espresso:espresso-accessibility:$androidx_test_espresso_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidx_test_espresso_version"
     androidTestImplementation "androidx.test.ext:junit-ktx:$androidx_test_ext_junit_version"
