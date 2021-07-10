@@ -18,25 +18,30 @@ package com.example.android.trackr.ui.detail
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.android.trackr.NavTaskEditGraphArgs
 import com.example.android.trackr.R
+import com.example.android.trackr.data.TaskDetail
 import com.example.android.trackr.databinding.TaskDetailFragmentBinding
+import com.example.android.trackr.ui.TwoPaneViewModel
 import com.example.android.trackr.ui.dataBindings
 import com.example.android.trackr.ui.utils.DateTimeUtils
 import com.example.android.trackr.ui.utils.repeatWithViewLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import org.threeten.bp.Clock
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class TaskDetailFragment : Fragment(R.layout.task_detail_fragment) {
 
-    private val viewModel: TaskDetailViewModel by viewModels()
+    private val taskDetailViewModel: TaskDetailViewModel by viewModels()
+    private val twoPaneViewModel: TwoPaneViewModel by activityViewModels()
+
     private val args: TaskDetailFragmentArgs by navArgs()
     private val binding by dataBindings(TaskDetailFragmentBinding::bind)
 
@@ -45,48 +50,63 @@ class TaskDetailFragment : Fragment(R.layout.task_detail_fragment) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.taskId.value = args.taskId
+        taskDetailViewModel.taskId.value = args.taskId
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.viewModel = viewModel
+        binding.viewModel = taskDetailViewModel
         binding.clock = clock
 
         binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
+            twoPaneViewModel.onDetailPaneNavigateUp()
         }
 
         repeatWithViewLifecycle {
-            viewModel.detail.collect { value ->
-                value?.let {
-                    binding.dueAt.contentDescription = resources.getString(
-                        R.string.due_date_with_value,
-                        DateTimeUtils.formattedDate(resources, it.dueAt, clock)
-                    )
-
-                    binding.createdAt.contentDescription = resources.getString(
-                        R.string.creation_date_with_value,
-                        DateTimeUtils.formattedDate(resources, it.createdAt, clock)
-                    )
-
-                    binding.owner.contentDescription =
-                        resources.getString(R.string.owner_with_value, value.owner.username)
-                    binding.creator.contentDescription =
-                        resources.getString(R.string.creator_with_value, value.creator.username)
+            launch {
+                taskDetailViewModel.detail.collect {
+                    updateContentDescriptions(it)
+                }
+            }
+            launch {
+                twoPaneViewModel.isTwoPane.collect { isTwoPane ->
+                    binding.toolbar.navigationIcon = if (isTwoPane) {
+                        null
+                    } else {
+                        AppCompatResources.getDrawable(
+                            requireContext(),
+                            R.drawable.ic_chevron_start
+                        )
+                    }
                 }
             }
         }
 
         binding.edit.setOnClickListener {
-            findNavController().navigate(
-                R.id.nav_task_edit_graph,
-                NavTaskEditGraphArgs(taskId = args.taskId).toBundle()
-            )
+            twoPaneViewModel.onEditTask(args.taskId)
         }
 
         binding.star.setOnClickListener {
-            viewModel.toggleTaskStarState()
+            taskDetailViewModel.toggleTaskStarState()
+        }
+    }
+
+    private fun updateContentDescriptions(taskDetail: TaskDetail?) {
+        taskDetail?.let {
+            binding.dueAt.contentDescription = resources.getString(
+                R.string.due_date_with_value,
+                DateTimeUtils.formattedDate(resources, it.dueAt, clock)
+            )
+
+            binding.createdAt.contentDescription = resources.getString(
+                R.string.creation_date_with_value,
+                DateTimeUtils.formattedDate(resources, it.createdAt, clock)
+            )
+
+            binding.owner.contentDescription =
+                resources.getString(R.string.owner_with_value, it.owner.username)
+            binding.creator.contentDescription =
+                resources.getString(R.string.creator_with_value, it.creator.username)
         }
     }
 }

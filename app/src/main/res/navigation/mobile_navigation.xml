@@ -24,7 +24,12 @@
         android:id="@+id/nav_tasks"
         android:name="com.example.android.trackr.ui.tasks.TasksTwoPaneFragment"
         android:label="Tasks"
-        tools:layout="@layout/tasks_fragment" />
+        tools:layout="@layout/tasks_fragment">
+
+        <action
+            android:id="@+id/to_task_edit"
+            app:destination="@id/nav_task_edit_graph" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_archives"

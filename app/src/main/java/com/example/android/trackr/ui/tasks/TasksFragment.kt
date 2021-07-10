@@ -47,7 +47,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListener {
 
-    private val viewModel: TasksViewModel by hiltNavGraphViewModels(R.id.nav_tasks)
+    private val tasksViewModel: TasksViewModel by hiltNavGraphViewModels(R.id.nav_tasks)
     private val binding by dataBindings(TasksFragmentBinding::bind)
     private lateinit var tasksAdapter: TasksAdapter
 
@@ -116,7 +116,7 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
 
         repeatWithViewLifecycle {
             launch {
-                viewModel.listItems.collect {
+                tasksViewModel.listItems.collect {
                     tasksAdapter.submitList(it) {
                         updateStickyHeader()
                     }
@@ -124,7 +124,7 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
             }
             launch {
                 // Logic for presenting user the option to unarchive a previously archived task.
-                viewModel.archivedItem.collect { item ->
+                tasksViewModel.archivedItem.collect { item ->
                     Snackbar
                         .make(
                             binding.coordinator,
@@ -132,14 +132,14 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
                             Snackbar.LENGTH_LONG
                         )
                         .setAction(getString(R.string.undo)) {
-                            viewModel.unarchiveTask(item)
+                            tasksViewModel.unarchiveTask(item)
                         }
                         .setAnchorView(binding.add)
                         .show()
                 }
             }
             launch {
-                viewModel.undoReorderTasks.collect { undo ->
+                tasksViewModel.undoReorderTasks.collect { undo ->
                     Snackbar
                         .make(
                             binding.coordinator,
@@ -147,7 +147,7 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
                             Snackbar.LENGTH_LONG
                         )
                         .setAction(getString(R.string.undo)) {
-                            viewModel.undoReorderTasks(undo)
+                            tasksViewModel.undoReorderTasks(undo)
                         }
                         .setAnchorView(binding.add)
                         .show()
@@ -164,19 +164,19 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
     }
 
     override fun onStarClicked(taskSummary: TaskSummary) {
-        viewModel.toggleTaskStarState(taskSummary)
+        tasksViewModel.toggleTaskStarState(taskSummary)
     }
 
     override fun onHeaderClicked(headerData: HeaderData) {
-        viewModel.toggleExpandedState(headerData)
+        tasksViewModel.toggleExpandedState(headerData)
     }
 
     override fun onTaskClicked(taskSummary: TaskSummary) {
-        viewModel.showTaskDetail(taskSummary)
+        tasksViewModel.showTaskDetail(taskSummary)
     }
 
     override fun onTaskArchived(taskSummary: TaskSummary) {
-        viewModel.archiveTask(taskSummary)
+        tasksViewModel.archiveTask(taskSummary)
     }
 
     override fun onTaskDragged(fromPosition: Int, toPosition: Int) {
@@ -209,7 +209,7 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
             list[toPosition + 1]
         } as? ListItem.TypeTask ?: return
 
-        viewModel.reorderTasks(draggedItem.taskSummary, targetItem.taskSummary)
+        tasksViewModel.reorderTasks(draggedItem.taskSummary, targetItem.taskSummary)
     }
 }
 

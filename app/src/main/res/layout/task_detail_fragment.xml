@@ -50,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:navigationContentDescription="@string/back"
-                app:navigationIcon="@drawable/ic_chevron_start" />
+                tools:navigationIcon="@drawable/ic_chevron_start" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
