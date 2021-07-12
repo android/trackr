@@ -18,6 +18,7 @@ package com.example.android.trackr.ui.tasks
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.core.graphics.Insets
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.doOnLayout
@@ -26,6 +27,7 @@ import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.slidingpanelayout.widget.SlidingPaneLayout
+import androidx.slidingpanelayout.widget.SlidingPaneLayout.PanelSlideListener
 import com.example.android.trackr.R
 import com.example.android.trackr.TaskDetailGraphDirections
 import com.example.android.trackr.databinding.TasksTwoPaneFragmentBinding
@@ -40,8 +42,14 @@ class TasksTwoPaneFragment : Fragment(R.layout.tasks_two_pane_fragment) {
     private val binding by dataBindings(TasksTwoPaneFragmentBinding::bind)
     private val viewModel: TasksViewModel by hiltNavGraphViewModels(R.id.nav_tasks)
 
+    private lateinit var backPressHandler: BackPressHandler
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        backPressHandler = BackPressHandler(binding.slidingPaneLayout)
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backPressHandler)
+
         binding.slidingPaneLayout.apply {
             lockMode = SlidingPaneLayout.LOCK_MODE_LOCKED
             doOnLayout { // Wait for layout, otherwise isSlideable may have the wrong value.
@@ -76,6 +84,38 @@ class TasksTwoPaneFragment : Fragment(R.layout.tasks_two_pane_fragment) {
                     binding.slidingPaneLayout.openPane()
                 }
             }
+        }
+    }
+
+    private class BackPressHandler(
+        val slidingPaneLayout: SlidingPaneLayout
+    ) : OnBackPressedCallback(false), PanelSlideListener {
+
+        init {
+            slidingPaneLayout.addPanelSlideListener(this)
+            slidingPaneLayout.doOnLayout {
+                syncState()
+            }
+        }
+
+        private fun syncState() {
+            isEnabled = slidingPaneLayout.isSlideable && slidingPaneLayout.isOpen
+        }
+
+        override fun handleOnBackPressed() {
+            slidingPaneLayout.closePane()
+        }
+
+        override fun onPanelOpened(panel: View) {
+            syncState()
+        }
+
+        override fun onPanelClosed(panel: View) {
+            syncState()
+        }
+
+        override fun onPanelSlide(panel: View, slideOffset: Float) {
+            // empty
         }
     }
 }
