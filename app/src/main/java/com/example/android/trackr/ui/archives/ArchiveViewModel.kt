@@ -51,9 +51,18 @@ class ArchiveViewModel @Inject constructor(
     private val _unarchiveActions = Channel<UnarchiveAction>(capacity = Channel.CONFLATED)
     val unarchiveActions = _unarchiveActions.receiveAsFlow()
 
+    private var detailTaskId: Long? = null
+    private val showTaskDetailChannel = Channel<ShowTaskDetailEvent>(capacity = Channel.CONFLATED)
+    val showTaskDetailEvents = showTaskDetailChannel.receiveAsFlow()
+
     val archivedTasks = combine(archivedTaskSummaries, selectedTaskIds) { tasks, selectedIds ->
         tasks.map {
             ArchivedTask(it, it.id in selectedIds)
+        }.also {
+            if (detailTaskId == null && tasks.isNotEmpty()) {
+                // Select the first item. This will set the detail pane content without opening it.
+                selectTask(tasks[0], isUserSelection = false)
+            }
         }
     }.stateIn(viewModelScope, WhileViewSubscribed, emptyList())
 
@@ -93,6 +102,13 @@ class ArchiveViewModel @Inject constructor(
             archiveUseCase(action.taskIds.toList())
         }
     }
+
+    fun selectTask(taskSummary: TaskSummary, isUserSelection: Boolean = true) {
+        showTaskDetailChannel.trySend(
+            ShowTaskDetailEvent(taskSummary.id, taskSummary.id != detailTaskId, isUserSelection)
+        )
+        detailTaskId = taskSummary.id
+    }
 }
 
 data class ArchivedTask(
@@ -101,3 +117,9 @@ data class ArchivedTask(
 )
 
 data class UnarchiveAction(val taskIds: Set<Long>)
+
+data class ShowTaskDetailEvent(
+    val taskId: Long,
+    val isNewSelection: Boolean = true,
+    val isUserSelection: Boolean = true
+)

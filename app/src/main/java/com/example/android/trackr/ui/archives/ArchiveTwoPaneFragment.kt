@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.android.trackr.ui.tasks
+package com.example.android.trackr.ui.archives
 
 import android.os.Bundle
 import android.view.View
@@ -23,7 +23,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.slidingpanelayout.widget.SlidingPaneLayout
 import com.example.android.trackr.R
 import com.example.android.trackr.TaskDetailGraphDirections
-import com.example.android.trackr.databinding.TasksTwoPaneFragmentBinding
+import com.example.android.trackr.databinding.ArchiveTwoPaneFragmentBinding
 import com.example.android.trackr.ui.BaseTwoPaneFragment
 import com.example.android.trackr.ui.dataBindings
 import com.example.android.trackr.ui.utils.repeatWithViewLifecycle
@@ -33,10 +33,10 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class TasksTwoPaneFragment : BaseTwoPaneFragment(R.layout.tasks_two_pane_fragment) {
+class ArchiveTwoPaneFragment : BaseTwoPaneFragment(R.layout.archive_two_pane_fragment) {
 
-    private val binding by dataBindings(TasksTwoPaneFragmentBinding::bind)
-    private val tasksViewModel: TasksViewModel by hiltNavGraphViewModels(R.id.nav_tasks)
+    private val binding by dataBindings(ArchiveTwoPaneFragmentBinding::bind)
+    private val archiveViewModel: ArchiveViewModel by hiltNavGraphViewModels(R.id.nav_archives)
 
     override fun getSlidingPaneLayout(): SlidingPaneLayout = binding.slidingPaneLayout
 
@@ -46,7 +46,7 @@ class TasksTwoPaneFragment : BaseTwoPaneFragment(R.layout.tasks_two_pane_fragmen
         val detailNavController = requireFragment(R.id.detail_pane).findNavController()
         repeatWithViewLifecycle {
             launch {
-                tasksViewModel.showTaskDetailEvents.collect {
+                archiveViewModel.showTaskDetailEvents.collect {
                     if (it.isNewSelection) {
                         // Change the detail pane contents.
                         detailNavController.navigate(TaskDetailGraphDirections.toTaskDetail(it.taskId))

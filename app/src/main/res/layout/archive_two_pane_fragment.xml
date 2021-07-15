@@ -25,7 +25,7 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/list_pane"
-            android:name="com.example.android.trackr.ui.tasks.TasksFragment"
+            android:name="com.example.android.trackr.ui.archives.ArchivesFragment"
             android:layout_width="@dimen/list_pane_width"
             android:layout_height="match_parent"
             android:layout_weight="@dimen/list_pane_weight" />

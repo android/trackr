@@ -24,13 +24,11 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import com.example.android.trackr.R
 import com.example.android.trackr.data.User
 import com.example.android.trackr.databinding.ArchiveFragmentBinding
 import com.example.android.trackr.ui.dataBindings
-import com.example.android.trackr.ui.detail.TaskDetailFragmentArgs
 import com.example.android.trackr.ui.utils.doOnApplyWindowInsets
 import com.example.android.trackr.ui.utils.repeatWithViewLifecycle
 import com.google.android.material.snackbar.Snackbar
@@ -43,7 +41,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ArchivesFragment : Fragment(R.layout.archive_fragment) {
 
-    private val viewModel: ArchiveViewModel by viewModels()
+    private val viewModel: ArchiveViewModel by hiltNavGraphViewModels(R.id.nav_archives)
     private val binding by dataBindings(ArchiveFragmentBinding::bind)
     private val backPressCallback = BackPressCallback()
 
@@ -64,7 +62,7 @@ class ArchivesFragment : Fragment(R.layout.archive_fragment) {
                 if (viewModel.selectedCount.value > 0) {
                     viewModel.toggleTaskSelection(task.id)
                 } else {
-                    navigateToDetail(task.id)
+                    viewModel.selectTask(task)
                 }
             },
             onItemLongClick = { task -> viewModel.toggleTaskSelection(task.id) },
@@ -128,13 +126,6 @@ class ArchivesFragment : Fragment(R.layout.archive_fragment) {
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backPressCallback)
-    }
-
-    private fun navigateToDetail(taskId: Long) {
-        findNavController().navigate(
-            R.id.nav_task_detail,
-            TaskDetailFragmentArgs(taskId).toBundle()
-        )
     }
 
     inner class BackPressCallback : OnBackPressedCallback(false) {
