@@ -17,11 +17,6 @@
 <resources>
     <style name="Base.Theme.Trackr" parent="android:Theme.Material.Light.NoActionBar">
         <!-- The only color in XML theme. Other colors are in the Compose theme. -->
-        <item name="android:windowBackground">#364F6B</item>
-    </style>
-
-    <style name="Theme.Trackr" parent="Base.Theme.Trackr">
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowBackground">#1C2A3A</item>
     </style>
 </resources>

@@ -17,42 +17,54 @@
 package com.example.android.trackr.compose.ui
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Shapes
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
+object TrackrColors {
+    val Blue500 = Color(0xFF364F6B)
+    val Blue700 = Color(0xFF1C2A3A)
+    val Pink400 = Color(0xFFFF85AA)
+    val Pink600 = Color(0xFFE9678E)
+}
 
-private val DarkColorPalette = darkColors(
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200
-)
+private val DarkColorPalette = with(TrackrColors) {
+    darkColors(
+        primary = Blue700,
+        primaryVariant = Blue700,
+        secondary = Pink400
+    )
+}
 
-private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200
-)
+private val LightColorPalette = with(TrackrColors) {
+    lightColors(
+        primary = Blue500,
+        primaryVariant = Blue700,
+        secondary = Pink600,
+        background = Blue500
+    )
+}
 
 @Composable
 fun TrackrTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable() () -> Unit
 ) {
-
     MaterialTheme(
         colors = if (darkTheme) {
             DarkColorPalette
         } else {
             LightColorPalette
         },
+        shapes = Shapes(
+            medium = RoundedCornerShape(8.dp),
+        ),
         content = content
     )
 }

@@ -16,22 +16,46 @@
 
 package com.example.android.trackr.compose.ui
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import com.example.android.trackr.compose.ui.TrackrTheme
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.navArgument
+import androidx.navigation.compose.rememberNavController
+import com.example.android.trackr.compose.ui.detail.TaskDetail
+import com.example.android.trackr.compose.ui.detail.TaskDetailViewModel
+import com.example.android.trackr.compose.ui.tasks.Tasks
+import com.google.accompanist.insets.ProvideWindowInsets
 
 @Composable
 fun Main() {
     TrackrTheme {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(text = "Hello, world!")
+        ProvideWindowInsets {
+            val navController = rememberNavController()
+            NavHost(
+                navController = navController,
+                startDestination = "tasks",
+            ) {
+                composable("tasks") {
+                    Tasks(
+                        hiltViewModel(),
+                        onTaskClick = { taskId ->
+                            navController.navigate("detail/$taskId")
+                        },
+                    )
+                }
+                composable(
+                    route = "detail/{taskId}",
+                    arguments = listOf(navArgument("taskId") { type = NavType.LongType })
+                ) { backStackEntry ->
+                    TaskDetail(
+                        hiltViewModel<TaskDetailViewModel>().apply {
+                            taskId = backStackEntry.arguments?.getLong("taskId") ?: 0L
+                        }
+                    )
+                }
+            }
         }
     }
 }
