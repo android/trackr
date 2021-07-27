@@ -35,8 +35,8 @@ import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.ui.utils.DateTimeUtils
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import org.threeten.bp.Clock
-import org.threeten.bp.Instant
+import java.time.Clock
+import java.time.Instant
 import kotlin.math.ceil
 
 /**

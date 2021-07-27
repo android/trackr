@@ -30,7 +30,7 @@ import com.example.android.trackr.ui.utils.DateTimeUtils
 import com.example.android.trackr.ui.utils.repeatWithViewLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import org.threeten.bp.Clock
+import java.time.Clock
 import javax.inject.Inject
 
 @AndroidEntryPoint

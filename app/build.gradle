@@ -46,6 +46,7 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
@@ -76,6 +77,8 @@ android {
 dependencies {
     implementation project(':shared')
 
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$desugar_jdk_version"
+
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "androidx.cardview:cardview:$cardview_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
@@ -97,7 +100,6 @@ dependencies {
     implementation "com.android.support:multidex:$multidex_library_version"
     implementation "com.google.android.material:material:$material_version"
     implementation "com.google.dagger:hilt-android:$hilt_version"
-    implementation "com.jakewharton.threetenabp:threetenabp:$threetenabp_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
@@ -114,9 +116,6 @@ dependencies {
     testImplementation "junit:junit:$junit_version"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
     testImplementation "org.robolectric:robolectric:$robolectric_version"
-    testImplementation("org.threeten:threetenbp:$threetenbp_version") {
-        exclude group: "com.jakewharton.threetenabp", module: "threetenabp"
-    }
 
     androidTestImplementation "androidx.test:core-ktx:$androidx_test_core_version"
     androidTestImplementation "androidx.test.espresso:espresso-accessibility:$androidx_test_espresso_version"

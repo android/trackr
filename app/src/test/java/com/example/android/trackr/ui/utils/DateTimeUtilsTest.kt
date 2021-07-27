@@ -25,10 +25,10 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.threeten.bp.Clock
-import org.threeten.bp.Duration
-import org.threeten.bp.Instant
-import org.threeten.bp.ZoneId
+import java.time.Clock
+import java.time.Duration
+import java.time.Instant
+import java.time.ZoneId
 
 @RunWith(AndroidJUnit4::class)
 class DateTimeUtilsTest {

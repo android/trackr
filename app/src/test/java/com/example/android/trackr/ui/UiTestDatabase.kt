@@ -28,7 +28,7 @@ import com.example.android.trackr.data.User
 import com.example.android.trackr.data.UserTask
 import com.example.android.trackr.db.AppDatabase
 import kotlinx.coroutines.runBlocking
-import org.threeten.bp.Instant
+import java.time.Instant
 
 fun createDatabase(): AppDatabase {
     val db = Room

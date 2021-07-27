@@ -18,11 +18,11 @@ package com.example.android.trackr.ui.utils
 
 import android.content.res.Resources
 import com.example.android.trackr.R
-import org.threeten.bp.Clock
-import org.threeten.bp.Duration
-import org.threeten.bp.Instant
-import org.threeten.bp.ZonedDateTime
-import org.threeten.bp.format.DateTimeFormatter
+import java.time.Clock
+import java.time.Duration
+import java.time.Instant
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 object DateTimeUtils {
     private val DATE_TIME_FORMATTER_PATTERN = DateTimeFormatter.ofPattern("MMM d, YYYY")

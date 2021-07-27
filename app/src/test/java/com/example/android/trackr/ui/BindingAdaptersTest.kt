@@ -19,6 +19,7 @@ package com.example.android.trackr.ui
 import android.app.Application
 import android.content.res.Resources
 import android.view.View
+import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.TextView
 import androidx.test.core.app.ApplicationProvider
 import com.example.android.trackr.TestApplication
@@ -31,10 +32,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
-import org.threeten.bp.Clock
-import org.threeten.bp.Instant
-import org.threeten.bp.ZoneId
-import android.view.accessibility.AccessibilityNodeInfo
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneId
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestApplication::class)

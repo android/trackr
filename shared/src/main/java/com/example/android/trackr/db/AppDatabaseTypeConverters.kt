@@ -20,7 +20,7 @@ import androidx.room.TypeConverter
 import com.example.android.trackr.data.Avatar
 import com.example.android.trackr.data.TagColor
 import com.example.android.trackr.data.TaskStatus
-import org.threeten.bp.Instant
+import java.time.Instant
 
 /**
  * Adds converters for custom types for working with database column values.
