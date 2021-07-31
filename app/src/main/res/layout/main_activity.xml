@@ -29,13 +29,13 @@
             android:id="@+id/navigation_rail"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:clickable="@bool/show_navigation_rail"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:headerLayout="@layout/navigation_rail_header"
             app:isGone="@{!@bool/show_navigation_rail}"
-            app:menu="@menu/navigation_rail"
-            app:menuGravity="center" />
+            app:labelVisibilityMode="unlabeled"
+            app:menu="@menu/navigation_rail" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host_fragment"

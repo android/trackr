@@ -20,6 +20,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <import type="android.view.View" />
 
         <variable
@@ -41,6 +42,8 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/pane_margin"
+            android:paddingRight="@dimen/pane_margin"
             android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
             app:paddingLeftSystemBars="@{true}"
             app:paddingRightSystemBars="@{true}">
@@ -57,6 +60,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
+            android:paddingLeft="@dimen/pane_margin"
+            android:paddingRight="@dimen/pane_margin"
             tools:listitem="@layout/task_summary" />
 
         <com.google.android.material.bottomappbar.BottomAppBar
@@ -74,15 +79,10 @@
             android:id="@+id/add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="@integer/add_task_fab_gravity"
-            android:layout_margin="@dimen/add_task_fab_margin"
             android:contentDescription="@string/add_task"
-            app:layout_anchor="@{ @bool/show_navigation_rail ? View.NO_ID : @id/bottomAppBar }"
-            app:marginBottomSystemBars="@{@bool/show_navigation_rail}"
-            app:marginLeftSystemBars="@{@bool/show_navigation_rail}"
-            app:marginRightSystemBars="@{@bool/show_navigation_rail}"
-            app:srcCompat="@drawable/ic_add"
-            tools:layout_anchor="@id/bottomAppBar" />
+            app:layout_anchor="@id/bottomAppBar"
+            app:isGone="@{@bool/show_navigation_rail}"
+            app:srcCompat="@drawable/ic_add" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

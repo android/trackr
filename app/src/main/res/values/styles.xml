@@ -38,6 +38,12 @@
         <item name="android:textDirection">locale</item>
     </style>
 
+    <style name="Widget.Trackr.NavigationRail" parent="Widget.MaterialComponents.NavigationRailView.Colored">
+        <item name="background">@color/navigation_rail</item>
+        <item name="itemBackground">@drawable/navigation_rail_item_bg</item>
+        <item name="itemIconTint">@color/navigation_rail_icon_tint</item>
+    </style>
+
     <style name="HomeSectionHeaderText">
         <item name="fontFamily">@font/raleway_extrabold</item>
         <item name="android:textColor">@color/trackr_blue_100</item>

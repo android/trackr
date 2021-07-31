@@ -80,10 +80,15 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
+
         binding.navigationRail.apply {
             setupWithNavController(navController)
             setOnItemReselectedListener { } // Prevent navigating to the same item.
             setOnApplyWindowInsetsListener(null) // See above about consuming window insets.
+
+            headerView?.setOnClickListener {
+                navController.navigate(R.id.nav_task_edit_graph)
+            }
         }
     }
 }

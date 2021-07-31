@@ -16,7 +16,6 @@
 
 package com.example.android.trackr.ui.archives
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
@@ -51,7 +50,6 @@ class ArchivesFragment : Fragment(R.layout.archive_fragment) {
     @Inject
     lateinit var clock: Clock
 
-    @SuppressLint("ShowToast")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.viewModel = viewModel
 

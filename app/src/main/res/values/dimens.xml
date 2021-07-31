@@ -41,6 +41,10 @@
 
     <dimen name="text_size_home_section_header">20sp</dimen>
 
-    <dimen name="add_task_fab_margin">0dp</dimen>
-    <integer name="add_task_fab_gravity">0</integer>
+    <dimen name="navigation_rail_item_bg_inset_left">0dp</dimen>
+    <dimen name="navigation_rail_item_bg_inset_right">@dimen/spacing_tiny</dimen>
+    <dimen name="navigation_rail_item_bg_corner_radius_left">0dp</dimen>
+    <dimen name="navigation_rail_item_bg_corner_radius_right">@dimen/spacing_medium</dimen>
+
+    <dimen name="pane_margin">0dp</dimen>
 </resources>
