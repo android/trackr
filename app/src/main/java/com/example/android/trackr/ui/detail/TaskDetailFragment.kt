@@ -26,7 +26,7 @@ import com.example.android.trackr.NavTaskEditGraphArgs
 import com.example.android.trackr.R
 import com.example.android.trackr.databinding.TaskDetailFragmentBinding
 import com.example.android.trackr.ui.dataBindings
-import com.example.android.trackr.ui.utils.DateTimeUtils
+import com.example.android.trackr.utils.DateTimeUtils
 import com.example.android.trackr.ui.utils.repeatWithViewLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect

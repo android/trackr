@@ -26,19 +26,8 @@
 
     <!--Task Item -->
     <string name="user">Owner: %s</string>
-    <plurals name="due_date_overdue_x_days">
-        <item quantity="one">Overdue by %d day</item>
-        <item quantity="other">Overdue by %d days</item>
-    </plurals>
-    <string name="due_date_today">Due today</string>
-    <plurals name="due_date_days">
-        <item quantity="one">Due tomorrow</item>
-        <item quantity="other">Due in %d days</item>
-    </plurals>
     <string name="tag_label">Tag: %s</string>
     <string name="more_tags">+%d</string>
-    <!-- When due date is 5 or more days away, display with date. Example: Due Mar 15, 2020 -->
-    <string name="due_date_generic">Due %s</string>
     <string name="due_date_with_value">Due date: %s</string>
     <string name="creation_date_with_value">Creation date: %s</string>
 
@@ -68,7 +57,6 @@
     <string name="title">Title</string>
     <string name="description">Description</string>
     <string name="status">Status</string>
-    <string name="owner">Owner</string>
     <string name="creator">Creator</string>
     <string name="owner_with_value">Owner: %s</string>
     <string name="creator_with_value">Creator: %s</string>

@@ -32,7 +32,7 @@ import androidx.databinding.BindingAdapter
 import com.example.android.trackr.R
 import com.example.android.trackr.data.Tag
 import com.example.android.trackr.data.TaskStatus
-import com.example.android.trackr.ui.utils.DateTimeUtils
+import com.example.android.trackr.utils.DateTimeUtils
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import java.time.Clock

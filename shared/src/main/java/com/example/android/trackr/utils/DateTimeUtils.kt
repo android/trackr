@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 The Android Open Source Project
+ * Copyright (C) 2021 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.example.android.trackr.ui.utils
+package com.example.android.trackr.utils
 
 import android.content.res.Resources
-import com.example.android.trackr.R
+import com.example.android.trackr.shared.R
 import java.time.Clock
 import java.time.Duration
 import java.time.Instant
@@ -25,7 +25,7 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 object DateTimeUtils {
-    private val DATE_TIME_FORMATTER_PATTERN = DateTimeFormatter.ofPattern("MMM d, YYYY")
+    private val DATE_TIME_FORMATTER_PATTERN = DateTimeFormatter.ofPattern("MMM d, yyyy")
     const val MAX_NUM_DAYS_FOR_CUSTOM_MESSAGE = 5
 
     /**

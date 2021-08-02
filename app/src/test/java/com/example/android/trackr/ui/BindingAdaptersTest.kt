@@ -23,7 +23,7 @@ import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.TextView
 import androidx.test.core.app.ApplicationProvider
 import com.example.android.trackr.TestApplication
-import com.example.android.trackr.ui.utils.DateTimeUtils
+import com.example.android.trackr.utils.DateTimeUtils
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockkObject

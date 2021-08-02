@@ -17,16 +17,28 @@
 package com.example.android.trackr.compose.ui.tasks
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.android.trackr.data.User
 import com.example.android.trackr.usecase.GetOngoingTaskSummariesUseCase
+import com.example.android.trackr.usecase.ToggleTaskStarStateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import java.time.Clock
 import javax.inject.Inject
 
 @HiltViewModel
 class TasksViewModel @Inject constructor(
-    currentUser: User,
+    private val currentUser: User,
+    val clock: Clock,
     getOngoingTaskSummariesUseCase: GetOngoingTaskSummariesUseCase,
+    private val toggleTaskStarStateUseCase: ToggleTaskStarStateUseCase
 ) : ViewModel() {
 
     val taskSummaries = getOngoingTaskSummariesUseCase(currentUser.id)
+
+    fun toggleTaskStarState(taskId: Long) {
+        viewModelScope.launch {
+            toggleTaskStarStateUseCase(taskId, currentUser)
+        }
+    }
 }

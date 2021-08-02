@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.example.android.trackr.ui.utils
+package com.example.android.trackr.utils
 
 import android.app.Application
 import android.content.res.Resources
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.android.trackr.R
+import com.example.android.trackr.shared.R
 import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test

@@ -15,8 +15,25 @@
   ~ limitations under the License.
 -->
 <resources>
+    <!-- Task statuses -->
+    <eat-comment />
     <string name="in_progress">In progress</string>
     <string name="not_started">Not started</string>
     <string name="completed">Completed</string>
     <string name="archived">Archived</string>
+    <string name="owner">Owner</string>
+
+    <!-- Due date messages -->
+    <!-- When due date is 5 or more days away, display with date. Example: Due Mar 15, 2020 -->
+    <string name="due_date_generic">Due %s</string>
+    <plurals name="due_date_overdue_x_days">
+        <item quantity="one">Overdue by %d day</item>
+        <item quantity="other">Overdue by %d days</item>
+    </plurals>
+    <string name="due_date_today">Due today</string>
+    <plurals name="due_date_days">
+        <item quantity="one">Due tomorrow</item>
+        <item quantity="other">Due in %d days</item>
+    </plurals>
+
 </resources>

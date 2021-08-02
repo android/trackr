@@ -31,7 +31,7 @@ import com.example.android.trackr.R
 import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.databinding.TaskEditFragmentBinding
 import com.example.android.trackr.ui.dataBindings
-import com.example.android.trackr.ui.utils.DateTimeUtils
+import com.example.android.trackr.utils.DateTimeUtils
 import com.example.android.trackr.ui.utils.repeatWithViewLifecycle
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
