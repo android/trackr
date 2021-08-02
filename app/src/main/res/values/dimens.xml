@@ -47,4 +47,6 @@
     <dimen name="navigation_rail_item_bg_corner_radius_right">@dimen/spacing_medium</dimen>
 
     <dimen name="pane_margin">0dp</dimen>
+
+    <dimen name="dialog_when_large_background_inset">0dp</dimen>
 </resources>

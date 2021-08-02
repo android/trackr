@@ -16,24 +16,30 @@
 
 package com.example.android.trackr.ui.edit
 
+import android.annotation.SuppressLint
+import android.app.Dialog
 import android.os.Bundle
+import android.view.ContextThemeWrapper
+import android.view.KeyEvent
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import androidx.activity.addCallback
-import androidx.fragment.app.Fragment
+import androidx.core.view.WindowCompat
+import androidx.fragment.app.DialogFragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.android.trackr.NavTaskEditGraphArgs
 import com.example.android.trackr.R
 import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.databinding.TaskEditFragmentBinding
-import com.example.android.trackr.ui.dataBindings
 import com.example.android.trackr.ui.utils.DateTimeUtils
-import com.example.android.trackr.ui.utils.repeatWithViewLifecycle
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -44,26 +50,40 @@ import javax.inject.Inject
 private const val FRAGMENT_DATE_PICKER = "DatePicker"
 
 @AndroidEntryPoint
-class TaskEditFragment : Fragment(R.layout.task_edit_fragment) {
+class TaskEditFragment : DialogFragment(R.layout.task_edit_fragment) {
 
     private val args: NavTaskEditGraphArgs by navArgs()
     private val viewModel: TaskEditViewModel by hiltNavGraphViewModels(R.id.nav_task_edit_graph)
-    private val binding by dataBindings(TaskEditFragmentBinding::bind)
 
     @Inject
     lateinit var clock: Clock
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    // DialogFragment does not have a viewLifecycleOwner when it returns a Dialog from this method,
+    // so we use the Fragment as the lifecycle owner instead. This makes `repeatWithLifecycle` raise
+    // an "UnsafeRepeatOnLifecycleDetector" warning, but there isn't an alternative.
+    @SuppressLint("UnsafeRepeatOnLifecycleDetector")
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         viewModel.taskId = args.taskId
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            close()
-        }
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val themedContext = ContextThemeWrapper(
+            requireContext(),
+            R.style.ThemeOverlay_Trackr_TaskEdit
+        )
+        val dialog = MaterialAlertDialogBuilder(themedContext)
+            .setCancelable(false)
+            .setOnKeyListener { _, keyCode, event ->
+                // This is the only way to intercept the back button press in DialogFragment.
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
+                    close()
+                    true
+                } else false
+            }
+            .create()
+
+        val binding = TaskEditFragmentBinding.inflate(dialog.layoutInflater)
         binding.viewModel = viewModel
         binding.clock = clock
+        binding.lifecycleOwner = this
 
         binding.toolbar.setNavigationOnClickListener {
             close()
@@ -104,45 +124,52 @@ class TaskEditFragment : Fragment(R.layout.task_edit_fragment) {
             findNavController().navigate(R.id.nav_user_selection)
         }
 
-        repeatWithViewLifecycle {
-            launch {
-                viewModel.modified.collect { modified ->
-                    menuItemSave.isVisible = modified
-                 }
-            }
-            launch {
-                viewModel.status.collect { status ->
-                    binding.status.setSelection(status.ordinal)
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.modified.collect { modified ->
+                        menuItemSave.isVisible = modified
+                    }
                 }
-            }
-            launch {
-                viewModel.owner.collect {
-                    binding.owner.contentDescription =
-                        resources.getString(R.string.owner_with_value, it.username)
+                launch {
+                    viewModel.status.collect { status ->
+                        binding.status.setSelection(status.ordinal)
+                    }
                 }
-            }
-            launch {
-                viewModel.dueAt.collect {
-                    binding.dueAt.contentDescription = resources.getString(
-                        R.string.due_date_with_value,
-                        DateTimeUtils.formattedDate(resources, it, clock)
-                    )
+                launch {
+                    viewModel.owner.collect {
+                        binding.owner.contentDescription =
+                            resources.getString(R.string.owner_with_value, it.username)
+                    }
+                }
+                launch {
+                    viewModel.dueAt.collect {
+                        binding.dueAt.contentDescription = resources.getString(
+                            R.string.due_date_with_value,
+                            DateTimeUtils.formattedDate(resources, it, clock)
+                        )
 
-                    binding.dueAt.setOnClickListener {
-                        MaterialDatePicker.Builder.datePicker().build().apply {
-                            addOnPositiveButtonClickListener { time ->
-                                viewModel.updateDueAt(Instant.ofEpochMilli(time))
-                            }
-                        }.show(childFragmentManager, FRAGMENT_DATE_PICKER)
+                        binding.dueAt.setOnClickListener {
+                            MaterialDatePicker.Builder.datePicker().build().apply {
+                                addOnPositiveButtonClickListener { time ->
+                                    viewModel.updateDueAt(Instant.ofEpochMilli(time))
+                                }
+                            }.show(childFragmentManager, FRAGMENT_DATE_PICKER)
+                        }
+                    }
+                }
+                launch {
+                    // TODO: Add a fragment test to verify changes result in navigation.
+                    viewModel.discarded.collect {
+                        findNavController().popBackStack(R.id.nav_task_edit_graph, true)
                     }
                 }
             }
-            launch {
-                // TODO: Add a fragment test to verify changes result in navigation.
-                viewModel.discarded.collect {
-                    findNavController().popBackStack(R.id.nav_task_edit_graph, true)
-                }
-            }
+        }
+
+        return dialog.apply {
+            setView(binding.root)
+            WindowCompat.setDecorFitsSystemWindows(requireNotNull(window), false)
         }
     }
 
@@ -150,7 +177,7 @@ class TaskEditFragment : Fragment(R.layout.task_edit_fragment) {
         if (viewModel.modified.value) {
             findNavController().navigate(R.id.nav_discard_confirmation)
         } else {
-            findNavController().popBackStack()
+            findNavController().popBackStack(R.id.nav_task_edit_graph, true)
         }
     }
 }
