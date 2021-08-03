@@ -18,7 +18,6 @@ package com.example.android.trackr.ui.detail
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -70,13 +69,10 @@ class TaskDetailFragment : Fragment(R.layout.task_detail_fragment) {
             }
             launch {
                 twoPaneViewModel.isTwoPane.collect { isTwoPane ->
-                    binding.toolbar.navigationIcon = if (isTwoPane) {
-                        null
+                    if (isTwoPane) {
+                        binding.toolbar.navigationIcon = null
                     } else {
-                        AppCompatResources.getDrawable(
-                            requireContext(),
-                            R.drawable.ic_chevron_start
-                        )
+                        binding.toolbar.setNavigationIcon(R.drawable.ic_chevron_start)
                     }
                 }
             }
