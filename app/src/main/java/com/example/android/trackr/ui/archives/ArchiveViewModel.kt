@@ -44,7 +44,7 @@ class ArchiveViewModel @Inject constructor(
     private val unarchiveUseCase: UnarchiveUseCase
 ) : ViewModel() {
 
-    private val archivedTaskSummaries = archivedTaskListItemsUseCase()
+    private val archivedTaskSummaries = archivedTaskListItemsUseCase(currentUser.id)
     private val selectedTaskIds = MutableStateFlow(emptySet<Long>())
 
     // Notify subscribers when 1 or more tasks are unarchived.

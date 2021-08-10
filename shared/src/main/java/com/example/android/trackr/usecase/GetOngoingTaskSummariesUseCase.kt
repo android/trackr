@@ -22,5 +22,5 @@ import javax.inject.Inject
 class GetOngoingTaskSummariesUseCase @Inject constructor(
     private val taskDao: TaskDao
 ) {
-    operator fun invoke() = taskDao.getOngoingTaskSummaries()
+    operator fun invoke(userId: Long) = taskDao.getOngoingTaskSummaries(userId)
 }

@@ -81,9 +81,9 @@ class ListItemsCreatorTest {
             dueAt = Instant.now(),
             owner = user,
             status = TaskStatus.IN_PROGRESS,
-            starUsers = emptyList(),
             tags = emptyList(),
-            orderInCategory = 1
+            orderInCategory = 1,
+            starred = false,
         )
 
         val item2 = TaskSummary(
@@ -92,9 +92,9 @@ class ListItemsCreatorTest {
             dueAt = Instant.now(),
             owner = user,
             status = TaskStatus.IN_PROGRESS,
-            starUsers = emptyList(),
             tags = emptyList(),
-            orderInCategory = 3 // Note: out of order
+            orderInCategory = 3, // Note: out of order
+            starred = false,
         )
 
 
@@ -104,9 +104,9 @@ class ListItemsCreatorTest {
             dueAt = Instant.now(),
             owner = user,
             status = TaskStatus.IN_PROGRESS,
-            starUsers = emptyList(),
             tags = emptyList(),
-            orderInCategory = 2 // Note: out of order
+            orderInCategory = 2, // Note: out of order
+            starred = false,
         )
     }
 }

@@ -21,10 +21,6 @@
     <data>
 
         <variable
-            name="currentUser"
-            type="com.example.android.trackr.data.User" />
-
-        <variable
             name="taskSummary"
             type="com.example.android.trackr.data.TaskSummary" />
 
@@ -57,7 +53,7 @@
                 android:layout_marginStart="@dimen/home_task_star_margin"
                 android:layout_marginEnd="@dimen/home_task_star_margin"
                 android:importantForAccessibility="no"
-                android:checked="@{taskSummary.starUsers.contains(currentUser)}"
+                android:checked="@{taskSummary.starred}"
                 android:gravity="center"
                 app:layout_constraintBottom_toBottomOf="@id/title"
                 app:layout_constraintStart_toStartOf="parent"

@@ -27,9 +27,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.trackr.R
-import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.data.TaskStatus
-import com.example.android.trackr.data.User
+import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.databinding.HeaderItemBinding
 import com.example.android.trackr.databinding.TaskSummaryBinding
 import com.example.android.trackr.ui.utils.AccessibilityUtils
@@ -39,7 +38,6 @@ import java.util.Collections
 
 class TasksAdapter(
     private val itemListener: ItemListener,
-    private val currentUser: User,
     private val clock: Clock
 ) :
     ListAdapter<ListItem, RecyclerView.ViewHolder>(
@@ -73,7 +71,7 @@ class TasksAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             ITEM_VIEW_TYPE_HEADER -> HeaderViewHolder.from(parent, itemListener)
-            ITEM_VIEW_TYPE_TASK -> TaskViewHolder.from(parent, itemListener, currentUser, clock)
+            ITEM_VIEW_TYPE_TASK -> TaskViewHolder.from(parent, itemListener, clock)
             else -> throw IllegalArgumentException("Unknown viewType $viewType")
         }
     }
@@ -158,7 +156,6 @@ class TasksAdapter(
     class TaskViewHolder private constructor(
         val binding: TaskSummaryBinding,
         private val itemListener: ItemListener,
-        private val currentUser: User,
         private val clock: Clock
     ) :
         RecyclerView.ViewHolder(binding.root), SwipeAndDragCallback.ItemTouchListener {
@@ -171,18 +168,15 @@ class TasksAdapter(
             binding.card.setOnClickListener { itemListener.onTaskClicked(taskSummary) }
             binding.star.setOnClickListener { itemListener.onStarClicked(taskSummary) }
             binding.clock = clock
-            binding.currentUser = currentUser
             binding.root.contentDescription =
                 AccessibilityUtils.taskSummaryLabel(binding.root.context, taskSummary, clock)
-            
-            val starredStateResId =
-                if (taskSummary.starUsers.isEmpty()) R.string.unstarred else R.string.starred
 
             ViewCompat.setStateDescription(
                 binding.root,
-                resources.getString(taskSummary.status.stringResId) + ", " + resources.getString(
-                    starredStateResId
-                )
+                resources.getString(taskSummary.status.stringResId) + ", " +
+                        resources.getString(
+                            if (taskSummary.starred) R.string.starred else R.string.unstarred
+                        )
             )
 
             // TODO(b/176934848): include chip/tag information in contentDescription of each task in list.
@@ -281,7 +275,7 @@ class TasksAdapter(
                 ViewCompat.addAccessibilityAction(
                     binding.root,
                     // The label surfaced to end user by an accessibility service.
-                    if (taskSummary.starUsers.contains(currentUser)) {
+                    if (taskSummary.starred) {
                         binding.root.context.getString(R.string.unstar)
                     } else {
                         binding.root.context.getString(R.string.star)
@@ -297,7 +291,6 @@ class TasksAdapter(
             fun from(
                 parent: ViewGroup,
                 itemListener: ItemListener,
-                currentUser: User,
                 clock: Clock
             ):
                     TaskViewHolder {
@@ -307,7 +300,7 @@ class TasksAdapter(
                         layoutInflater,
                         parent,
                         false
-                    ), itemListener, currentUser, clock
+                    ), itemListener, clock
                 )
             }
         }

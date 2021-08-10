@@ -155,9 +155,9 @@ class DragAndDropActionsHelperTest {
                             dueAt = Instant.now(),
                             owner = user,
                             status = status,
-                            starUsers = emptyList(),
                             tags = emptyList(),
-                            orderInCategory = i
+                            orderInCategory = i,
+                            starred = false,
                         )
                     )
                 )

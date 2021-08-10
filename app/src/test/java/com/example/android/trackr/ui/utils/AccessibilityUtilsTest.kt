@@ -95,9 +95,9 @@ class AccessibilityUtilsTest {
             dueAt = Instant.now(),
             owner = user1,
             status = TaskStatus.IN_PROGRESS,
-            starUsers = emptyList(),
             tags = emptyList(),
-            orderInCategory = 1
+            orderInCategory = 1,
+            starred = false,
         )
 
         var taskSummaryWithTags = TaskSummary(
@@ -106,9 +106,9 @@ class AccessibilityUtilsTest {
             dueAt = Instant.now(),
             owner = user1,
             status = TaskStatus.IN_PROGRESS,
-            starUsers = emptyList(),
             tags = listOf(tag1, tag2),
-            orderInCategory = 2
+            orderInCategory = 2,
+            starred = false,
         )
     }
 }

@@ -55,7 +55,7 @@ class TasksViewModel @Inject constructor(
     private val undoReorderTasksChannel = Channel<UndoReorderTasks>(capacity = Channel.CONFLATED)
     val undoReorderTasks = undoReorderTasksChannel.receiveAsFlow()
 
-    private val taskSummaries = getOngoingTaskSummariesUseCase()
+    private val taskSummaries = getOngoingTaskSummariesUseCase(currentUser.id)
 
     // TODO: don't hardcode TaskStatus values; instead, read from the db
     private val expandedStatesMap = MutableStateFlow(

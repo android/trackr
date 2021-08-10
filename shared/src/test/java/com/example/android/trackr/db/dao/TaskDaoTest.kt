@@ -132,7 +132,7 @@ class TaskDaoTest {
 
         insertData(taskDao, users, tasks, tags, taskTags, userTasks)
 
-        taskDao.getOngoingTaskSummaries().first().let { taskSummaries ->
+        taskDao.getOngoingTaskSummaries(1L).first().let { taskSummaries ->
             assertThat(taskSummaries).hasSize(1)
             val item = taskSummaries[0]
             assertThat(item.id).isEqualTo(tasks[0].id)
@@ -141,7 +141,7 @@ class TaskDaoTest {
             assertThat(item.dueAt).isEqualTo(tasks[0].dueAt)
             assertThat(item.status).isEqualTo(tasks[0].status)
             assertThat(item.tags).hasSize(tags.size)
-            assertThat(item.starUsers).hasSize(userTasks.size)
+            assertThat(item.starred).isTrue()
         }
     }
 
@@ -156,7 +156,7 @@ class TaskDaoTest {
         insertData(taskDao, users, tasks, tags, taskTags, userTasks)
         assertThat(taskDao.getTasks().first()).hasSize(2)
 
-        val ongoingTasks = taskDao.getOngoingTaskSummaries().first()
+        val ongoingTasks = taskDao.getOngoingTaskSummaries(1L).first()
         assertThat(ongoingTasks).hasSize(1)
         assertThat(ongoingTasks[0].id).isEqualTo(task1.id)
     }
@@ -172,7 +172,7 @@ class TaskDaoTest {
         insertData(taskDao, users, tasks, tags, taskTags, userTasks)
         assertThat(taskDao.getTasks().first()).hasSize(2)
 
-        val archivedTasks = taskDao.getArchivedTaskSummaries().first()
+        val archivedTasks = taskDao.getArchivedTaskSummaries(1L).first()
         assertThat(archivedTasks).hasSize(1)
         assertThat(archivedTasks[0].id).isEqualTo(task2.id)
     }

@@ -22,5 +22,5 @@ import javax.inject.Inject
 class ArchivedTaskListItemsUseCase @Inject constructor(
     private val taskDao: TaskDao
 ) {
-    operator fun invoke() = taskDao.getArchivedTaskSummaries()
+    operator fun invoke(userId: Long) = taskDao.getArchivedTaskSummaries(userId)
 }

@@ -27,7 +27,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.android.trackr.R
-import com.example.android.trackr.data.User
 import com.example.android.trackr.databinding.ArchiveFragmentBinding
 import com.example.android.trackr.ui.dataBindings
 import com.example.android.trackr.ui.detail.TaskDetailFragmentArgs
@@ -48,9 +47,6 @@ class ArchivesFragment : Fragment(R.layout.archive_fragment) {
     private val backPressCallback = BackPressCallback()
 
     @Inject
-    lateinit var currentUser: User
-
-    @Inject
     lateinit var clock: Clock
 
     @SuppressLint("ShowToast")
@@ -58,7 +54,6 @@ class ArchivesFragment : Fragment(R.layout.archive_fragment) {
         binding.viewModel = viewModel
 
         val adapter = ArchiveAdapter(
-            currentUser = currentUser,
             clock = clock,
             onItemClick = { task ->
                 if (viewModel.selectedCount.value > 0) {

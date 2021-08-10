@@ -59,17 +59,7 @@ data class TaskSummary(
     )
     val tags: List<Tag>,
 
-    @Relation(
-        parentColumn = "id",
-        entity = User::class,
-        entityColumn = "id",
-        associateBy = Junction(
-            value = UserTask::class,
-            parentColumn = "taskId",
-            entityColumn = "userId"
-        )
-    )
-    val starUsers: List<User>
+    val starred: Boolean,
 )
 
 @DatabaseView(

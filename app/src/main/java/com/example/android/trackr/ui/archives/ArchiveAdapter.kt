@@ -23,12 +23,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.trackr.data.TaskSummary
-import com.example.android.trackr.data.User
 import com.example.android.trackr.databinding.TaskSummaryBinding
 import org.threeten.bp.Clock
 
 internal class ArchiveAdapter(
-    private val currentUser: User,
     private val clock: Clock,
     private val onItemClick: (task: TaskSummary) -> Unit,
     private val onItemLongClick: (task: TaskSummary) -> Unit,
@@ -44,7 +42,7 @@ internal class ArchiveAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArchiveHolder {
-        return ArchiveHolder.from(parent, currentUser, clock)
+        return ArchiveHolder.from(parent, clock)
     }
 
     override fun onBindViewHolder(holder: ArchiveHolder, position: Int) {
@@ -87,12 +85,11 @@ internal class ArchiveHolder private constructor(
     }
 
     companion object {
-        fun from(parent: ViewGroup, currentUser: User, clock: Clock): ArchiveHolder {
+        fun from(parent: ViewGroup, clock: Clock): ArchiveHolder {
             return ArchiveHolder(
                 TaskSummaryBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
                     .also { binding ->
-                        binding.currentUser = currentUser
                         binding.clock = clock
                     }
             )

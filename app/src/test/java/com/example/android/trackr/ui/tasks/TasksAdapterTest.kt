@@ -58,7 +58,7 @@ class TasksAdapterTest {
     private val dateInEpochSecond = 1584310694L // March 15, 2020
     private val fakeClock =
         Clock.fixed(Instant.ofEpochSecond(dateInEpochSecond), ZoneId.systemDefault())
-    private val tasksAdapter = TasksAdapter(TestListener(), user, fakeClock)
+    private val tasksAdapter = TasksAdapter(TestListener(), fakeClock)
     private lateinit var context: Context
     private lateinit var frameLayout: FrameLayout
     private lateinit var testItemListener: TestListener
@@ -140,7 +140,7 @@ class TasksAdapterTest {
     @Test
     fun bindTaskViewHolder_initialState() {
         val holder =
-            TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, user, fakeClock)
+            TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, fakeClock)
 
         assertThat(holder.binding.taskSummary).isNull()
         assertThat(holder.accessibilityActionIds).isEmpty()
@@ -159,9 +159,8 @@ class TasksAdapterTest {
 
     @Test
     fun bindTaskViewHolder_starredTaskShownForCurrentUser() {
-        val currentUser = user2
         val holder =
-            TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, currentUser, fakeClock)
+            TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, fakeClock)
 
         assertThat(holder.binding.star.isChecked).isFalse()
 
@@ -175,22 +174,10 @@ class TasksAdapterTest {
     }
 
     @Test
-    fun bindTaskViewHolder_starredTaskNotShownForOtherUsers() {
-        val currentUser = user
-        val holder =
-            TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, currentUser, fakeClock)
-
-        holder.bind(starredTaskSummary, DragAndDropActionsHelper(headerAndTask()))
-
-        assertFalse(holder.binding.star.isChecked)
-    }
-    
-    @Test
     fun replaceAccessibilityAction_ActionClickLabel() {
         val holder = TasksAdapter.TaskViewHolder.from(
             frameLayout,
             testItemListener,
-            user,
             fakeClock
         )
 
@@ -216,7 +203,7 @@ class TasksAdapterTest {
     @Test
     fun bindTaskViewHolder_addingAccessibilityAction_isIdempotent() {
         val holder =
-            TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, user, fakeClock)
+            TasksAdapter.TaskViewHolder.from(frameLayout, testItemListener, fakeClock)
         holder.bind(inProgressTaskSummary, DragAndDropActionsHelper(headerAndTask()))
         val size = holder.accessibilityActionIds.size
 
@@ -289,7 +276,7 @@ class TasksAdapterTest {
     private fun setUpAndBindTaskViewHolder(
         listener: TasksAdapter.ItemListener
     ): TasksAdapter.TaskViewHolder {
-        val holder = TasksAdapter.TaskViewHolder.from(frameLayout, listener, user, fakeClock)
+        val holder = TasksAdapter.TaskViewHolder.from(frameLayout, listener, fakeClock)
         holder.bind(inProgressTaskSummary, DragAndDropActionsHelper(headerAndTask()))
         return holder
     }
@@ -304,9 +291,9 @@ class TasksAdapterTest {
             dueAt = Instant.now(),
             owner = user,
             status = TaskStatus.IN_PROGRESS,
-            starUsers = emptyList(),
             tags = emptyList(),
-            orderInCategory = 1
+            orderInCategory = 1,
+            starred = false,
         )
 
         val starredTaskSummary = TaskSummary(
@@ -315,9 +302,9 @@ class TasksAdapterTest {
             dueAt = Instant.now(),
             owner = user2,
             status = TaskStatus.IN_PROGRESS,
-            starUsers = listOf(user2),
             tags = emptyList(),
-            orderInCategory = 2
+            orderInCategory = 2,
+            starred = true,
         )
 
         val notStartedTaskSummary = TaskSummary(
@@ -326,9 +313,9 @@ class TasksAdapterTest {
             dueAt = Instant.now(),
             owner = user,
             status = TaskStatus.NOT_STARTED,
-            starUsers = emptyList(),
             tags = emptyList(),
-            orderInCategory = 3
+            orderInCategory = 3,
+            starred = false,
         )
 
         val inProgressHeader = ListItem.TypeHeader(

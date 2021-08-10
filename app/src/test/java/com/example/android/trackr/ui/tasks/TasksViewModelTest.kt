@@ -130,7 +130,7 @@ class TasksViewModelTest {
             orderInCategory = 1,
             owner = currentUser,
             tags = emptyList(),
-            starUsers = emptyList()
+            starred = false,
         )
     }
 

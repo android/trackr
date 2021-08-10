@@ -30,7 +30,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.trackr.R
 import com.example.android.trackr.data.TaskSummary
-import com.example.android.trackr.data.User
 import com.example.android.trackr.databinding.TasksFragmentBinding
 import com.example.android.trackr.ui.dataBindings
 import com.example.android.trackr.ui.detail.TaskDetailFragmentArgs
@@ -52,16 +51,13 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
     private lateinit var tasksAdapter: TasksAdapter
 
     @Inject
-    lateinit var currentUser: User
-
-    @Inject
     lateinit var clock: Clock
 
     @SuppressLint("ShowToast")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tasksAdapter = TasksAdapter(this, currentUser, clock)
+        tasksAdapter = TasksAdapter(this, clock)
 
         binding.listener = this
 

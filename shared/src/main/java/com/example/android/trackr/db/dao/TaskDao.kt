@@ -22,6 +22,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import com.example.android.trackr.data.SeedData
 import com.example.android.trackr.data.Tag
 import com.example.android.trackr.data.Task
 import com.example.android.trackr.data.TaskDetail
@@ -69,12 +70,28 @@ interface TaskDao {
     suspend fun loadTaskDetailById(id: Long): TaskDetail?
 
     @Transaction
-    @Query("SELECT * FROM TaskSummary WHERE isArchived = 0")
-    fun getOngoingTaskSummaries(): Flow<List<TaskSummary>>
+    @Query("""
+        SELECT s.*,
+            EXISTS(
+                SELECT id
+                FROM user_tasks AS t
+                WHERE t.taskId = s.id AND t.userId = :userId
+            ) AS starred
+        FROM TaskSummary AS s WHERE s.isArchived = 0
+    """)
+    fun getOngoingTaskSummaries(userId: Long): Flow<List<TaskSummary>>
 
     @Transaction
-    @Query("SELECT * FROM TaskSummary WHERE isArchived != 0")
-    fun getArchivedTaskSummaries(): Flow<List<TaskSummary>>
+    @Query("""
+        SELECT s.*,
+            EXISTS(
+                SELECT id
+                FROM user_tasks AS t
+                WHERE t.taskId = s.id AND t.userId = :userId
+            ) AS starred
+        FROM TaskSummary AS s WHERE s.isArchived <> 0
+    """)
+    fun getArchivedTaskSummaries(userId: Long): Flow<List<TaskSummary>>
 
     @Query("UPDATE tasks SET status = :status WHERE id = :id")
     suspend fun updateTaskStatus(id: Long, status: TaskStatus)
