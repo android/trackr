@@ -63,4 +63,18 @@
         <item name="yellowTagTextColor">@color/trackr_yellow_700</item>
     </style>
 
+    <style name="ThemeOverlay.Trackr.TaskEdit" parent="">
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.Trackr.DialogWhenLarge</item>
+    </style>
+
+    <style name="Base.ThemeOverlay.Trackr.DialogWhenLarge" parent="ThemeOverlay.MaterialComponents" />
+
+    <style name="ThemeOverlay.Trackr.DialogWhenLarge" parent="Base.ThemeOverlay.Trackr.DialogWhenLarge">
+        <item name="android:windowCloseOnTouchOutside">false</item>
+        <item name="backgroundInsetStart">@dimen/dialog_when_large_background_inset</item>
+        <item name="backgroundInsetTop">@dimen/dialog_when_large_background_inset</item>
+        <item name="backgroundInsetEnd">@dimen/dialog_when_large_background_inset</item>
+        <item name="backgroundInsetBottom">@dimen/dialog_when_large_background_inset</item>
+    </style>
+
 </resources>
