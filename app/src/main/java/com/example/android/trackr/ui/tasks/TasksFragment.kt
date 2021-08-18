@@ -39,7 +39,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.threeten.bp.Clock
+import java.time.Clock
 import java.util.Collections
 import javax.inject.Inject
 

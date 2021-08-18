@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.databinding.TaskSummaryBinding
-import org.threeten.bp.Clock
+import java.time.Clock
 
 internal class ArchiveAdapter(
     private val clock: Clock,

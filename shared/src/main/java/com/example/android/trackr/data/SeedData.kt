@@ -16,8 +16,8 @@
 
 package com.example.android.trackr.data
 
-import org.threeten.bp.Duration
-import org.threeten.bp.Instant
+import java.time.Duration
+import java.time.Instant
 
 object SeedData {
 

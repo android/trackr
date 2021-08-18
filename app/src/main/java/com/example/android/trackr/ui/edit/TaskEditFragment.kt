@@ -37,8 +37,8 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.threeten.bp.Clock
-import org.threeten.bp.Instant
+import java.time.Clock
+import java.time.Instant
 import javax.inject.Inject
 
 private const val FRAGMENT_DATE_PICKER = "DatePicker"

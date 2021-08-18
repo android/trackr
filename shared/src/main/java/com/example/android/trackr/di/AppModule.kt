@@ -33,7 +33,7 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.threeten.bp.Clock
+import java.time.Clock
 import javax.inject.Singleton
 
 @Module

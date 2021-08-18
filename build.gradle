@@ -38,6 +38,7 @@ buildscript {
         core_version = "1.6.0"
         core_testing_version = "2.1.0"
         coroutines_version = "1.5.0"
+        desugar_jdk_version = "1.1.5"
         espresso_core_version = "3.2.0"
         fragment_ktx_version = "1.3.4"
         hilt_compiler_version = "1.0.0"
@@ -56,8 +57,6 @@ buildscript {
         recyclerview_version = "1.1.0"
         robolectric_version = "4.5.1"
         room_version = "2.3.0"
-        threetenabp_version = "1.2.1"
-        threetenbp_version = "1.4.0"
         truth_version = "1.1.3"
     }
 
