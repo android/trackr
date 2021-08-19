@@ -63,7 +63,7 @@ class ListItemsCreatorTest {
     @Test
     fun execute_returnsTasksInOrder() {
         val subject = ListItemsCreator(
-            listOf(item1, item2, item3),
+            listOf(item1, item3, item2), // TaskDao gives us these sorted items.
             mutableMapOf(TaskStatus.IN_PROGRESS to true)
         )
 
@@ -96,7 +96,6 @@ class ListItemsCreatorTest {
             orderInCategory = 3, // Note: out of order
             starred = false,
         )
-
 
         val item3 = TaskSummary(
             id = 3,

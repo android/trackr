@@ -23,19 +23,19 @@ import com.example.android.trackr.data.TaskSummary
 /**
  * Combines the results of [expandedStatesMap] and [taskSummaries] and returns a list of
  * [ListItem]s.
- * @param taskSummaries List of [TaskSummary]s, which could be null
- * @param  expandedStatesMap A [TaskStatus] to [Boolean] map, which determines the
+ * @param taskSummaries List of [TaskSummary]s. The list is expected to be sorted by its status and
+ * order.
+ * @param expandedStatesMap A [TaskStatus] to [Boolean] map, which determines the
  * collapsed/expanded state of a category of [TaskSummary]s
- * TODO: refactor into a UseCase.
- */
+  */
 class ListItemsCreator(
     private val taskSummaries: List<TaskSummary>,
     private val expandedStatesMap: Map<TaskStatus, Boolean>
 ) {
     fun execute(): List<ListItem> {
         val itemsToSubmit = mutableListOf<ListItem>()
-        val statusToItemsMap: Map<TaskStatus, List<TaskSummary>> =
-            taskSummaries.groupBy { it.status }
+        // `groupBy` preserves the order within `taskSummaries`.
+        val statusToItemsMap = taskSummaries.groupBy { it.status }
         expandedStatesMap.forEach { (status, isExpanded) ->
             val sublist: List<TaskSummary>? = statusToItemsMap[status]
             itemsToSubmit.add(
@@ -48,9 +48,7 @@ class ListItemsCreator(
                 )
             )
             if (isExpanded && sublist != null) {
-                sublist.sortedBy { it.orderInCategory }
-                    .map { ListItem.TypeTask(it) }
-                    .toCollection(itemsToSubmit)
+                sublist.map { ListItem.TypeTask(it) }.toCollection(itemsToSubmit)
             }
         }
         return itemsToSubmit

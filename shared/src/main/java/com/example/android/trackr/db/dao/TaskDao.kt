@@ -78,6 +78,7 @@ interface TaskDao {
                 WHERE t.taskId = s.id AND t.userId = :userId
             ) AS starred
         FROM TaskSummary AS s WHERE s.isArchived = 0
+        ORDER BY s.status, s.orderInCategory
     """)
     fun getOngoingTaskSummaries(userId: Long): Flow<List<TaskSummary>>
 
@@ -90,6 +91,7 @@ interface TaskDao {
                 WHERE t.taskId = s.id AND t.userId = :userId
             ) AS starred
         FROM TaskSummary AS s WHERE s.isArchived <> 0
+        ORDER BY s.orderInCategory
     """)
     fun getArchivedTaskSummaries(userId: Long): Flow<List<TaskSummary>>
 
