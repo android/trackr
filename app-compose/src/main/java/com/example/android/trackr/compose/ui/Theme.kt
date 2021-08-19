@@ -59,9 +59,9 @@ private val Yellow500 = Color(0xFF9B6303)
 private val Yellow700 = Color(0xFF824A00)
 
 private val DarkColorPalette = darkColors(
-    primary = Blue700,
-    primaryVariant = Blue700,
-    secondary = Pink400
+    surface = Blue700,
+    background = Blue700,
+    secondary = Pink400,
 )
 
 private val LightColorPalette = lightColors(
