@@ -85,17 +85,10 @@ fun TaskSummaryCard(
                 TaskSummaryDueAt(dueAt = summary.dueAt, clock = clock)
                 Spacer(modifier = Modifier.height(4.dp))
                 // The tags.
-                Row {
-                    var first = true
-                    for (tag in summary.tags) {
-                        if (first) {
-                            first = false
-                        } else {
-                            Spacer(modifier = Modifier.width(4.dp))
-                        }
-                        TagChip(tag = tag)
-                    }
-                }
+                TagGroup(
+                    tags = summary.tags,
+                    max = 3
+                )
             }
         }
     }

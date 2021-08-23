@@ -27,7 +27,6 @@
     <!--Task Item -->
     <string name="user">Owner: %s</string>
     <string name="tag_label">Tag: %s</string>
-    <string name="more_tags">+%d</string>
     <string name="due_date_with_value">Due date: %s</string>
     <string name="creation_date_with_value">Creation date: %s</string>
 
