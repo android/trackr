@@ -77,4 +77,10 @@
         <item name="backgroundInsetBottom">@dimen/dialog_when_large_background_inset</item>
     </style>
 
+    <!-- Add/Edit Toolbar when shown as dialog -->
+    <style name="ThemeOverlay.Trackr.Toolbar.TaskEdit" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
+        <item name="actionMenuTextColor">?colorSecondary</item>
+        <item name="actionMenuTextAppearance">?attr/textAppearanceHeadline6</item>
+    </style>
+
 </resources>

@@ -48,6 +48,7 @@
     <string name="star">Star</string>
     <string name="unstar">Unstar</string>
     <string name="edit_task">Edit task</string>
+    <string name="new_task">New task</string>
     <string name="change">change</string>
     <string name="expanded">Expanded</string>
     <string name="collapsed">Collapsed</string>

@@ -63,7 +63,8 @@ class TaskEditFragment : DialogFragment(R.layout.task_edit_fragment) {
     // an "UnsafeRepeatOnLifecycleDetector" warning, but there isn't an alternative.
     @SuppressLint("UnsafeRepeatOnLifecycleDetector")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        viewModel.taskId = args.taskId
+        val taskId = args.taskId
+        viewModel.taskId = taskId
 
         val themedContext = ContextThemeWrapper(
             requireContext(),
@@ -85,14 +86,15 @@ class TaskEditFragment : DialogFragment(R.layout.task_edit_fragment) {
         binding.clock = clock
         binding.lifecycleOwner = this
 
+        binding.toolbar.setTitle(if (taskId == 0L) R.string.new_task else R.string.edit_task)
         binding.toolbar.setNavigationOnClickListener {
             close()
         }
         binding.toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.action_save -> {
-                    if (binding.title.text.toString().isEmpty()) {
-                        binding.title.error = resources.getString(R.string.missing_title_error)
+                    if (binding.content.title.text.toString().isEmpty()) {
+                        binding.content.title.error = resources.getString(R.string.missing_title_error)
                     } else {
                         viewModel.save { success ->
                             if (success) {
@@ -105,8 +107,9 @@ class TaskEditFragment : DialogFragment(R.layout.task_edit_fragment) {
                 else -> false
             }
         }
+
         val menuItemSave = binding.toolbar.menu.findItem(R.id.action_save)
-        binding.status.adapter = ArrayAdapter(
+        binding.content.status.adapter = ArrayAdapter(
             requireContext(),
             R.layout.status_spinner_item,
             R.id.status_text,
@@ -114,13 +117,13 @@ class TaskEditFragment : DialogFragment(R.layout.task_edit_fragment) {
                 getString(it.stringResId)
             }
         )
-        binding.status.doOnItemSelected { position ->
+        binding.content.status.doOnItemSelected { position ->
             viewModel.updateState(TaskStatus.values()[position])
         }
-        binding.tagContainer.setOnClickListener {
+        binding.content.tagContainer.setOnClickListener {
             findNavController().navigate(R.id.nav_tag_selection)
         }
-        binding.owner.setOnClickListener {
+        binding.content.owner.setOnClickListener {
             findNavController().navigate(R.id.nav_user_selection)
         }
 
@@ -133,23 +136,23 @@ class TaskEditFragment : DialogFragment(R.layout.task_edit_fragment) {
                 }
                 launch {
                     viewModel.status.collect { status ->
-                        binding.status.setSelection(status.ordinal)
+                        binding.content.status.setSelection(status.ordinal)
                     }
                 }
                 launch {
                     viewModel.owner.collect {
-                        binding.owner.contentDescription =
+                        binding.content.owner.contentDescription =
                             resources.getString(R.string.owner_with_value, it.username)
                     }
                 }
                 launch {
                     viewModel.dueAt.collect {
-                        binding.dueAt.contentDescription = resources.getString(
+                        binding.content.dueAt.contentDescription = resources.getString(
                             R.string.due_date_with_value,
                             DateTimeUtils.formattedDate(resources, it, clock)
                         )
 
-                        binding.dueAt.setOnClickListener {
+                        binding.content.dueAt.setOnClickListener {
                             MaterialDatePicker.Builder.datePicker().build().apply {
                                 addOnPositiveButtonClickListener { time ->
                                     viewModel.updateDueAt(Instant.ofEpochMilli(time))

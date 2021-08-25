@@ -16,5 +16,7 @@
   -->
 
 <resources>
-    <style name="Base.ThemeOverlay.Trackr.DialogWhenLarge" parent="ThemeOverlay.MaterialComponents.Dialog.Alert" />
+    <style name="Base.ThemeOverlay.Trackr.DialogWhenLarge" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance.Trackr.TaskEdit</item>
+    </style>
 </resources>
