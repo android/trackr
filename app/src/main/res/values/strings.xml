@@ -80,6 +80,7 @@
     <string name="add_tags">Add tags</string>
 
     <string name="back">Back</string>
+    <string name="edit">Edit</string>
     <string name="save">Save</string>
 
     <string name="missing_title_error">Title Required</string>

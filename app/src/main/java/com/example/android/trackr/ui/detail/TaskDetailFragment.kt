@@ -29,6 +29,7 @@ import com.example.android.trackr.ui.TwoPaneViewModel
 import com.example.android.trackr.ui.dataBindings
 import com.example.android.trackr.ui.utils.DateTimeUtils
 import com.example.android.trackr.ui.utils.repeatWithViewLifecycle
+import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -59,6 +60,14 @@ class TaskDetailFragment : Fragment(R.layout.task_detail_fragment) {
 
         binding.toolbar.setNavigationOnClickListener {
             twoPaneViewModel.onDetailPaneNavigateUp()
+        }
+        binding.toolbar.menu.findItem(R.id.action_edit).apply {
+            val button = actionView as MaterialButton
+            button.text = title
+            button.icon = icon
+            button.setOnClickListener {
+                twoPaneViewModel.onEditTask(args.taskId)
+            }
         }
 
         repeatWithViewLifecycle {
