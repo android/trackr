@@ -24,17 +24,36 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.BottomAppBar
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.android.trackr.compose.R
 import com.example.android.trackr.compose.ui.TaskSummaryCard
 import com.example.android.trackr.compose.ui.TrackrTheme
 import com.example.android.trackr.data.Avatar
@@ -49,11 +68,13 @@ import java.time.Clock
 import java.time.Duration
 import java.time.Instant
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun Tasks(
     viewModel: TasksViewModel,
-    onTaskClick: (taskId: Long) -> Unit
+    onTaskClick: (taskId: Long) -> Unit,
+    onAddTaskClick: () -> Unit,
+    onArchiveClick: () -> Unit,
+    onSettingsClick: () -> Unit
 ) {
     val statusGroups by viewModel.statusGroups.collectAsState(emptyMap())
     TasksContent(
@@ -62,6 +83,9 @@ fun Tasks(
         onStatusClick = { viewModel.toggleStatusExpanded(it) },
         onStarClick = { viewModel.toggleTaskStarState(it) },
         onTaskClick = onTaskClick,
+        onAddTaskClick = onAddTaskClick,
+        onArchiveClick = onArchiveClick,
+        onSettingsClick = onSettingsClick
     )
 }
 
@@ -72,9 +96,13 @@ private fun TasksContent(
     clock: Clock,
     onStatusClick: (status: TaskStatus) -> Unit,
     onStarClick: (taskId: Long) -> Unit,
-    onTaskClick: (taskId: Long) -> Unit
+    onTaskClick: (taskId: Long) -> Unit,
+    onAddTaskClick: () -> Unit,
+    onArchiveClick: () -> Unit,
+    onSettingsClick: () -> Unit
 ) {
     val systemBars = LocalWindowInsets.current.systemBars
+    var bottomBarHeight by remember { mutableStateOf(0) }
     Scaffold(
         modifier = Modifier.padding(
             rememberInsetsPaddingValues(
@@ -83,12 +111,22 @@ private fun TasksContent(
                 applyEnd = false,
                 applyBottom = false
             )
-        )
+        ),
+        bottomBar = {
+            TasksBottomBar(
+                onArchiveClick = onArchiveClick,
+                onSettingsClick = onSettingsClick,
+                modifier = Modifier.onSizeChanged { size -> bottomBarHeight = size.height }
+            )
+        },
+        floatingActionButton = {
+            AddTaskButton(onClick = onAddTaskClick)
+        },
+        isFloatingActionButtonDocked = true
     ) {
         LazyColumn(
-            contentPadding = rememberInsetsPaddingValues(
-                insets = systemBars,
-                applyTop = false,
+            contentPadding = PaddingValues(
+                bottom = with(LocalDensity.current) { bottomBarHeight.toDp() + 4.dp }
             ),
             verticalArrangement = Arrangement.spacedBy(1.dp),
         ) {
@@ -121,6 +159,54 @@ private fun TasksContent(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun TasksBottomBar(
+    onArchiveClick: () -> Unit,
+    onSettingsClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var menuExpanded by remember { mutableStateOf(false) }
+    val systemBars = LocalWindowInsets.current.systemBars
+    BottomAppBar(
+        modifier = modifier,
+        contentPadding = rememberInsetsPaddingValues(
+            insets = systemBars,
+            applyTop = false
+        ),
+        cutoutShape = CircleShape
+    ) {
+        IconButton(onClick = { menuExpanded = true }) {
+            Icon(
+                imageVector = Icons.Default.MoreVert,
+                contentDescription = stringResource(R.string.menu),
+            )
+        }
+        DropdownMenu(
+            expanded = menuExpanded,
+            onDismissRequest = { menuExpanded = false }
+        ) {
+            DropdownMenuItem(onClick = onArchiveClick) {
+                Text(text = stringResource(R.string.archive))
+            }
+            DropdownMenuItem(onClick = onSettingsClick) {
+                Text(text = stringResource(R.string.settings))
+            }
+        }
+    }
+}
+
+@Composable
+private fun AddTaskButton(
+    onClick: () -> Unit
+) {
+    FloatingActionButton(onClick = onClick) {
+        Icon(
+            imageVector = Icons.Default.Add,
+            contentDescription = stringResource(R.string.add_task)
+        )
     }
 }
 
@@ -157,7 +243,10 @@ private fun PreviewTasksContent() {
             clock = Clock.systemDefaultZone(),
             onStatusClick = {},
             onStarClick = {},
-            onTaskClick = {}
+            onTaskClick = {},
+            onAddTaskClick = {},
+            onArchiveClick = {},
+            onSettingsClick = {}
         )
     }
 }

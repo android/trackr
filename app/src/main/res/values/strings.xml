@@ -17,13 +17,6 @@
 <resources>
     <string name="app_name">Trackr</string>
 
-    <!-- Tasks screen -->
-    <string name="add_task">Add a new task</string>
-
-    <!-- Bottom app bar -->
-    <string name="tasks">Tasks</string>
-    <string name="settings">Settings</string>
-
     <!--Task Item -->
     <string name="user">Owner: %s</string>
     <string name="tag_label">Tag: %s</string>
@@ -41,7 +34,6 @@
     <string name="collapsed">Collapsed</string>
 
     <!-- Custom accessibility action strings -->
-    <string name="archive">Archive</string>
     <string name="explore_details">Explore details</string>
     <string name="toggle">Toggle</string>
     <string name="move_to_top">Move to top</string>
