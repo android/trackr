@@ -16,9 +16,8 @@
   -->
 
 <resources>
-    <!-- tint colors -->
-    <color name="icon_tint_gray">@color/trackr_gray_200</color>
-    <color name="icon_tint_teal">@color/trackr_teal_300</color>
-
-    <color name="navigation_rail">@color/trackr_blue_500</color>
+    <dimen name="navigation_rail_item_bg_inset_left">@dimen/spacing_tiny</dimen>
+    <dimen name="navigation_rail_item_bg_inset_right">0dp</dimen>
+    <dimen name="navigation_rail_item_bg_corner_radius_left">@dimen/spacing_medium</dimen>
+    <dimen name="navigation_rail_item_bg_corner_radius_right">0dp</dimen>
 </resources>

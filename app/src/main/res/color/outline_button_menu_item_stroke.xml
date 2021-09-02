@@ -15,10 +15,7 @@
   ~ limitations under the License.
   -->
 
-<resources>
-    <!-- tint colors -->
-    <color name="icon_tint_gray">@color/trackr_gray_200</color>
-    <color name="icon_tint_teal">@color/trackr_teal_300</color>
-
-    <color name="navigation_rail">@color/trackr_blue_500</color>
-</resources>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="?attr/colorControlHighlight" android:state_enabled="true" />
+    <item android:alpha="0.12" android:color="?attr/colorOnSurface" android:state_enabled="false" />
+</selector>

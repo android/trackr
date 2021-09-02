@@ -21,9 +21,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.doOnNextLayout
+import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,7 +33,6 @@ import com.example.android.trackr.R
 import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.databinding.TasksFragmentBinding
 import com.example.android.trackr.ui.dataBindings
-import com.example.android.trackr.ui.detail.TaskDetailFragmentArgs
 import com.example.android.trackr.ui.utils.doOnApplyWindowInsets
 import com.example.android.trackr.ui.utils.repeatWithViewLifecycle
 import com.google.android.material.snackbar.Snackbar
@@ -46,7 +46,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListener {
 
-    private val viewModel: TasksViewModel by viewModels()
+    private val tasksViewModel: TasksViewModel by hiltNavGraphViewModels(R.id.nav_tasks)
     private val binding by dataBindings(TasksFragmentBinding::bind)
     private lateinit var tasksAdapter: TasksAdapter
 
@@ -73,15 +73,24 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
 
             doOnApplyWindowInsets { v, insets, padding, _ ->
                 val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-                // BottomAppBar has its own logic to adapt to window insets, but its height isn't
-                // updated until measurement, so wait for its next layout.
-                binding.bottomAppBar.doOnNextLayout { bottomBar ->
+                if (binding.bottomAppBar.isVisible) {
+                    // BottomAppBar has its own logic to adapt to window insets, but its height isn't
+                    // updated until measurement, so wait for its next layout.
+                    binding.bottomAppBar.doOnNextLayout { bottomBar ->
+                        v.updatePadding(
+                            left = padding.left + systemBars.left,
+                            right = padding.right + systemBars.right,
+                            bottom = bottomBar.height
+                        )
+                    }
+                } else {
                     v.updatePadding(
                         left = padding.left + systemBars.left,
                         right = padding.right + systemBars.right,
-                        bottom = bottomBar.height
+                        bottom = padding.bottom + systemBars.bottom
                     )
                 }
+                insets
             }
         }
         binding.add.setOnClickListener {
@@ -103,7 +112,7 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
 
         repeatWithViewLifecycle {
             launch {
-                viewModel.listItems.collect {
+                tasksViewModel.listItems.collect {
                     tasksAdapter.submitList(it) {
                         updateStickyHeader()
                     }
@@ -111,7 +120,7 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
             }
             launch {
                 // Logic for presenting user the option to unarchive a previously archived task.
-                viewModel.archivedItem.collect { item ->
+                tasksViewModel.archivedItem.collect { item ->
                     Snackbar
                         .make(
                             binding.coordinator,
@@ -119,14 +128,14 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
                             Snackbar.LENGTH_LONG
                         )
                         .setAction(getString(R.string.undo)) {
-                            viewModel.unarchiveTask(item)
+                            tasksViewModel.unarchiveTask(item)
                         }
                         .setAnchorView(binding.add)
                         .show()
                 }
             }
             launch {
-                viewModel.undoReorderTasks.collect { undo ->
+                tasksViewModel.undoReorderTasks.collect { undo ->
                     Snackbar
                         .make(
                             binding.coordinator,
@@ -134,7 +143,7 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
                             Snackbar.LENGTH_LONG
                         )
                         .setAction(getString(R.string.undo)) {
-                            viewModel.undoReorderTasks(undo)
+                            tasksViewModel.undoReorderTasks(undo)
                         }
                         .setAnchorView(binding.add)
                         .show()
@@ -151,20 +160,19 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
     }
 
     override fun onStarClicked(taskSummary: TaskSummary) {
-        viewModel.toggleTaskStarState(taskSummary)
+        tasksViewModel.toggleTaskStarState(taskSummary)
     }
 
     override fun onHeaderClicked(headerData: HeaderData) {
-        viewModel.toggleExpandedState(headerData)
+        tasksViewModel.toggleExpandedState(headerData)
     }
 
     override fun onTaskClicked(taskSummary: TaskSummary) {
-        findNavController()
-            .navigate(R.id.nav_task_detail, TaskDetailFragmentArgs(taskSummary.id).toBundle())
+        tasksViewModel.showTaskDetail(taskSummary)
     }
 
     override fun onTaskArchived(taskSummary: TaskSummary) {
-        viewModel.archiveTask(taskSummary)
+        tasksViewModel.archiveTask(taskSummary)
     }
 
     override fun onTaskDragged(fromPosition: Int, toPosition: Int) {
@@ -197,7 +205,7 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
             list[toPosition + 1]
         } as? ListItem.TypeTask ?: return
 
-        viewModel.reorderTasks(draggedItem.taskSummary, targetItem.taskSummary)
+        tasksViewModel.reorderTasks(draggedItem.taskSummary, targetItem.taskSummary)
     }
 }
 

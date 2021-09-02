@@ -30,9 +30,23 @@
     <dimen name="chip_height">48dp</dimen>
     <dimen name="card_radius">8dp</dimen>
 
+    <dimen name="list_pane_width">360dp</dimen>
+    <dimen name="detail_pane_width">400dp</dimen>
+    <dimen name="list_pane_weight">1</dimen>
+    <dimen name="detail_pane_weight">2</dimen>
+
     <!-- Home Screen -->
     <dimen name="home_task_star_size">24dp</dimen>
     <dimen name="home_task_star_margin">24dp</dimen>
 
     <dimen name="text_size_home_section_header">20sp</dimen>
+
+    <dimen name="navigation_rail_item_bg_inset_left">0dp</dimen>
+    <dimen name="navigation_rail_item_bg_inset_right">@dimen/spacing_tiny</dimen>
+    <dimen name="navigation_rail_item_bg_corner_radius_left">0dp</dimen>
+    <dimen name="navigation_rail_item_bg_corner_radius_right">@dimen/spacing_medium</dimen>
+
+    <dimen name="pane_margin">0dp</dimen>
+
+    <dimen name="dialog_when_large_background_inset">0dp</dimen>
 </resources>

@@ -16,9 +16,7 @@
   -->
 
 <resources>
-    <!-- tint colors -->
-    <color name="icon_tint_gray">@color/trackr_gray_200</color>
-    <color name="icon_tint_teal">@color/trackr_teal_300</color>
-
-    <color name="navigation_rail">@color/trackr_blue_500</color>
+    <style name="Base.ThemeOverlay.Trackr.DialogWhenLarge" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance.Trackr.TaskEdit</item>
+    </style>
 </resources>

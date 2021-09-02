@@ -14,17 +14,15 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
 -->
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="24dp"
-    android:height="24dp"
-    android:viewportWidth="24"
-    android:viewportHeight="24"
-    android:tint="?colorControlNormal">
-    <group
-        android:translateX="3"
-        android:translateY="3">
-        <path
-            android:fillColor="#000000"
-            android:pathData="M16.06 0.589997L17.41 1.94C18.2 2.72 18.2 3.99 17.41 4.77L4.18 18H0V13.82L13.23 0.589997C14.01 -0.190003 15.28 -0.190003 16.06 0.589997ZM2 16L3.41 16.06L13.23 6.23L11.82 4.82L2 14.64V16Z" />
-    </group>
-</vector>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_edit"
+        android:icon="@drawable/ic_edit"
+        android:title="@string/edit"
+        android:visible="@bool/show_navigation_rail"
+        app:actionLayout="@layout/outline_button_menu_item"
+        app:showAsAction="always" />
+
+</menu>

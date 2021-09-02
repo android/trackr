@@ -15,10 +15,14 @@
   ~ limitations under the License.
   -->
 
-<resources>
-    <!-- tint colors -->
-    <color name="icon_tint_gray">@color/trackr_gray_200</color>
-    <color name="icon_tint_teal">@color/trackr_teal_300</color>
-
-    <color name="navigation_rail">@color/trackr_blue_500</color>
-</resources>
+<com.google.android.material.button.MaterialButton
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textAppearance="?textAppearanceHeadline6"
+    app:strokeColor="@color/outline_button_menu_item_stroke"
+    app:strokeWidth="1dp"
+    tools:icon="@drawable/ic_add"
+    tools:text="Android" />
