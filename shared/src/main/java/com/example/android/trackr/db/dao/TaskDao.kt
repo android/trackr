@@ -22,7 +22,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.example.android.trackr.data.SeedData
 import com.example.android.trackr.data.Tag
 import com.example.android.trackr.data.Task
 import com.example.android.trackr.data.TaskDetail
@@ -149,6 +148,7 @@ interface TaskDao {
             ownerId = detail.owner.id,
             createdAt = detail.createdAt,
             dueAt = detail.dueAt,
+            isArchived = detail.isArchived,
             orderInCategory = if (topOrderInCategory) {
                 val min = loadMinOrderInCategory(detail.status, detail.id)
                 if (min == null) 1 else min - 1

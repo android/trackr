@@ -81,6 +81,9 @@ class TaskEditViewModel @Inject constructor(
     // Creating a new task puts it at the top of the status.
     private var topInCategory = true
 
+    // This is not editable, but needed for when we save.
+    private var isArchived = false
+
     private val _tags = MutableStateFlow<List<Tag>>(emptyList())
     val tags: StateFlow<List<Tag>> = _tags
 
@@ -135,6 +138,7 @@ class TaskEditViewModel @Inject constructor(
                     _dueAt.value = detail.dueAt
                     _createdAt.value = detail.createdAt
                     orderInCategory = detail.orderInCategory
+                    isArchived = detail.isArchived
                     topInCategory = false
                     _tags.value = detail.tags
                     starUsers.clear()
@@ -196,6 +200,7 @@ class TaskEditViewModel @Inject constructor(
                         createdAt = _createdAt.value,
                         dueAt = _dueAt.value,
                         orderInCategory = orderInCategory,
+                        isArchived = isArchived,
                         owner = _owner.value,
                         creator = _creator.value,
                         tags = _tags.value,

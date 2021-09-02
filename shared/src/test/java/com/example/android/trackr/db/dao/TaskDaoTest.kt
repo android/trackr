@@ -142,6 +142,7 @@ class TaskDaoTest {
             assertThat(item.status).isEqualTo(tasks[0].status)
             assertThat(item.tags).hasSize(tags.size)
             assertThat(item.starred).isTrue()
+            assertThat(item.isArchived).isFalse()
         }
     }
 
@@ -260,6 +261,7 @@ class TaskDaoTest {
             createdAt = Instant.now(),
             dueAt = dueAt2,
             orderInCategory = 0,
+            isArchived = false,
             owner = user2,
             creator = user1,
             tags = listOf(tag1, tag3),
@@ -304,6 +306,7 @@ class TaskDaoTest {
             createdAt = initialDetail.createdAt, // The UI doesn't allow editing this.
             dueAt = dueAt2,
             orderInCategory = initialDetail.orderInCategory,
+            isArchived = false,
             owner = user2,
             creator = initialDetail.creator, // The UI doesn't allow editing this.
             tags = listOf(tag1, tag3),
@@ -389,6 +392,7 @@ class TaskDaoTest {
             status = TaskStatus.IN_PROGRESS,
             createdAt = Instant.now(),
             dueAt = dueAt1,
+            isArchived = false,
             orderInCategory = 1,
             owner = user1,
             creator = user1,

@@ -66,6 +66,7 @@ data class TaskSummary(
     """
         SELECT
             t.id, t.title, t.description, t.status, t.createdAt, t.dueAt, t.orderInCategory,
+            t.isArchived,
             o.id AS owner_id, o.username AS owner_username, o.avatar AS owner_avatar,
             c.id AS creator_id, c.username AS creator_username, c.avatar as creator_avatar
         FROM tasks AS t
@@ -88,6 +89,8 @@ data class TaskDetail(
     val dueAt: Instant,
 
     val orderInCategory: Int,
+
+    val isArchived: Boolean,
 
     @Embedded(prefix = "owner_")
     val owner: User,
