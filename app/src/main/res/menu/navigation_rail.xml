@@ -15,10 +15,20 @@
   ~ limitations under the License.
   -->
 
-<resources>
-    <!-- tint colors -->
-    <color name="icon_tint_gray">@color/trackr_gray_200</color>
-    <color name="icon_tint_teal">@color/trackr_teal_300</color>
-
-    <color name="navigation_rail">@color/trackr_blue_500</color>
-</resources>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_tasks"
+        android:contentDescription="@string/archive"
+        android:title="@string/tasks"
+        android:icon="@drawable/ic_task" />
+    <item
+        android:id="@+id/nav_archives"
+        android:contentDescription="@string/archive"
+        android:title="@string/archive"
+        android:icon="@drawable/ic_archive" />
+    <item
+        android:id="@+id/nav_settings"
+        android:contentDescription="@string/settings"
+        android:title="@string/settings"
+        android:icon="@drawable/ic_settings"/>
+</menu>

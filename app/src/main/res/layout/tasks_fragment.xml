@@ -21,6 +21,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="headerData"
             type="com.example.android.trackr.ui.tasks.HeaderData" />
@@ -40,6 +42,8 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/pane_margin"
+            android:paddingRight="@dimen/pane_margin"
             android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
             app:paddingLeftSystemBars="@{true}"
             app:paddingRightSystemBars="@{true}">
@@ -56,6 +60,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
+            android:paddingLeft="@dimen/pane_margin"
+            android:paddingRight="@dimen/pane_margin"
             tools:listitem="@layout/task_summary" />
 
         <com.google.android.material.bottomappbar.BottomAppBar
@@ -66,6 +72,7 @@
             android:layout_gravity="bottom"
             app:backgroundTint="?android:attr/windowBackground"
             app:fabAlignmentMode="end"
+            app:isGone="@{@bool/show_navigation_rail}"
             app:menu="@menu/bottom_app_bar_menu" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -74,6 +81,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/add_task"
             app:layout_anchor="@id/bottomAppBar"
+            app:isGone="@{@bool/show_navigation_rail}"
             app:srcCompat="@drawable/ic_add" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

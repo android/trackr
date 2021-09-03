@@ -68,4 +68,6 @@
     <!-- tint colors -->
     <color name="icon_tint_gray">@color/trackr_gray_700</color>
     <color name="icon_tint_teal">@color/trackr_teal_700</color>
+
+    <color name="navigation_rail">#3D5773</color>
 </resources>

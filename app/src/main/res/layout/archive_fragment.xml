@@ -36,6 +36,8 @@
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/pane_margin"
+            android:paddingRight="@dimen/pane_margin"
             android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
             app:paddingLeftSystemBars="@{true}"
             app:paddingRightSystemBars="@{true}">
@@ -52,9 +54,11 @@
             android:id="@+id/archived_tasks"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/pane_margin"
+            android:layout_marginRight="@dimen/pane_margin"
             android:clipToPadding="false"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/task_summary" />
 
         <com.google.android.material.bottomappbar.BottomAppBar

@@ -14,7 +14,8 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -41,6 +42,8 @@
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/pane_margin"
+            android:paddingRight="@dimen/pane_margin"
             android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
             app:paddingLeftSystemBars="@{true}"
             app:paddingRightSystemBars="@{true}">
@@ -49,14 +52,17 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                app:menu="@menu/task_detail"
                 app:navigationContentDescription="@string/back"
-                app:navigationIcon="@drawable/ic_chevron_start" />
+                tools:navigationIcon="@drawable/ic_chevron_start" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/pane_margin"
+            android:layout_marginRight="@dimen/pane_margin"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:cardCornerRadius="@dimen/card_radius"
             app:marginLeftSystemBars="@{true}"
@@ -87,12 +93,12 @@
                             android:id="@+id/star"
                             android:layout_width="@dimen/home_task_star_size"
                             android:layout_height="@dimen/home_task_star_size"
-                            android:layout_marginStart="20dp"
                             android:layout_marginEnd="20dp"
+                            android:layout_marginStart="20dp"
                             android:checked="@{viewModel.starred}"
                             android:gravity="center"
-                            app:ensureMinTouchArea="@{@dimen/min_touch_target}"
-                            app:clickActionLabel="@{@string/toggle}" />
+                            app:clickActionLabel="@{@string/toggle}"
+                            app:ensureMinTouchArea="@{@dimen/min_touch_target}" />
 
                         <TextView
                             style="@style/Widget.Trackr.TextView.Label.Title"
@@ -111,9 +117,9 @@
                         style="@style/Widget.Trackr.TextView.Body"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/spacing_medium"
                         android:layout_marginStart="@dimen/spacing_huge"
                         android:layout_marginTop="@dimen/spacing_medium"
-                        android:layout_marginEnd="@dimen/spacing_medium"
                         android:text="@{viewModel.detail.description}"
                         tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." />
 
@@ -244,8 +250,8 @@
                     <com.google.android.material.chip.ChipGroup
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/spacing_huge"
                         android:layout_marginBottom="@dimen/spacing_large"
+                        android:layout_marginStart="@dimen/spacing_huge"
                         app:showAllTags="@{true}"
                         app:tags="@{viewModel.detail.tags}" />
 
@@ -262,6 +268,7 @@
             android:layout_gravity="end|bottom"
             android:layout_margin="@dimen/spacing_large"
             android:contentDescription="@string/edit_task"
+            app:isGone="@{@bool/show_navigation_rail}"
             app:marginBottomSystemBars="@{true}"
             app:marginLeftSystemBars="@{true}"
             app:marginRightSystemBars="@{true}"

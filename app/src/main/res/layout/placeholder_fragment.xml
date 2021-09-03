@@ -15,10 +15,15 @@
   ~ limitations under the License.
   -->
 
-<resources>
-    <!-- tint colors -->
-    <color name="icon_tint_gray">@color/trackr_gray_200</color>
-    <color name="icon_tint_teal">@color/trackr_teal_300</color>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <color name="navigation_rail">@color/trackr_blue_500</color>
-</resources>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_launcher_foreground" />
+</FrameLayout>

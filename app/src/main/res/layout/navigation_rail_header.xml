@@ -15,10 +15,11 @@
   ~ limitations under the License.
   -->
 
-<resources>
-    <!-- tint colors -->
-    <color name="icon_tint_gray">@color/trackr_gray_200</color>
-    <color name="icon_tint_teal">@color/trackr_teal_300</color>
-
-    <color name="navigation_rail">@color/trackr_blue_500</color>
-</resources>
+<com.google.android.material.floatingactionbutton.FloatingActionButton
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/add"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:contentDescription="@string/add_task"
+    app:srcCompat="@drawable/ic_add" />

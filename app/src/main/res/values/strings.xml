@@ -22,6 +22,7 @@
     <string name="add_task">Add a new task</string>
 
     <!-- Bottom app bar -->
+    <string name="tasks">Tasks</string>
     <string name="settings">Settings</string>
 
     <!--Task Item -->
@@ -36,6 +37,7 @@
     <string name="star">Star</string>
     <string name="unstar">Unstar</string>
     <string name="edit_task">Edit task</string>
+    <string name="new_task">New task</string>
     <string name="change">change</string>
     <string name="expanded">Expanded</string>
     <string name="collapsed">Collapsed</string>
@@ -66,6 +68,7 @@
     <string name="add_tags">Add tags</string>
 
     <string name="back">Back</string>
+    <string name="edit">Edit</string>
     <string name="save">Save</string>
 
     <string name="missing_title_error">Title Required</string>
