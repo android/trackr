@@ -23,6 +23,11 @@
     <string name="archived">Archived</string>
     <string name="owner">Owner</string>
 
+    <!-- Tasks screen header -->
+    <string name="header_label_with_count">%1$s (%2$d)</string>
+    <string name="expand_tasks">Expand tasks</string>
+    <string name="collapse_tasks">Collapse tasks</string>
+
     <!-- Due date messages -->
     <!-- When due date is 5 or more days away, display with date. Example: Due Mar 15, 2020 -->
     <string name="due_date_generic">Due %s</string>

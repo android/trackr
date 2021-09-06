@@ -16,8 +16,16 @@
 
 package com.example.android.trackr.compose.ui.tasks
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Scaffold
@@ -41,42 +49,77 @@ import java.time.Clock
 import java.time.Duration
 import java.time.Instant
 
+@OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun Tasks(
     viewModel: TasksViewModel,
     onTaskClick: (taskId: Long) -> Unit
 ) {
-    val taskSummaries by viewModel.taskSummaries.collectAsState(emptyList())
+    val statusGroups by viewModel.statusGroups.collectAsState(emptyMap())
     TasksContent(
-        summaries = taskSummaries,
+        statusGroups = statusGroups,
         clock = viewModel.clock,
+        onStatusClick = { viewModel.toggleStatusExpanded(it) },
         onStarClick = { viewModel.toggleTaskStarState(it) },
         onTaskClick = onTaskClick,
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 @Composable
 private fun TasksContent(
-    summaries: List<TaskSummary>,
+    statusGroups: Map<TaskStatus, TaskStatusGroup>,
     clock: Clock,
+    onStatusClick: (status: TaskStatus) -> Unit,
     onStarClick: (taskId: Long) -> Unit,
     onTaskClick: (taskId: Long) -> Unit
 ) {
-    LazyColumn(
-        contentPadding = rememberInsetsPaddingValues(LocalWindowInsets.current.systemBars),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
-    ) {
-        items(
-            items = summaries,
-            key = { summary -> summary.id },
-        ) { summary ->
-            TaskSummaryCard(
-                summary = summary,
-                clock = clock,
-                onStarClick = { onStarClick(summary.id) },
-                onClick = { onTaskClick(summary.id) },
-                modifier = Modifier.fillMaxWidth()
+    val systemBars = LocalWindowInsets.current.systemBars
+    Scaffold(
+        modifier = Modifier.padding(
+            rememberInsetsPaddingValues(
+                insets = systemBars,
+                applyStart = false,
+                applyEnd = false,
+                applyBottom = false
             )
+        )
+    ) {
+        LazyColumn(
+            contentPadding = rememberInsetsPaddingValues(
+                insets = systemBars,
+                applyTop = false,
+            ),
+            verticalArrangement = Arrangement.spacedBy(1.dp),
+        ) {
+            for ((status, group) in statusGroups) {
+                stickyHeader(key = "header-${status.key}") {
+                    TaskStatusHeader(
+                        status = status,
+                        count = group.summaries.size,
+                        expanded = group.expanded,
+                        onClick = { onStatusClick(status) },
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+                items(items = group.summaries, key = { "task-${it.id}" }) { summary ->
+                    AnimatedVisibility(
+                        visible = group.expanded,
+                        enter = fadeIn() + expandVertically(),
+                        exit = fadeOut() + shrinkVertically(),
+                    ) {
+                        TaskSummaryCard(
+                            summary = summary,
+                            clock = clock,
+                            onStarClick = { onStarClick(summary.id) },
+                            onClick = { onTaskClick(summary.id) },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 2.dp)
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -85,28 +128,36 @@ private fun TasksContent(
 @Composable
 private fun PreviewTasksContent() {
     TrackrTheme {
-        Scaffold {
-            TasksContent(
-                summaries = listOf(
-                    TaskSummary(
-                        id = 1L,
-                        title = "Create default illustrations for event types",
-                        status = TaskStatus.IN_PROGRESS,
-                        dueAt = Instant.now() + Duration.ofHours(73),
-                        orderInCategory = 1,
-                        isArchived = false,
-                        owner = User(id = 1L, username = "Daring Dove", avatar = Avatar.DARING_DOVE),
-                        tags = listOf(
-                            Tag(id = 1L, label = "2.3 release", color = TagColor.BLUE),
-                            Tag(id = 4L, label = "UI/UX", color = TagColor.PURPLE),
-                        ),
-                        starred = true,
+        TasksContent(
+            statusGroups = mapOf(
+                TaskStatus.IN_PROGRESS to TaskStatusGroup(
+                    expanded = true,
+                    summaries = listOf(
+                        TaskSummary(
+                            id = 1L,
+                            title = "Create default illustrations for event types",
+                            status = TaskStatus.IN_PROGRESS,
+                            dueAt = Instant.now() + Duration.ofHours(73),
+                            orderInCategory = 1,
+                            isArchived = false,
+                            owner = User(
+                                id = 1L,
+                                username = "Daring Dove",
+                                avatar = Avatar.DARING_DOVE
+                            ),
+                            tags = listOf(
+                                Tag(id = 1L, label = "2.3 release", color = TagColor.BLUE),
+                                Tag(id = 4L, label = "UI/UX", color = TagColor.PURPLE),
+                            ),
+                            starred = true,
+                        )
                     )
-                ),
-                clock = Clock.systemDefaultZone(),
-                onStarClick = {},
-                onTaskClick = {}
-            )
-        }
+                )
+            ),
+            clock = Clock.systemDefaultZone(),
+            onStatusClick = {},
+            onStarClick = {},
+            onTaskClick = {}
+        )
     }
 }
