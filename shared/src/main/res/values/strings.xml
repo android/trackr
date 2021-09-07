@@ -22,6 +22,9 @@
     <string name="completed">Completed</string>
     <string name="archived">Archived</string>
 
+    <!-- Tasks screen -->
+    <string name="add_task">Add a new task</string>
+
     <!-- Tasks screen header -->
     <string name="header_label_with_count">%1$s (%2$d)</string>
     <string name="expand_tasks">Expand tasks</string>
@@ -30,6 +33,12 @@
     <!-- Task summary -->
     <string name="owner">Owner</string>
     <string name="more_tags">+%d</string>
+
+    <!-- Tasks bottom app bar -->
+    <string name="menu">Menu</string>
+    <string name="tasks">Tasks</string>
+    <string name="archive">Archive</string>
+    <string name="settings">Settings</string>
 
     <!-- Due date messages -->
     <!-- When due date is 5 or more days away, display with date. Example: Due Mar 15, 2020 -->

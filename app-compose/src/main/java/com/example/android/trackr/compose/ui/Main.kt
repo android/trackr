@@ -43,6 +43,15 @@ fun Main() {
                         onTaskClick = { taskId ->
                             navController.navigate("detail/$taskId")
                         },
+                        onAddTaskClick = {
+                            // TODO
+                        },
+                        onArchiveClick = {
+                            // TODO
+                        },
+                        onSettingsClick = {
+                            // TODO
+                        }
                     )
                 }
                 composable(
