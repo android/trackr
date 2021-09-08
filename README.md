@@ -59,9 +59,9 @@ more about developer facing aspects of Android accessibility, read the
 Screenshots
 -----------
 
-![Home Screen TalkBack](screenshots/talkback_home.png "Task list screen with TalkBack on"){width=240px}
-![Detail](screenshots/detail_dark.png "Detail screen in dark mode"){width=240px}
-![Edit](screenshots/edit.png "Task edit screen"){width=240px}
+|Home Screen TalkBack|Detail|Edit|
+|:--:|:--:|:--:|
+|<img src="screenshots/talkback_home.png" alt="Home Screen TalkBack" title="Task list screen with TalkBack on" width="240px">|<img src="screenshots/detail_dark.png" alt="Detail" title="Detail screen in dark mode" width="240px">|<img src="screenshots/edit.png" alt="Edit" title="Task edit screen" width="240px">|
 
 Issues
 -----------
