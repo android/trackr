@@ -50,12 +50,12 @@ class MainActivity : AppCompatActivity() {
         // cannot do that properly since the parent receives the insets first and will consume some
         // of them. We'll remove the rail's built-in listener and apply the padding ourselves.
         binding.activityRoot.doOnApplyWindowInsets { v, insets, _, _ ->
-            if (binding.navigationRail.isGone) {
+            if (binding.navigationRail?.isGone == true) {
                 insets // Don't consume any insets.
             } else {
                 val isRtl = v.isRtl
                 val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-                binding.navigationRail.updatePadding(
+                binding.navigationRail?.updatePadding(
                     left = if (isRtl) 0 else systemBars.left,
                     right = if (isRtl) systemBars.right else 0,
                     top = systemBars.top,
@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
 
-        binding.navigationRail.apply {
+        binding.navigationRail?.apply {
             setupWithNavController(navController)
             setOnItemReselectedListener { } // Prevent navigating to the same item.
             setOnApplyWindowInsetsListener(null) // See above about consuming window insets.

@@ -73,10 +73,10 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
 
             doOnApplyWindowInsets { v, insets, padding, _ ->
                 val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-                if (binding.bottomAppBar.isVisible) {
+                if (binding.bottomAppBar?.isVisible == true) {
                     // BottomAppBar has its own logic to adapt to window insets, but its height isn't
                     // updated until measurement, so wait for its next layout.
-                    binding.bottomAppBar.doOnNextLayout { bottomBar ->
+                    binding.bottomAppBar?.doOnNextLayout { bottomBar ->
                         v.updatePadding(
                             left = padding.left + systemBars.left,
                             right = padding.right + systemBars.right,
@@ -93,10 +93,10 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
                 insets
             }
         }
-        binding.add.setOnClickListener {
+        binding.add?.setOnClickListener {
             findNavController().navigate(R.id.nav_task_edit_graph)
         }
-        binding.bottomAppBar.setOnMenuItemClickListener { menuItem ->
+        binding.bottomAppBar?.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.archive -> {
                     findNavController().navigate(R.id.nav_archives)

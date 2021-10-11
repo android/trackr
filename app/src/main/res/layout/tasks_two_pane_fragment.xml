@@ -16,7 +16,8 @@
   -->
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.slidingpanelayout.widget.SlidingPaneLayout
         android:id="@+id/sliding_pane_layout"
@@ -28,7 +29,8 @@
             android:name="com.example.android.trackr.ui.tasks.TasksFragment"
             android:layout_width="@dimen/list_pane_width"
             android:layout_height="match_parent"
-            android:layout_weight="@dimen/list_pane_weight" />
+            android:layout_weight="@dimen/list_pane_weight"
+            tools:layout="@layout/tasks_fragment"/>
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/detail_pane"
@@ -36,7 +38,8 @@
             android:layout_width="@dimen/detail_pane_width"
             android:layout_height="match_parent"
             android:layout_weight="@dimen/detail_pane_weight"
-            app:navGraph="@navigation/task_detail" />
+            app:navGraph="@navigation/task_detail"
+            tools:layout="@layout/task_detail_fragment"/>
 
     </androidx.slidingpanelayout.widget.SlidingPaneLayout>
 </layout>
