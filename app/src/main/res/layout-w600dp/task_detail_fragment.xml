@@ -261,18 +261,6 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="@dimen/spacing_large"
-            android:contentDescription="@string/edit_task"
-            app:marginBottomSystemBars="@{true}"
-            app:marginLeftSystemBars="@{true}"
-            app:marginRightSystemBars="@{true}"
-            app:srcCompat="@drawable/ic_edit" />
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

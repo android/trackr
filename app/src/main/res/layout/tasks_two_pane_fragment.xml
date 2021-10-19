@@ -30,7 +30,7 @@
             android:layout_width="@dimen/list_pane_width"
             android:layout_height="match_parent"
             android:layout_weight="@dimen/list_pane_weight"
-            tools:layout="@layout/tasks_fragment"/>
+            tools:layout="@layout/tasks_fragment" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/detail_pane"
@@ -39,7 +39,7 @@
             android:layout_height="match_parent"
             android:layout_weight="@dimen/detail_pane_weight"
             app:navGraph="@navigation/task_detail"
-            tools:layout="@layout/task_detail_fragment"/>
+            tools:layout="@layout/task_detail_fragment" />
 
     </androidx.slidingpanelayout.widget.SlidingPaneLayout>
 </layout>

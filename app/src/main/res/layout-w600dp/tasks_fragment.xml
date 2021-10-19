@@ -64,7 +64,6 @@
             android:paddingRight="@dimen/pane_margin"
             tools:listitem="@layout/task_summary" />
 
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

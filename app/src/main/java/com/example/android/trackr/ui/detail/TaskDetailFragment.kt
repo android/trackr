@@ -87,7 +87,7 @@ class TaskDetailFragment : Fragment(R.layout.task_detail_fragment) {
             }
         }
 
-        binding.edit.setOnClickListener {
+        binding.edit?.setOnClickListener {
             twoPaneViewModel.onEditTask(args.taskId)
         }
 

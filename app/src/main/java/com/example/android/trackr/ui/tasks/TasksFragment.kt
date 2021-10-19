@@ -73,7 +73,7 @@ class TasksFragment : Fragment(R.layout.tasks_fragment), TasksAdapter.ItemListen
 
             doOnApplyWindowInsets { v, insets, padding, _ ->
                 val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-                if (binding.bottomAppBar?.isVisible == true) {
+                if (binding.bottomAppBar != null) {
                     // BottomAppBar has its own logic to adapt to window insets, but its height isn't
                     // updated until measurement, so wait for its next layout.
                     binding.bottomAppBar?.doOnNextLayout { bottomBar ->
