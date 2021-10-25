@@ -23,6 +23,6 @@
         android:title="@string/edit"
         app:actionLayout="@layout/outline_button_menu_item"
         app:showAsAction="always"
-        android:visible="false"/>
+        android:visible="false" />
 
 </menu>
