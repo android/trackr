@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2020 The Android Open Source Project
+     Copyright (C) 2021 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -260,18 +260,6 @@
             </ScrollView>
 
         </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_margin="@dimen/spacing_large"
-            android:contentDescription="@string/edit_task"
-            app:marginBottomSystemBars="@{true}"
-            app:marginLeftSystemBars="@{true}"
-            app:marginRightSystemBars="@{true}"
-            app:srcCompat="@drawable/ic_edit" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

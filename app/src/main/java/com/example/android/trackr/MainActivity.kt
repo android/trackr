@@ -21,7 +21,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.Insets
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isGone
 import androidx.core.view.updatePadding
 import androidx.navigation.fragment.NavHostFragment
 import com.example.android.trackr.databinding.MainActivityBinding
@@ -49,13 +48,11 @@ class MainActivity : AppCompatActivity() {
         // NavigationRailView also tries to set its own padding based on the window insets, but it
         // cannot do that properly since the parent receives the insets first and will consume some
         // of them. We'll remove the rail's built-in listener and apply the padding ourselves.
-        binding.activityRoot.doOnApplyWindowInsets { v, insets, _, _ ->
-            if (binding.navigationRail.isGone) {
-                insets // Don't consume any insets.
-            } else {
+        binding.navigationRail?.let { navRail ->
+            binding.activityRoot.doOnApplyWindowInsets { v, insets, _, _ ->
                 val isRtl = v.isRtl
                 val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-                binding.navigationRail.updatePadding(
+                navRail.updatePadding(
                     left = if (isRtl) 0 else systemBars.left,
                     right = if (isRtl) systemBars.right else 0,
                     top = systemBars.top,
@@ -72,6 +69,7 @@ class MainActivity : AppCompatActivity() {
                         systemBars.bottom
                     )
                 ).build()
+
             }
         }
 
@@ -81,7 +79,7 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
 
-        binding.navigationRail.apply {
+        binding.navigationRail?.apply {
             setupWithNavController(navController)
             setOnItemReselectedListener { } // Prevent navigating to the same item.
             setOnApplyWindowInsetsListener(null) // See above about consuming window insets.
