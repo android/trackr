@@ -18,7 +18,7 @@ package com.example.android.trackr.ui.archive
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.android.trackr.CoroutineTestRule
+import com.example.android.trackr.MainCoroutineRule
 import com.example.android.trackr.db.AppDatabase
 import com.example.android.trackr.ui.ARCHIVED_TASK_1
 import com.example.android.trackr.ui.USER_OWNER
@@ -30,9 +30,10 @@ import com.example.android.trackr.usecase.ArchivedTaskListItemsUseCase
 import com.example.android.trackr.usecase.ToggleTaskStarStateUseCase
 import com.example.android.trackr.usecase.UnarchiveUseCase
 import com.google.common.truth.Truth.assertThat
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -46,7 +47,7 @@ class ArchiveViewModelTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @get:Rule
-    val coroutineRule = CoroutineTestRule()
+    val coroutineRule = MainCoroutineRule()
 
     private lateinit var appDatabase: AppDatabase
 
@@ -72,7 +73,7 @@ class ArchiveViewModelTest {
     }
 
     @Test
-    fun select() = coroutineRule.runBlockingTest {
+    fun select() = runTest {
         val viewModel = createViewModel()
         viewModel.archivedTasks.first().let { tasks ->
             assertThat(tasks).hasSize(2)
@@ -101,13 +102,13 @@ class ArchiveViewModelTest {
     }
 
     @Test
-    fun unarchive() = coroutineRule.runBlockingTest {
+    fun unarchive() = runTest {
         val viewModel = createViewModel()
 
         // Collect UnarchiveActions. This is because asserting the absence of values emitted to a
         // flow is hard to do directly.
         val unarchiveActions = mutableListOf<UnarchiveAction>()
-        val collectingUnarchiveActionsJob = launch {
+        val collectingUnarchiveActionsJob = launch(UnconfinedTestDispatcher()) {
             viewModel.unarchiveActions.collect {
                 unarchiveActions.add(it)
             }

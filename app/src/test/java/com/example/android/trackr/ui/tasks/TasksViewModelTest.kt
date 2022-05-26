@@ -18,7 +18,7 @@ package com.example.android.trackr.ui.tasks
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.android.trackr.CoroutineTestRule
+import com.example.android.trackr.MainCoroutineRule
 import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.data.TaskSummary
 import com.example.android.trackr.ui.TASK_1
@@ -30,9 +30,10 @@ import com.example.android.trackr.usecase.ReorderTasksUseCase
 import com.example.android.trackr.usecase.ToggleTaskStarStateUseCase
 import com.example.android.trackr.usecase.UnarchiveUseCase
 import com.google.common.truth.Truth.assertThat
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -45,7 +46,7 @@ class TasksViewModelTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @get:Rule
-    val coroutineRule = CoroutineTestRule()
+    val coroutineRule = MainCoroutineRule()
 
     private fun createViewModel(): TasksViewModel {
         val db = createDatabase()
@@ -61,7 +62,7 @@ class TasksViewModelTest {
     }
 
     @Test
-    fun listItems() = coroutineRule.runBlockingTest {
+    fun listItems() = runTest {
         val viewModel = createViewModel()
         viewModel.listItems.first().let { listItems ->
             assertThat(listItems).hasSize(4)
@@ -71,7 +72,7 @@ class TasksViewModelTest {
     }
 
     @Test
-    fun toggleExpandedState() = coroutineRule.runBlockingTest {
+    fun toggleExpandedState() = runTest {
         val viewModel = createViewModel()
         viewModel.listItems.first().let { listItems ->
             val header = listItems.find {
@@ -90,13 +91,13 @@ class TasksViewModelTest {
     }
 
     @Test
-    fun archiveTask() = coroutineRule.runBlockingTest {
+    fun archiveTask() = runTest {
         val viewModel = createViewModel()
 
         // Collect ArchivedItems. This is because asserting the absence of values emitted to a
         // flow is hard to do directly.
         val archivedItems = mutableListOf<ArchivedItem>()
-        val collectingArchivedItemJob = launch {
+        val collectingArchivedItemJob = launch(UnconfinedTestDispatcher()) {
             viewModel.archivedItem.collect {
                 archivedItems.add(it)
             }

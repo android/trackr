@@ -217,6 +217,6 @@ class TaskEditViewModel @Inject constructor(
     }
 
     fun discardChanges() {
-        _discarded.offer(Unit)
+        _discarded.trySend(Unit)
     }
 }

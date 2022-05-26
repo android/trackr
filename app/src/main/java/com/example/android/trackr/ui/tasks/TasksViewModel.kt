@@ -113,7 +113,7 @@ class TasksViewModel @Inject constructor(
                 movedTask.orderInCategory,
                 targetTask.orderInCategory
             )
-            undoReorderTasksChannel.offer(
+            undoReorderTasksChannel.trySend(
                 UndoReorderTasks(
                     movedTask.id,
                     movedTask.status,

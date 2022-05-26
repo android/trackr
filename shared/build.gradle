@@ -21,7 +21,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdk 31
     buildToolsVersion build_tools_version
 
     defaultConfig {
@@ -68,6 +68,14 @@ android {
         unitTests {
             includeAndroidResources = true
         }
+    }
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        freeCompilerArgs += [
+                '-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi',
+        ]
     }
 }
 
