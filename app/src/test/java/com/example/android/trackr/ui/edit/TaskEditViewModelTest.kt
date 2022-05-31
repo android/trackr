@@ -18,7 +18,7 @@ package com.example.android.trackr.ui.edit
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.android.trackr.CoroutineTestRule
+import com.example.android.trackr.MainCoroutineRule
 import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.ui.TAG_1
 import com.example.android.trackr.ui.TAG_2
@@ -32,8 +32,9 @@ import com.example.android.trackr.usecase.LoadTaskDetailUseCase
 import com.example.android.trackr.usecase.LoadUsersUseCase
 import com.example.android.trackr.usecase.SaveTaskDetailUseCase
 import com.google.common.truth.Truth.assertThat
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -46,7 +47,7 @@ class TaskEditViewModelTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @get:Rule
-    val coroutineRule = CoroutineTestRule()
+    val coroutineRule = MainCoroutineRule()
 
     private fun createViewModel(): TaskEditViewModel {
         val db = createDatabase()
@@ -61,7 +62,7 @@ class TaskEditViewModelTest {
     }
 
     @Test
-    fun createNewTask() = coroutineRule.runBlockingTest {
+    fun createNewTask() = runTest {
         val viewModel = createViewModel()
         viewModel.taskId = 0L
 
@@ -80,7 +81,7 @@ class TaskEditViewModelTest {
     }
 
     @Test
-    fun editExistingTask() = coroutineRule.runBlockingTest {
+    fun editExistingTask() = runTest {
         val viewModel = createViewModel()
         viewModel.taskId = TASK_1.id
 
@@ -101,7 +102,7 @@ class TaskEditViewModelTest {
     }
 
     @Test
-    fun editOwner() = coroutineRule.runBlockingTest {
+    fun editOwner() = runTest {
         val viewModel = createViewModel()
         viewModel.taskId = TASK_1.id
 
@@ -115,7 +116,7 @@ class TaskEditViewModelTest {
     }
 
     @Test
-    fun editStatus() = coroutineRule.runBlockingTest {
+    fun editStatus() = runTest {
         val viewModel = createViewModel()
         viewModel.taskId = TASK_1.id
 
@@ -129,7 +130,7 @@ class TaskEditViewModelTest {
     }
 
     @Test
-    fun editDueAt() = coroutineRule.runBlockingTest {
+    fun editDueAt() = runTest {
         val viewModel = createViewModel()
         viewModel.taskId = TASK_1.id
 
@@ -143,7 +144,7 @@ class TaskEditViewModelTest {
     }
 
     @Test
-    fun addTag() = coroutineRule.runBlockingTest {
+    fun addTag() = runTest {
         val viewModel = createViewModel()
         viewModel.taskId = TASK_1.id
 
@@ -157,7 +158,7 @@ class TaskEditViewModelTest {
     }
 
     @Test
-    fun removeTag() = coroutineRule.runBlockingTest {
+    fun removeTag() = runTest {
         val viewModel = createViewModel()
         viewModel.taskId = TASK_1.id
 
@@ -171,12 +172,12 @@ class TaskEditViewModelTest {
     }
 
     @Test
-    fun discardChanges() = coroutineRule.runBlockingTest {
+    fun discardChanges() = runTest {
         val viewModel = createViewModel()
         viewModel.taskId = TASK_1.id
 
         var discardEventCount = 0
-        val collectDiscardEvents = launch {
+        val collectDiscardEvents = launch(UnconfinedTestDispatcher()) {
             viewModel.discarded.collect {
                 discardEventCount++
             }

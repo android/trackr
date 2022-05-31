@@ -2,7 +2,7 @@ package com.example.android.trackr.ui.detail
 
 import androidx.arch.core.executor.testing.CountingTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.android.trackr.CoroutineTestRule
+import com.example.android.trackr.MainCoroutineRule
 import com.example.android.trackr.data.TaskDetail
 import com.example.android.trackr.data.TaskStatus
 import com.example.android.trackr.db.AppDatabase
@@ -14,8 +14,9 @@ import com.example.android.trackr.ui.createDatabase
 import com.example.android.trackr.usecase.FindTaskDetailUseCase
 import com.example.android.trackr.usecase.ToggleTaskStarStateUseCase
 import com.google.common.truth.Truth.assertThat
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -32,7 +33,7 @@ class TaskDetailViewModelTest {
     val countingTaskExecutorRule = CountingTaskExecutorRule()
 
     @get:Rule
-    val coroutineRule = CoroutineTestRule()
+    val coroutineRule = MainCoroutineRule()
 
     private lateinit var appDatabase: AppDatabase
 
@@ -57,10 +58,10 @@ class TaskDetailViewModelTest {
     }
 
     @Test
-    fun loadsDetails() = coroutineRule.runBlockingTest {
+    fun loadsDetails() = runTest {
         val viewModel = createViewModel()
         var taskDetail: TaskDetail? = null
-        val collectorJob = launch {
+        val collectorJob = launch(UnconfinedTestDispatcher()) {
             viewModel.detail.collect {
                 taskDetail = it
             }
@@ -88,10 +89,10 @@ class TaskDetailViewModelTest {
     }
 
     @Test
-    fun toggleStarred() = coroutineRule.runBlockingTest {
+    fun toggleStarred() = runTest {
         val viewModel = createViewModel()
         var isStarred = false
-        val collectorJob = launch {
+        val collectorJob = launch(UnconfinedTestDispatcher()) {
             viewModel.starred.collect {
                 isStarred = it
             }

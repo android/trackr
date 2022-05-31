@@ -92,7 +92,7 @@ class ArchiveViewModel @Inject constructor(
         val ids = selectedTaskIds.value
         viewModelScope.launch {
             unarchiveUseCase(ids.toList())
-            _unarchiveActions.offer(UnarchiveAction(ids))
+            _unarchiveActions.trySend(UnarchiveAction(ids))
             clearSelection()
         }
     }

@@ -22,7 +22,7 @@ plugins {
 }
 
 android {
-    compileSdk 30
+    compileSdk 31
     buildToolsVersion build_tools_version
     defaultConfig {
         applicationId 'com.example.android.trackr.compose'
@@ -65,6 +65,14 @@ android {
     packagingOptions {
         excludes += '/META-INF/AL2.0'
         excludes += '/META-INF/LGPL2.1'
+    }
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        freeCompilerArgs += [
+                '-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi',
+        ]
     }
 }
 
