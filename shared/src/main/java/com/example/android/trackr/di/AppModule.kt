@@ -30,8 +30,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import java.time.Clock
 import javax.inject.Singleton
@@ -45,7 +46,13 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
+    fun provideAppCoroutineScope(): CoroutineScope {
+        return CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDatabase(@ApplicationContext context: Context, appCoroutineScope: CoroutineScope): AppDatabase {
         appDatabase = Room.databaseBuilder(
             context,
             AppDatabase::class.java,
@@ -55,7 +62,7 @@ object AppModule {
             .addCallback(object : RoomDatabase.Callback() {
                 override fun onCreate(db: SupportSQLiteDatabase) {
                     super.onCreate(db)
-                    GlobalScope.launch(Dispatchers.IO) {
+                    appCoroutineScope.launch(Dispatchers.IO) {
                         insertSeedData()
                     }
                 }
