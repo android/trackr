@@ -31,7 +31,7 @@ buildscript {
         androidx_test_runner_version = "1.4.0"
         androidx_test_rules_version = "1.4.0"
         appcompat_version = "1.2.0"
-        byte_buddy_version = "1.10.14"
+        byte_buddy_version = "1.11.9"
         cardview_version = "1.0.0"
         compose_version = "1.0.1"
         constraintlayout_version = "2.0.4"
